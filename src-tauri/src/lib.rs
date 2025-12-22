@@ -15,7 +15,7 @@ pub struct AppState {
     pub data: Mutex<GameData>,
 }
 
-/// Get the data directory path
+/// Get the data directory path (for pre-Tauri initialization)
 fn get_data_dir() -> PathBuf {
     // In development, use relative path from src-tauri
     let dev_path = PathBuf::from("../data");
@@ -35,13 +35,26 @@ fn get_data_dir() -> PathBuf {
         return installed_path;
     }
 
-    // Try next to the executable
+    // Try next to the executable (works for AppImage)
     if let Ok(exe_path) = std::env::current_exe() {
         if let Some(exe_dir) = exe_path.parent() {
             let exe_data_path = exe_dir.join("data");
             if exe_data_path.exists() {
                 return exe_data_path;
             }
+        }
+    }
+
+    // Try APPDIR for AppImage (resources extracted here)
+    if let Ok(appdir) = std::env::var("APPDIR") {
+        let appimage_data = PathBuf::from(&appdir).join("usr/share/ship-lens/data");
+        if appimage_data.exists() {
+            return appimage_data;
+        }
+        // Also try resources directly in APPDIR
+        let appimage_resources = PathBuf::from(&appdir).join("data");
+        if appimage_resources.exists() {
+            return appimage_resources;
         }
     }
 
@@ -282,8 +295,9 @@ fn delete_fleet_preset(app: tauri::AppHandle, preset_id: String) -> Result<(), S
 pub fn run() {
     // Load game data
     let data_dir = get_data_dir();
+    eprintln!("Looking for data in: {:?}", data_dir);
     let game_data = GameData::load(&data_dir).unwrap_or_else(|e| {
-        eprintln!("Warning: Could not load game data: {}", e);
+        eprintln!("Warning: Could not load game data from {:?}: {}", data_dir, e);
         GameData::default()
     });
 
