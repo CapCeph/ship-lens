@@ -1330,9 +1330,21 @@ function showUpdateModal(update: Awaited<ReturnType<typeof check>>) {
 
   if (!updateModal) return;
 
+  // Detect if we're on Linux (system install can't auto-update)
+  const isLinux = navigator.platform.toLowerCase().includes("linux");
+
   // Update the version display
   if (updateVersion) {
     updateVersion.textContent = `Version ${update.version}`;
+  }
+
+  // For Linux, change button to open releases page instead of auto-update
+  if (isLinux && updateInstall instanceof HTMLButtonElement) {
+    updateInstall.textContent = "View on GitHub";
+    if (updateProgress) {
+      updateProgress.style.display = "block";
+      updateProgress.textContent = "Linux: Re-run the install command from the README to update.";
+    }
   }
 
   // Show the modal
@@ -1355,6 +1367,13 @@ function showUpdateModal(update: Awaited<ReturnType<typeof check>>) {
 
   // Install button handler
   updateInstall?.addEventListener("click", async () => {
+    // On Linux, open GitHub releases page instead of trying to auto-update
+    if (isLinux) {
+      window.open("https://github.com/CapCeph/ship-lens/releases/latest", "_blank");
+      updateModal.classList.remove("open");
+      return;
+    }
+
     try {
       // Disable button and show progress
       if (updateInstall instanceof HTMLButtonElement) {

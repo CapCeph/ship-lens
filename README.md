@@ -50,12 +50,12 @@ Think of it as [Erkul](https://www.erkul.games/) but as a lightweight desktop ap
 
 **Fedora / RHEL:**
 ```bash
-curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens-0.1.5-1.x86_64.rpm && sudo dnf install -y ./Ship.Lens-*.rpm
+curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens-0.1.6-1.x86_64.rpm && sudo dnf install -y ./Ship.Lens-*.rpm
 ```
 
 **Ubuntu / Debian / Zorin:**
 ```bash
-curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens_0.1.5_amd64.deb && sudo apt install -y ./Ship.Lens_*.deb
+curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens_0.1.6_amd64.deb && sudo apt install -y ./Ship.Lens_*.deb
 ```
 
 ### Windows
