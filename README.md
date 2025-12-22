@@ -55,7 +55,7 @@ curl -sL $(curl -s https://api.github.com/repos/CapCeph/ship-lens/releases/lates
 
 **Ubuntu / Debian / Zorin:**
 ```bash
-curl -sL $(curl -s https://api.github.com/repos/CapCeph/ship-lens/releases/latest | grep "browser_download_url.*amd64.deb" | cut -d '"' -f 4) -o /tmp/ship-lens.deb && sudo dpkg -i /tmp/ship-lens.deb
+curl -sL $(curl -s https://api.github.com/repos/CapCeph/ship-lens/releases/latest | grep "browser_download_url.*amd64.deb" | cut -d '"' -f 4) -o /tmp/ship-lens.deb && sudo apt install -y /tmp/ship-lens.deb
 ```
 
 ### Windows
