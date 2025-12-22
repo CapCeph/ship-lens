@@ -46,42 +46,49 @@ Think of it as [Erkul](https://www.erkul.games/) but as a lightweight desktop ap
 
 ## Installation
 
-### Fedora / RHEL / CentOS
+### Linux (Recommended)
 
+**AppImage** - Works on any distro, supports auto-updates:
+
+```bash
+curl -sL $(curl -s https://api.github.com/repos/CapCeph/ship-lens/releases/latest | grep "browser_download_url.*AppImage\"" | cut -d '"' -f 4) -o ~/Ship-Lens.AppImage && chmod +x ~/Ship-Lens.AppImage && ~/Ship-Lens.AppImage
+```
+
+> **Tip:** Move it to `~/.local/bin/` and create a desktop shortcut for easy access.
+
+### Windows
+
+Download the `.msi` installer from the [Releases page](https://github.com/CapCeph/ship-lens/releases/latest), run it, and launch "Ship Lens" from the Start Menu.
+
+### Alternative: System Packages
+
+<details>
+<summary>RPM/DEB packages (manual updates required)</summary>
+
+System packages install to `/usr/bin/` which prevents auto-updates. You'll need to re-run these commands to update.
+
+**Fedora / RHEL:**
 ```bash
 curl -sL $(curl -s https://api.github.com/repos/CapCeph/ship-lens/releases/latest | grep "browser_download_url.*rpm" | cut -d '"' -f 4) -o /tmp/ship-lens.rpm && sudo dnf install -y /tmp/ship-lens.rpm
 ```
 
-### Ubuntu / Debian
-
+**Ubuntu / Debian:**
 ```bash
 curl -sL $(curl -s https://api.github.com/repos/CapCeph/ship-lens/releases/latest | grep "browser_download_url.*amd64.deb" | cut -d '"' -f 4) -o /tmp/ship-lens.deb && sudo dpkg -i /tmp/ship-lens.deb
 ```
 
-### AppImage (Any Linux)
-
-```bash
-curl -sL $(curl -s https://api.github.com/repos/CapCeph/ship-lens/releases/latest | grep "browser_download_url.*AppImage" | cut -d '"' -f 4) -o ~/Ship-Lens.AppImage && chmod +x ~/Ship-Lens.AppImage && ~/Ship-Lens.AppImage
-```
-
-### Windows
-
-1. Download the `.msi` installer from the [Releases page](https://github.com/CapCeph/ship-lens/releases/latest)
-2. Run the installer
-3. Launch "Ship Lens" from the Start Menu
+</details>
 
 ### Manual Download
 
-If the one-liners don't work, just grab the file for your system from:
-
 **[Download Latest Release](https://github.com/CapCeph/ship-lens/releases/latest)**
 
-| Platform | File |
-|----------|------|
-| Fedora/RHEL | `Ship.Lens-x.x.x-1.x86_64.rpm` |
-| Ubuntu/Debian | `Ship.Lens_x.x.x_amd64.deb` |
-| Any Linux | `Ship.Lens_x.x.x_amd64.AppImage` |
-| Windows | `Ship.Lens_x.x.x_x64-setup.msi` |
+| Platform | File | Auto-Updates |
+|----------|------|--------------|
+| Any Linux | `.AppImage` | Yes |
+| Windows | `.msi` / `.exe` | Yes |
+| Fedora/RHEL | `.rpm` | No (manual) |
+| Ubuntu/Debian | `.deb` | No (manual) |
 
 ---
 
