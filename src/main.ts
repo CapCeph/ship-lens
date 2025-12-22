@@ -1,5 +1,6 @@
 import "./style.css";
 import { invoke } from "@tauri-apps/api/core";
+import { getVersion } from "@tauri-apps/api/app";
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 
@@ -1588,8 +1589,29 @@ function initFleetManagementModal() {
   });
 }
 
+// Update version display from Tauri config
+async function updateVersionDisplay() {
+  try {
+    const version = await getVersion();
+    const aboutVersion = document.getElementById("about-version");
+    const footerVersion = document.getElementById("footer-version");
+
+    if (aboutVersion) {
+      aboutVersion.textContent = `Ship Lens v${version}`;
+    }
+    if (footerVersion) {
+      footerVersion.textContent = `Ship Lens v${version}`;
+    }
+  } catch (error) {
+    console.error("Failed to get app version:", error);
+  }
+}
+
 async function init() {
   console.log("Ship Lens initializing...");
+
+  // Update version display from Tauri config
+  updateVersionDisplay();
 
   // Create searchable dropdowns
   attackerShipDropdown = new SearchableDropdown("attacker-ship-container");

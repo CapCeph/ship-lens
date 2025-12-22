@@ -62,6 +62,8 @@ curl -sL $(curl -s https://api.github.com/repos/CapCeph/ship-lens/releases/lates
 
 Download the `.msi` installer from the [Releases page](https://github.com/CapCeph/ship-lens/releases/latest), run it, and launch "Ship Lens" from the Start Menu.
 
+> **Note:** Linux is the primary development platform. Windows builds are provided via GitHub Actions but may contain bugs or untested behavior. Please [report any issues](https://github.com/CapCeph/ship-lens/issues) you encounter.
+
 ### Manual Download
 
 **[Download Latest Release](https://github.com/CapCeph/ship-lens/releases/latest)**
