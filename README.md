@@ -13,7 +13,7 @@
     <img src="https://img.shields.io/github/v/release/CapCeph/ship-lens?style=flat-square&color=blue" alt="Latest Release">
   </a>
   <a href="https://github.com/CapCeph/ship-lens/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/CapCeph/ship-lens?style=flat-square" alt="License">
+    <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License">
   </a>
   <a href="https://github.com/CapCeph/ship-lens/releases">
     <img src="https://img.shields.io/github/downloads/CapCeph/ship-lens/total?style=flat-square&color=green" alt="Downloads">
