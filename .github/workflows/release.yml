@@ -34,7 +34,7 @@ jobs:
           node-version: 'lts/*'
 
       - name: Install Rust stable
-        uses: dtolnay/rust-action@stable
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Install frontend dependencies
         run: npm install
