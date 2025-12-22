@@ -1,0 +1,69 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Ship Lens",
+  "version": "0.1.0",
+  "identifier": "com.shiplens.app",
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU4MDVFMDExRjMyNjMwNUMKUldSY01DYnpFZUFGV0lpbmRoY1Jma1g1RHNHVytqS3JGYkg0RlBQSFpEbVBlZlRpUG94K2cxbCsK",
+      "endpoints": [
+        "https://github.com/CapCeph/ship-lens/releases/latest/download/latest.json"
+      ]
+    }
+  },
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Ship Lens - Star Citizen Damage Calculator",
+        "width": 1400,
+        "height": 900,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true,
+        "transparent": false,
+        "theme": "Dark"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "createUpdaterArtifacts": true,
+    "resources": {
+      "../data/*": "data/"
+    },
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "category": "Game",
+    "shortDescription": "Star Citizen Time-To-Kill Calculator",
+    "longDescription": "Ship Lens is a damage calculator for Star Citizen that helps pilots understand combat dynamics between ships.",
+    "linux": {
+      "deb": {
+        "files": {
+          "/usr/share/ship-lens/data/": "../data/"
+        }
+      },
+      "rpm": {
+        "files": {
+          "/usr/share/ship-lens/data/": "../data/"
+        }
+      }
+    }
+  }
+}
