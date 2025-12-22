@@ -5,7 +5,7 @@
   "identifier": "com.shiplens.app",
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU4MDVFMDExRjMyNjMwNUMKUldSY01DYnpFZUFGV0lpbmRoY1Jma1g1RHNHVytqS3JGYkg0RlBQSFpEbVBlZlRpUG94K2cxbCsK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDMyNzA2MjNEMkRGNzFENUIKUldSYkhmY3RQV0p3TW5JaUxOVnhmTUFVbnVJSU8wemh2S0JtV0JxQk1EV2x0VzBpWmV3TXZZQU8K",
       "endpoints": [
         "https://github.com/CapCeph/ship-lens/releases/latest/download/latest.json"
       ]
