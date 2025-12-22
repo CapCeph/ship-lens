@@ -34,3 +34,6 @@ __pycache__/
 .eggs/
 venv/
 .venv/
+
+# Project context (contains sensitive info)
+CLAUDE.md
