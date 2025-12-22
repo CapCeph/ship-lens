@@ -19,47 +19,53 @@ pub struct AppState {
 fn get_data_dir() -> PathBuf {
     // In development, use relative path from src-tauri
     let dev_path = PathBuf::from("../data");
-    if dev_path.exists() {
+    if dev_path.exists() && has_data_files(&dev_path) {
         return dev_path;
     }
 
     // Try current directory
     let current_path = PathBuf::from("data");
-    if current_path.exists() {
+    if current_path.exists() && has_data_files(&current_path) {
         return current_path;
     }
 
-    // Try installed location (Linux: /usr/share/ship-lens/data)
-    let installed_path = PathBuf::from("/usr/share/ship-lens/data");
-    if installed_path.exists() {
-        return installed_path;
+    // Try APPDIR for AppImage FIRST (resources bundled in usr/lib/Ship Lens/data)
+    if let Ok(appdir) = std::env::var("APPDIR") {
+        // Tauri bundles resources to usr/lib/<app-name>/data
+        let appimage_data = PathBuf::from(&appdir).join("usr/lib/Ship Lens/data");
+        if appimage_data.exists() && has_data_files(&appimage_data) {
+            return appimage_data;
+        }
+        // Also try usr/share path (older convention)
+        let appimage_share = PathBuf::from(&appdir).join("usr/share/ship-lens/data");
+        if appimage_share.exists() && has_data_files(&appimage_share) {
+            return appimage_share;
+        }
     }
 
-    // Try next to the executable (works for AppImage)
+    // Try next to the executable
     if let Ok(exe_path) = std::env::current_exe() {
         if let Some(exe_dir) = exe_path.parent() {
             let exe_data_path = exe_dir.join("data");
-            if exe_data_path.exists() {
+            if exe_data_path.exists() && has_data_files(&exe_data_path) {
                 return exe_data_path;
             }
         }
     }
 
-    // Try APPDIR for AppImage (resources extracted here)
-    if let Ok(appdir) = std::env::var("APPDIR") {
-        let appimage_data = PathBuf::from(&appdir).join("usr/share/ship-lens/data");
-        if appimage_data.exists() {
-            return appimage_data;
-        }
-        // Also try resources directly in APPDIR
-        let appimage_resources = PathBuf::from(&appdir).join("data");
-        if appimage_resources.exists() {
-            return appimage_resources;
-        }
+    // Try installed location (Linux: /usr/share/ship-lens/data)
+    let installed_path = PathBuf::from("/usr/share/ship-lens/data");
+    if installed_path.exists() && has_data_files(&installed_path) {
+        return installed_path;
     }
 
     // Fallback
     PathBuf::from("../data")
+}
+
+/// Check if a directory has data files (not just empty)
+fn has_data_files(path: &PathBuf) -> bool {
+    path.join("ships.csv").exists() || path.join("weapons.csv").exists()
 }
 
 /// Get all ships sorted by name
