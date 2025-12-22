@@ -64,6 +64,11 @@
           "/usr/share/ship-lens/data/": "../data/"
         }
       }
+    },
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      }
     }
   }
 }
