@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-  <img src="https://robertsspaceindustries.com/media/a2u5vfrvz1u4br/source/CreatedByTheCommunity_1920x1080.jpg" alt="Made By The Community" width="400">
+  <img src="https://robertsspaceindustries.com/media/a2u5vfrvz1u4br/source/CreatedByTheCommunity_1920x1080.jpg" alt="Made By TheCeph for The Community" width="400">
 </p>
 
 ---
