@@ -65,7 +65,8 @@ fn get_data_dir() -> PathBuf {
 
 /// Check if a directory has data files (not just empty)
 fn has_data_files(path: &PathBuf) -> bool {
-    path.join("ships.csv").exists() || path.join("weapons.csv").exists()
+    // Check for actual data files used by the app
+    path.join("shields.csv").exists() || path.join("ship_parts_comprehensive.csv").exists()
 }
 
 /// Get all ships sorted by name
