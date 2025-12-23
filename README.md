@@ -30,6 +30,8 @@
 
 Ship Lens is a fast, native desktop app that calculates **Time-To-Kill (TTK)** between Star Citizen ships. No browser needed - just launch and go.
 
+Note: Please keep in mind that this is a new project. Solidification of the proper calculation systems are still in development and current results may not be accurate.
+
 Think of it as [Erkul](https://www.erkul.games/) but as a lightweight desktop app built in Rust.
 
 ### Features
