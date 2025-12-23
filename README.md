@@ -36,9 +36,12 @@ Think of it as [Erkul](https://www.erkul.games/) but as a lightweight desktop ap
 
 ### Features
 
-- **279+ Ships** - All flyable ships with accurate stats
+- **Alpha 4.5 Damage Model** - Accurate TTK with dual-layer armor, shield absorption, and damage type resistances
+- **279+ Ships** - All flyable ships with hull, armor, and component HP
+- **114+ Weapons** - Player-equippable weapons with proper in-game names
 - **Weapon Categories** - Pilot weapons, turrets, PDCs, and specialized mounts
 - **Combat Scenarios** - Dogfight, Jousting, and Synthetic test modes
+- **Damage Breakdown** - Physical, Energy, and Distortion DPS with shield bypass
 - **Real-time TTK** - Instant calculations as you adjust loadouts
 - **Fleet Presets** - Save your favorite ship configurations
 - **Multiple Themes** - Crusader, Drake, MISC, Origin, and Aegis color schemes
@@ -52,12 +55,12 @@ Think of it as [Erkul](https://www.erkul.games/) but as a lightweight desktop ap
 
 **Fedora / RHEL:**
 ```bash
-curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens-0.1.6-1.x86_64.rpm && sudo dnf install -y ./Ship.Lens-*.rpm
+curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens-0.1.7-1.x86_64.rpm && sudo dnf install -y ./Ship.Lens-*.rpm
 ```
 
 **Ubuntu / Debian / Zorin:**
 ```bash
-curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens_0.1.6_amd64.deb && sudo apt install -y ./Ship.Lens_*.deb
+curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens_0.1.7_amd64.deb && sudo apt install -y ./Ship.Lens_*.deb
 ```
 
 ### Windows
