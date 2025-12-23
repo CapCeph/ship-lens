@@ -25,6 +25,12 @@ pub struct Ship {
     pub display_name: String,
     pub hull_hp: i32,
     pub armor_hp: i32,
+    // Dual-layer armor damage system (4.5):
+    // Layer 1: SCItemVehicleArmorParams.damageMultiplier
+    pub armor_damage_mult_physical: f64,
+    pub armor_damage_mult_energy: f64,
+    pub armor_damage_mult_distortion: f64,
+    // Layer 2: SHealthComponentParams.DamageResistances
     pub armor_resist_physical: f64,
     pub armor_resist_energy: f64,
     pub armor_resist_distortion: f64,
@@ -46,7 +52,7 @@ pub struct Ship {
     pub weapon_hardpoints: Vec<WeaponHardpoint>,
 }
 
-/// Weapon data with damage output
+/// Weapon data with damage output and penetration info
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Weapon {
     pub display_name: String,
@@ -55,9 +61,17 @@ pub struct Weapon {
     pub damage_type: String,
     pub sustained_dps: f64,
     pub power_consumption: f64,
+    // 4.5 damage breakdown by type
+    pub damage_physical: f64,
+    pub damage_energy: f64,
+    pub damage_distortion: f64,
+    // Penetration cone data
+    pub base_penetration_distance: f64,
+    pub near_radius: f64,
+    pub far_radius: f64,
 }
 
-/// Shield data with defense values
+/// Shield data with defense and absorption values
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Shield {
     pub display_name: String,
@@ -68,6 +82,13 @@ pub struct Shield {
     pub resist_physical: f64,
     pub resist_energy: f64,
     pub resist_distortion: f64,
+    // 4.5 absorption values (how much damage is absorbed vs passes through)
+    // Physical: 0.0-0.45 typical (55-100% passes through for ballistics!)
+    // Energy: 1.0 typical (fully absorbed)
+    // Distortion: 1.0 typical (fully absorbed)
+    pub absorb_physical: f64,
+    pub absorb_energy: f64,
+    pub absorb_distortion: f64,
 }
 
 /// Damage calculation result
@@ -221,13 +242,16 @@ impl GameData {
 
                 let display_name = Self::format_ship_name(filename);
 
-                // CSV columns: filename,display_name,hull_hp_normalized,fuse_penetration_mult,
-                // component_penetration_mult,critical_explosion_chance,armor_hp,
-                // armor_resist_physical,armor_resist_energy,armor_resist_distortion,
-                // thruster_count,thruster_main_hp,thruster_retro_hp,thruster_mav_hp,
-                // thruster_vtol_hp,thruster_total_hp,turret_count,turret_total_hp,
-                // powerplant_count,powerplant_total_hp,cooler_count,cooler_total_hp,
-                // shield_gen_count,shield_gen_total_hp,qd_count,qd_total_hp,...
+                // CSV columns (after dual-layer armor update):
+                // 0: filename, 1: display_name, 2: hull_hp_normalized, 3: fuse_penetration_mult,
+                // 4: component_penetration_mult, 5: critical_explosion_chance, 6: armor_hp,
+                // 7: armor_resist_physical, 8: armor_resist_energy, 9: armor_resist_distortion,
+                // 10: armor_damage_mult_physical, 11: armor_damage_mult_energy, 12: armor_damage_mult_distortion,
+                // 13: armor_effective_physical, 14: armor_effective_energy, 15: armor_effective_distortion,
+                // 16: thruster_count, 17: thruster_main_hp, 18: thruster_retro_hp, 19: thruster_mav_hp,
+                // 20: thruster_vtol_hp, 21: thruster_total_hp, 22: turret_count, 23: turret_total_hp,
+                // 24: powerplant_count, 25: powerplant_total_hp, 26: cooler_count, 27: cooler_total_hp,
+                // 28: shield_gen_count, 29: shield_gen_total_hp, 30: qd_count, 31: qd_total_hp,...
                 // Get weapon hardpoints for this ship
                 let hardpoints = weapon_hardpoints_lookup.get(&ship_upper)
                     .cloned()
@@ -238,19 +262,24 @@ impl GameData {
                     display_name: display_name.clone(),
                     hull_hp: record.get(2).and_then(|s| s.parse().ok()).unwrap_or(0),  // hull_hp_normalized
                     armor_hp: record.get(6).and_then(|s| s.parse().ok()).unwrap_or(0),  // armor_hp
-                    armor_resist_physical: record.get(7).and_then(|s| s.parse().ok()).unwrap_or(1.0),
-                    armor_resist_energy: record.get(8).and_then(|s| s.parse().ok()).unwrap_or(1.0),
+                    // Dual-layer armor damage system
+                    armor_damage_mult_physical: record.get(10).and_then(|s| s.parse().ok()).unwrap_or(0.75),
+                    armor_damage_mult_energy: record.get(11).and_then(|s| s.parse().ok()).unwrap_or(0.6),
+                    armor_damage_mult_distortion: record.get(12).and_then(|s| s.parse().ok()).unwrap_or(1.0),
+                    armor_resist_physical: record.get(7).and_then(|s| s.parse().ok()).unwrap_or(0.85),
+                    armor_resist_energy: record.get(8).and_then(|s| s.parse().ok()).unwrap_or(1.3),
                     armor_resist_distortion: record.get(9).and_then(|s| s.parse().ok()).unwrap_or(1.0),
-                    thruster_main_hp: record.get(11).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    thruster_retro_hp: record.get(12).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    thruster_mav_hp: record.get(13).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    thruster_vtol_hp: record.get(14).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    thruster_total_hp: record.get(15).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    turret_total_hp: record.get(17).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    powerplant_total_hp: record.get(19).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    cooler_total_hp: record.get(21).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    shield_gen_total_hp: record.get(23).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    qd_total_hp: record.get(25).and_then(|s| s.parse().ok()).unwrap_or(0),
+                    // Component HP (shifted by 6 columns due to new armor fields)
+                    thruster_main_hp: record.get(17).and_then(|s| s.parse().ok()).unwrap_or(0),
+                    thruster_retro_hp: record.get(18).and_then(|s| s.parse().ok()).unwrap_or(0),
+                    thruster_mav_hp: record.get(19).and_then(|s| s.parse().ok()).unwrap_or(0),
+                    thruster_vtol_hp: record.get(20).and_then(|s| s.parse().ok()).unwrap_or(0),
+                    thruster_total_hp: record.get(21).and_then(|s| s.parse().ok()).unwrap_or(0),
+                    turret_total_hp: record.get(23).and_then(|s| s.parse().ok()).unwrap_or(0),
+                    powerplant_total_hp: record.get(25).and_then(|s| s.parse().ok()).unwrap_or(0),
+                    cooler_total_hp: record.get(27).and_then(|s| s.parse().ok()).unwrap_or(0),
+                    shield_gen_total_hp: record.get(29).and_then(|s| s.parse().ok()).unwrap_or(0),
+                    qd_total_hp: record.get(31).and_then(|s| s.parse().ok()).unwrap_or(0),
                     pilot_weapon_count: pilot_count,
                     pilot_weapon_sizes: pilot_sizes,
                     max_shield_size,
@@ -447,10 +476,12 @@ impl GameData {
     }
 
     fn load_weapons(&mut self, data_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
-        let weapons_path = data_dir.join("ship_weapons.csv");
+        // Try the new combined CSV first, fall back to legacy
+        let combined_path = data_dir.join("weapons_combined.csv");
+        let legacy_path = data_dir.join("ship_weapons.csv");
         let power_path = data_dir.join("weapon_power_data.csv");
 
-        // Build power lookup
+        // Build power lookup for legacy format
         let mut power_lookup: HashMap<String, f64> = HashMap::new();
         if power_path.exists() {
             let mut rdr = csv::Reader::from_path(&power_path)?;
@@ -465,10 +496,67 @@ impl GameData {
             }
         }
 
-        if weapons_path.exists() {
-            let mut rdr = csv::Reader::from_path(&weapons_path)?;
-            // CSV columns: display_name,filename,manufacturer,damage_type,size,
-            //              fire_rate_rpm,fire_rate,damage_per_shot,dps,sustained_dps,...
+        // Use combined CSV if available (4.5 format with penetration data)
+        if combined_path.exists() {
+            let mut rdr = csv::Reader::from_path(&combined_path)?;
+            // CSV columns: display_name,filename,manufacturer,size,damage_type,
+            //              sustained_dps,fire_rate,damage_per_shot,speed,max_range,
+            //              damage_physical,damage_energy,damage_distortion,
+            //              base_penetration_distance,near_radius,far_radius,max_penetration_thickness
+            for result in rdr.records() {
+                let record = result?;
+                let display_name = record.get(0).unwrap_or("Unknown").to_string();
+                let filename = record.get(1).unwrap_or("").to_string();
+                let size: i32 = record.get(3).and_then(|s| s.parse().ok()).unwrap_or(0);
+
+                if size == 0 {
+                    continue;
+                }
+
+                let sustained_dps: f64 = record.get(5).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+                let damage_per_shot: f64 = record.get(7).and_then(|s| s.parse().ok()).unwrap_or(1.0);
+
+                // Per-shot damage breakdown
+                let phys_per_shot: f64 = record.get(10).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+                let energy_per_shot: f64 = record.get(11).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+                let dist_per_shot: f64 = record.get(12).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+
+                // Convert per-shot to DPS by ratio
+                // DPS_type = sustained_dps * (damage_type_per_shot / damage_per_shot_total)
+                let total_per_shot = phys_per_shot + energy_per_shot + dist_per_shot;
+                let (damage_physical, damage_energy, damage_distortion) = if total_per_shot > 0.0 {
+                    (
+                        sustained_dps * (phys_per_shot / total_per_shot),
+                        sustained_dps * (energy_per_shot / total_per_shot),
+                        sustained_dps * (dist_per_shot / total_per_shot),
+                    )
+                } else {
+                    // Fallback: assume all energy if no breakdown
+                    (0.0, sustained_dps, 0.0)
+                };
+
+                let weapon = Weapon {
+                    display_name: display_name.clone(),
+                    filename: filename.clone(),
+                    size,
+                    damage_type: record.get(4).unwrap_or("Unknown").to_string(),
+                    sustained_dps,
+                    power_consumption: power_lookup.get(&filename.to_lowercase()).copied().unwrap_or(0.0),
+                    // 4.5 damage breakdown (converted to DPS)
+                    damage_physical,
+                    damage_energy,
+                    damage_distortion,
+                    // Penetration data
+                    base_penetration_distance: record.get(13).and_then(|s| s.parse().ok()).unwrap_or(2.0),
+                    near_radius: record.get(14).and_then(|s| s.parse().ok()).unwrap_or(0.1),
+                    far_radius: record.get(15).and_then(|s| s.parse().ok()).unwrap_or(0.2),
+                };
+
+                self.weapons.insert(display_name, weapon);
+            }
+        } else if legacy_path.exists() {
+            // Fallback to legacy format
+            let mut rdr = csv::Reader::from_path(&legacy_path)?;
             for result in rdr.records() {
                 let record = result?;
                 let display_name = record.get(0).unwrap_or("Unknown").to_string();
@@ -479,13 +567,29 @@ impl GameData {
                     continue;
                 }
 
+                let sustained_dps: f64 = record.get(9).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+                let damage_type = record.get(3).unwrap_or("Unknown").to_string();
+
+                // Infer damage breakdown from type for legacy data
+                let (damage_physical, damage_energy, damage_distortion) = match damage_type.to_lowercase().as_str() {
+                    s if s.contains("ballistic") || s.contains("physical") => (sustained_dps, 0.0, 0.0),
+                    s if s.contains("distortion") => (0.0, 0.0, sustained_dps),
+                    _ => (0.0, sustained_dps, 0.0), // Default to energy
+                };
+
                 let weapon = Weapon {
                     display_name: display_name.clone(),
                     filename: filename.clone(),
                     size,
-                    damage_type: record.get(3).unwrap_or("Unknown").to_string(),
-                    sustained_dps: record.get(9).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+                    damage_type,
+                    sustained_dps,
                     power_consumption: power_lookup.get(&filename.to_lowercase()).copied().unwrap_or(0.0),
+                    damage_physical,
+                    damage_energy,
+                    damage_distortion,
+                    base_penetration_distance: 2.0, // Default
+                    near_radius: 0.1,
+                    far_radius: 0.2,
                 };
 
                 self.weapons.insert(display_name, weapon);
@@ -496,15 +600,55 @@ impl GameData {
     }
 
     fn load_shields(&mut self, data_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
-        let shields_path = data_dir.join("shields.csv");
+        // Try the new combined CSV first, fall back to legacy
+        let combined_path = data_dir.join("shields_combined.csv");
+        let legacy_path = data_dir.join("shields.csv");
 
         let mfr_codes: HashMap<&str, &str> = [
             ("godi", "Gorgon Defender"), ("asas", "ASAS"), ("basl", "Basilisk"),
             ("seco", "Seal Corp"), ("banu", "Banu"), ("behr", "Behring"),
         ].into_iter().collect();
 
-        if shields_path.exists() {
-            let mut rdr = csv::Reader::from_path(&shields_path)?;
+        // Use combined CSV if available (4.5 format with absorption data)
+        if combined_path.exists() {
+            let mut rdr = csv::Reader::from_path(&combined_path)?;
+            // CSV columns: display_name,internal_name,size,max_hp,regen,damage_regen_delay,
+            //              down_regen_delay,resist_physical,resist_energy,resist_distortion,
+            //              absorb_physical,absorb_energy,absorb_distortion
+            for result in rdr.records() {
+                let record = result?;
+                let display_name = record.get(0).unwrap_or("Unknown").to_string();
+                let internal_name = record.get(1).unwrap_or("").to_string();
+
+                if internal_name.contains("Template") {
+                    continue;
+                }
+
+                let max_hp: f64 = record.get(3).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+                if max_hp <= 0.0 {
+                    continue;
+                }
+
+                let shield = Shield {
+                    display_name: display_name.clone(),
+                    internal_name,
+                    size: record.get(2).and_then(|s| s.parse().ok()).unwrap_or(0),
+                    max_hp,
+                    regen: record.get(4).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+                    resist_physical: record.get(7).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+                    resist_energy: record.get(8).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+                    resist_distortion: record.get(9).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+                    // 4.5 absorption values
+                    absorb_physical: record.get(10).and_then(|s| s.parse().ok()).unwrap_or(0.225),
+                    absorb_energy: record.get(11).and_then(|s| s.parse().ok()).unwrap_or(1.0),
+                    absorb_distortion: record.get(12).and_then(|s| s.parse().ok()).unwrap_or(1.0),
+                };
+
+                self.shields.insert(display_name, shield);
+            }
+        } else if legacy_path.exists() {
+            // Fallback to legacy format
+            let mut rdr = csv::Reader::from_path(&legacy_path)?;
             for result in rdr.records() {
                 let record = result?;
                 let name = record.get(0).unwrap_or("");
@@ -518,7 +662,7 @@ impl GameData {
                     continue;
                 }
 
-                // Format display name
+                // Format display name from internal name
                 let display_name = {
                     let clean_name = name.to_lowercase().replace("_scitem", "");
                     let parts: Vec<&str> = clean_name.split('_').collect();
@@ -550,9 +694,13 @@ impl GameData {
                     size: record.get(1).and_then(|s| s.parse().ok()).unwrap_or(0),
                     max_hp,
                     regen: record.get(3).and_then(|s| s.parse().ok()).unwrap_or(0.0),
-                    resist_physical: record.get(9).and_then(|s| s.parse().ok()).unwrap_or(0.0),  // resist_physical_avg
-                    resist_energy: record.get(12).and_then(|s| s.parse().ok()).unwrap_or(0.0),  // resist_energy_avg
-                    resist_distortion: record.get(15).and_then(|s| s.parse().ok()).unwrap_or(0.0),  // resist_distortion_avg
+                    resist_physical: record.get(9).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+                    resist_energy: record.get(12).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+                    resist_distortion: record.get(15).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+                    // Default absorption values for legacy data (typical 4.5 values)
+                    absorb_physical: 0.225,  // Only 22.5% absorbed, 77.5% passes through
+                    absorb_energy: 1.0,       // Fully absorbed
+                    absorb_distortion: 1.0,   // Fully absorbed
                 };
 
                 self.shields.insert(display_name, shield);

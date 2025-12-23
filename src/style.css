@@ -946,6 +946,57 @@ body {
   color: var(--hull-amber);
 }
 
+/* Damage Breakdown (4.5 model) */
+.damage-breakdown-section {
+  margin-top: var(--spacing-sm);
+}
+
+.damage-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--bg-dark);
+  border-radius: var(--radius-xs);
+  border-left: 3px solid var(--primary);
+}
+
+.breakdown-row:nth-child(1) {
+  border-left-color: var(--stat-armor); /* Physical - orange */
+}
+
+.breakdown-row:nth-child(2) {
+  border-left-color: var(--primary); /* Energy - blue/cyan */
+}
+
+.breakdown-row:nth-child(3) {
+  border-left-color: #9b59b6; /* Distortion - purple */
+}
+
+.breakdown-row.passthrough {
+  border-left-color: #e74c3c; /* Passthrough - red warning */
+  background: rgba(231, 76, 60, 0.1);
+}
+
+.breakdown-label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.breakdown-value {
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
 /* Damage Timeline */
 .timeline {
   display: flex;

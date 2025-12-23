@@ -3,8 +3,10 @@
 //! Rust backend for calculating combat dynamics between ships.
 
 mod data;
+mod ttk;
 
-use data::{CombatScenario, DamageResult, GameData, Ship, Shield, Weapon};
+use data::{GameData, Ship, Shield, Weapon};
+use ttk::{CombatScenario as TTKScenario, EquippedWeapon, TTKResult, ZoneModifiers};
 use std::fs;
 use std::path::PathBuf;
 use std::sync::Mutex;
@@ -117,7 +119,7 @@ fn get_shields_by_size(state: State<AppState>, size: i32) -> Vec<Shield> {
         .collect()
 }
 
-/// Calculate TTK between ships
+/// Calculate TTK between ships (legacy - kept for backwards compatibility)
 #[tauri::command]
 fn calculate_ttk(
     state: State<AppState>,
@@ -126,7 +128,7 @@ fn calculate_ttk(
     shield_name: Option<String>,
     mount_type: String,
     accuracy_modifier: f64,
-) -> Option<DamageResult> {
+) -> Option<data::DamageResult> {
     let data = state.data.lock().unwrap();
 
     let _attacker = data.ships.get(&attacker_ship)?;
@@ -152,7 +154,7 @@ fn calculate_ttk(
 
     let shield = shield_name.and_then(|n| data.shields.get(&n));
 
-    let scenario = CombatScenario {
+    let scenario = data::CombatScenario {
         scenario_type: "Dogfight".to_string(),
         mount_type,
         fire_mode: "Sustained".to_string(),
@@ -161,6 +163,116 @@ fn calculate_ttk(
     };
 
     Some(data::calculate_damage(&weapons, target, shield, &scenario))
+}
+
+/// Calculate TTK with full 4.5 damage model
+///
+/// Parameters:
+/// - weapon_names: List of weapon display names to use
+/// - weapon_counts: Corresponding count for each weapon (parallel array)
+/// - target_ship: Display name of target ship
+/// - shield_name: Display name of shield to use (or null for target's default)
+/// - scenario: Combat scenario configuration
+/// - zone: Target zone modifiers (hull, armor, thruster, component percentages)
+#[tauri::command]
+fn calculate_ttk_v2(
+    state: State<AppState>,
+    weapon_names: Vec<String>,
+    weapon_counts: Vec<i32>,
+    target_ship: String,
+    shield_name: Option<String>,
+    mount_accuracy: f64,
+    scenario_accuracy: f64,
+    time_on_target: f64,
+    fire_mode: f64,
+    power_multiplier: f64,
+    zone_hull: f64,
+    zone_armor: f64,
+    zone_thruster: f64,
+    zone_component: f64,
+) -> Result<TTKResult, String> {
+    let data = state.data.lock().unwrap();
+
+    // Get target ship
+    let target = data.ships.get(&target_ship)
+        .ok_or_else(|| format!("Target ship '{}' not found", target_ship))?;
+
+    // Build equipped weapons list
+    let mut equipped_weapons = Vec::new();
+    for (i, name) in weapon_names.iter().enumerate() {
+        let count = weapon_counts.get(i).copied().unwrap_or(1);
+        if count <= 0 {
+            continue;
+        }
+
+        if let Some(weapon) = data.weapons.get(name) {
+            equipped_weapons.push(EquippedWeapon {
+                weapon: weapon.clone(),
+                count,
+            });
+        } else {
+            return Err(format!("Weapon '{}' not found", name));
+        }
+    }
+
+    if equipped_weapons.is_empty() {
+        return Err("No weapons equipped".to_string());
+    }
+
+    // Get shield (use specified, or look up target's default)
+    let shield = if let Some(ref name) = shield_name {
+        data.shields.get(name)
+            .ok_or_else(|| format!("Shield '{}' not found", name))?
+    } else {
+        // Try to find default shield by internal name reference
+        let default_ref = &target.default_shield_ref;
+        if !default_ref.is_empty() {
+            data.shields.values()
+                .find(|s| s.internal_name.to_lowercase().contains(&default_ref.to_lowercase()))
+                .ok_or_else(|| "Could not find default shield".to_string())?
+        } else {
+            // Fall back to first shield of matching size
+            data.shields.values()
+                .find(|s| s.size == target.max_shield_size)
+                .ok_or_else(|| "No compatible shield found".to_string())?
+        }
+    };
+
+    // Build scenario
+    let scenario = TTKScenario {
+        mount_accuracy,
+        scenario_accuracy,
+        time_on_target,
+        fire_mode,
+        power_multiplier,
+    };
+
+    // Build zone modifiers
+    let zone = ZoneModifiers {
+        hull: zone_hull,
+        armor: zone_armor,
+        thruster: zone_thruster,
+        component: zone_component,
+    };
+
+    // Calculate TTK using new model
+    let result = ttk::calculate_ttk(&equipped_weapons, target, shield, &scenario, &zone);
+
+    Ok(result)
+}
+
+/// Get a weapon by name
+#[tauri::command]
+fn get_weapon(state: State<AppState>, name: String) -> Option<Weapon> {
+    let data = state.data.lock().unwrap();
+    data.weapons.get(&name).cloned()
+}
+
+/// Get a shield by name
+#[tauri::command]
+fn get_shield(state: State<AppState>, name: String) -> Option<Shield> {
+    let data = state.data.lock().unwrap();
+    data.shields.get(&name).cloned()
 }
 
 /// Get statistics summary
@@ -337,9 +449,12 @@ pub fn run() {
             get_ship,
             get_weapons,
             get_weapons_by_size,
+            get_weapon,
             get_shields,
             get_shields_by_size,
+            get_shield,
             calculate_ttk,
+            calculate_ttk_v2,
             get_stats,
             save_settings,
             load_settings,

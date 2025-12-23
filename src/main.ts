@@ -49,6 +49,14 @@ interface Weapon {
   damage_type: string;
   sustained_dps: number;
   power_consumption: number;
+  // 4.5 damage breakdown
+  damage_physical: number;
+  damage_energy: number;
+  damage_distortion: number;
+  // Penetration data
+  base_penetration_distance: number;
+  near_radius: number;
+  far_radius: number;
 }
 
 interface Shield {
@@ -60,6 +68,30 @@ interface Shield {
   resist_physical: number;
   resist_energy: number;
   resist_distortion: number;
+  // 4.5 absorption values
+  absorb_physical: number;
+  absorb_energy: number;
+  absorb_distortion: number;
+}
+
+// 4.5 TTK calculation result from backend
+interface DamageBreakdown {
+  physical: number;
+  energy: number;
+  distortion: number;
+}
+
+interface TTKResult {
+  shield_time: number;
+  armor_time: number;
+  hull_time: number;
+  total_ttk: number;
+  damage_breakdown: DamageBreakdown;
+  effective_dps: number;
+  shield_dps: number;
+  passthrough_dps: number;
+  armor_damage_during_shields: number;
+  shield_failover_phases: number;
 }
 
 interface Stats {
@@ -200,6 +232,7 @@ class SearchableDropdown {
 
   private setupEventListeners() {
     this.searchInput.addEventListener("focus", () => this.showDropdown());
+    this.searchInput.addEventListener("click", () => this.showDropdown());
     this.searchInput.addEventListener("input", () => {
       this.filterOptions(this.searchInput.value);
       this.showDropdown();
@@ -1064,9 +1097,143 @@ function updateLoadoutSummary() {
   animateTextValue(powerDrawEl, powerDraw > 0 ? `${formatNumber(Math.round(powerDraw))} pwr/s` : "--");
 }
 
-function calculateTTK() {
+async function calculateTTK() {
   updateLoadoutSummary();
 
+  if (!currentAttackerShip || !currentTargetShip) return;
+
+  // Get equipped weapons from slot manager
+  const equippedWeapons = weaponSlotManager?.getAllSelectedWeapons() || [];
+  if (equippedWeapons.length === 0 || equippedWeapons.every(w => !w)) {
+    // No weapons equipped - show zeros
+    animateTextValue(ttkValueEl, "∞");
+    animateValue(effectiveDpsEl, 0, (n) => formatNumber(Math.round(n)));
+    updateTimeline(0, 0, 0);
+    return;
+  }
+
+  // Build weapon names and counts
+  const weaponMap = new Map<string, number>();
+  for (const weaponName of equippedWeapons) {
+    if (weaponName) {
+      weaponMap.set(weaponName, (weaponMap.get(weaponName) || 0) + 1);
+    }
+  }
+  const weaponNames = Array.from(weaponMap.keys());
+  const weaponCounts = Array.from(weaponMap.values());
+
+  // Get shield
+  const selectedShieldName = shieldDropdown.getValue();
+  const shieldData = allShields.find(s => s.display_name === selectedShieldName);
+
+  // Get scenario modifiers
+  const mountAccuracy = getMountAccuracy();
+  const scenarioMod = getScenarioModifiers();
+  const fireModeMod = getFireModeMod();
+  const powerMult = getPowerMultiplier();
+  const zoneMod = getZoneModifiers();
+
+  try {
+    // Call backend for 4.5 damage model calculation
+    const result = await invoke<TTKResult>("calculate_ttk_v2", {
+      weaponNames,
+      weaponCounts,
+      targetShip: currentTargetShip.display_name,
+      shieldName: selectedShieldName || null,
+      mountAccuracy,
+      scenarioAccuracy: scenarioMod.accuracy,
+      timeOnTarget: scenarioMod.tot,
+      fireMode: fireModeMod,
+      powerMultiplier: powerMult,
+      zoneHull: zoneMod.hull,
+      zoneArmor: zoneMod.armor,
+      zoneThruster: zoneMod.thruster,
+      zoneComponent: zoneMod.component,
+    });
+
+    // Update shield HP display (uses Rule of Two now)
+    const shieldCount = currentTargetShip.shield_count || 1;
+    const totalShieldHp = shieldData ? shieldData.max_hp * Math.min(shieldCount, 2) : 0;
+    shieldHpEl.textContent = shieldData ? formatNumber(Math.round(totalShieldHp)) : "0";
+    updateBars();
+
+    // Animated TTK update
+    animateTextValue(ttkValueEl, formatTime(result.total_ttk));
+    // Animated DPS counter
+    animateValue(effectiveDpsEl, Math.round(result.effective_dps), (n) => formatNumber(Math.round(n)));
+    updateTimeline(result.shield_time, result.armor_time, result.hull_time);
+
+    // Update damage breakdown display if it exists
+    updateDamageBreakdown(result);
+
+  } catch (e) {
+    console.error("TTK calculation failed:", e);
+    // Fallback to legacy local calculation
+    calculateTTKLegacy();
+  }
+}
+
+// Helper to get mount accuracy value
+function getMountAccuracy(): number {
+  const mountType = mountTypeDropdown?.getValue() || "Gimballed";
+  // Map to new accuracy values (slightly different from old MOUNT_TYPE_ACCURACY)
+  const accuracyMap: Record<string, number> = {
+    "Fixed": 0.60,
+    "Gimballed": 0.75,
+    "Auto-Gimbal": 0.80,
+    "Turret": 0.70,
+  };
+  return accuracyMap[mountType] || 0.75;
+}
+
+// Helper to get scenario modifiers
+function getScenarioModifiers(): { accuracy: number; tot: number } {
+  const scenario = scenarioDropdown?.getValue() || "dogfight";
+  return SCENARIO_MODIFIERS[scenario] || SCENARIO_MODIFIERS["dogfight"];
+}
+
+// Update damage breakdown UI
+function updateDamageBreakdown(result: TTKResult) {
+  const breakdownEl = document.getElementById('damage-breakdown');
+  if (!breakdownEl) return;
+
+  const { damage_breakdown, passthrough_dps } = result;
+  const total = damage_breakdown.physical + damage_breakdown.energy + damage_breakdown.distortion;
+
+  if (total <= 0) {
+    breakdownEl.innerHTML = '';
+    return;
+  }
+
+  const physPct = ((damage_breakdown.physical / total) * 100).toFixed(0);
+  const energyPct = ((damage_breakdown.energy / total) * 100).toFixed(0);
+  const distPct = ((damage_breakdown.distortion / total) * 100).toFixed(0);
+  const passthroughPct = total > 0 ? ((passthrough_dps / total) * 100).toFixed(0) : "0";
+
+  breakdownEl.innerHTML = `
+    <div class="breakdown-row" title="Physical damage (ballistics) - ${passthroughPct}% bypasses shields">
+      <span class="breakdown-label">Physical:</span>
+      <span class="breakdown-value">${formatNumber(Math.round(damage_breakdown.physical))} DPS (${physPct}%)</span>
+    </div>
+    <div class="breakdown-row" title="Energy damage - fully absorbed by shields, bonus damage after">
+      <span class="breakdown-label">Energy:</span>
+      <span class="breakdown-value">${formatNumber(Math.round(damage_breakdown.energy))} DPS (${energyPct}%)</span>
+    </div>
+    ${damage_breakdown.distortion > 0 ? `
+    <div class="breakdown-row" title="Distortion damage - shields only">
+      <span class="breakdown-label">Distortion:</span>
+      <span class="breakdown-value">${formatNumber(Math.round(damage_breakdown.distortion))} DPS (${distPct}%)</span>
+    </div>` : ''}
+    ${passthrough_dps > 0 ? `
+    <div class="breakdown-row passthrough" title="Shield bypass - damage that hits armor while shields are up">
+      <span class="breakdown-label">Shield Bypass:</span>
+      <span class="breakdown-value">${formatNumber(Math.round(passthrough_dps))} DPS (${passthroughPct}%)</span>
+    </div>` : ''}
+  `;
+}
+
+// Legacy local calculation as fallback
+function calculateTTKLegacy() {
   if (!currentAttackerShip || !currentTargetShip) return;
 
   const totalRawDps = weaponSlotManager.getTotalDps(allWeapons);
@@ -1076,41 +1243,33 @@ function calculateTTK() {
   const powerMult = getPowerMultiplier();
   const zoneMod = getZoneModifiers();
 
-  // Excel formula: Eff DPS = Raw DPS × Hit Rate × Fire Mode Factor × Time-on-Target × Power Multiplier
   const effectiveDps = totalRawDps * hitRate * fireModeMod * timeOnTarget * powerMult;
 
-  // Get shield data - Excel multiplies by ship's shield count
   const selectedShieldName = shieldDropdown.getValue();
   const shieldData = allShields.find(s => s.display_name === selectedShieldName);
   const shieldCount = currentTargetShip.shield_count || 1;
   const singleShieldHp = shieldData?.max_hp || 0;
   const singleShieldRegen = shieldData?.regen || 0;
-  // Total shield HP and regen = single shield × shield count (per Excel formula)
   const totalShieldHp = singleShieldHp * shieldCount;
   const totalShieldRegen = singleShieldRegen * shieldCount;
 
   shieldHpEl.textContent = shieldData ? formatNumber(Math.round(totalShieldHp)) : "0";
   updateBars();
 
-  // Shield phase: Net DPS = Effective DPS - Total Shield Regen
   const netShieldDps = Math.max(0, effectiveDps - totalShieldRegen);
   const shieldTime = netShieldDps > 0 ? totalShieldHp / netShieldDps : (totalShieldHp > 0 ? 9999 : 0);
 
-  // Hull phase: Calculate zone-specific HP
   const zoneHullHp = currentTargetShip.hull_hp * zoneMod.hull;
   const zoneArmorHp = currentTargetShip.armor_hp * zoneMod.armor;
   const zoneThrusterHp = currentTargetShip.thruster_total_hp * zoneMod.thruster;
   const zoneComponentHp = (currentTargetShip.powerplant_total_hp + currentTargetShip.cooler_total_hp + currentTargetShip.shield_gen_total_hp) * zoneMod.component;
 
-  // Split hull phase into armor time and hull time (armor comes first)
   const armorTime = effectiveDps > 0 ? zoneArmorHp / effectiveDps : 0;
   const hullTime = effectiveDps > 0 ? (zoneHullHp + zoneThrusterHp + zoneComponentHp) / effectiveDps : 0;
 
   const totalTtk = shieldTime + armorTime + hullTime;
 
-  // Animated TTK update
   animateTextValue(ttkValueEl, formatTime(totalTtk));
-  // Animated DPS counter
   animateValue(effectiveDpsEl, Math.round(effectiveDps), (n) => formatNumber(Math.round(n)));
   updateTimeline(shieldTime, armorTime, hullTime);
 }
