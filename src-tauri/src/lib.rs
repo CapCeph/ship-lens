@@ -12,6 +12,11 @@ use std::path::PathBuf;
 use std::sync::Mutex;
 use tauri::{Manager, State};
 
+#[cfg(target_os = "linux")]
+use std::process::Command;
+#[cfg(target_os = "linux")]
+use std::io::Write;
+
 /// Application state holding all game data
 pub struct AppState {
     pub data: Mutex<GameData>,
@@ -410,6 +415,121 @@ fn delete_fleet_preset(app: tauri::AppHandle, preset_id: String) -> Result<(), S
     Ok(())
 }
 
+/// Detect Linux package manager type
+#[cfg(target_os = "linux")]
+fn detect_package_manager() -> Option<&'static str> {
+    // Check for DNF (Fedora, RHEL 8+)
+    if PathBuf::from("/usr/bin/dnf").exists() {
+        return Some("dnf");
+    }
+    // Check for APT (Debian, Ubuntu)
+    if PathBuf::from("/usr/bin/apt").exists() {
+        return Some("apt");
+    }
+    // Fallback: check for rpm vs dpkg
+    if PathBuf::from("/usr/bin/rpm").exists() {
+        return Some("rpm");
+    }
+    if PathBuf::from("/usr/bin/dpkg").exists() {
+        return Some("dpkg");
+    }
+    None
+}
+
+/// Install a Linux update using pkexec for privilege elevation
+/// Downloads the appropriate package and installs via system package manager
+#[cfg(target_os = "linux")]
+#[tauri::command]
+fn install_linux_update(version: String) -> Result<String, String> {
+    let pkg_manager = detect_package_manager()
+        .ok_or_else(|| "Could not detect package manager".to_string())?;
+
+    // Determine package type and URL based on package manager
+    let (pkg_type, pkg_url) = match pkg_manager {
+        "dnf" | "rpm" => {
+            let filename = format!("Ship.Lens-{}-1.x86_64.rpm", version);
+            let url = format!(
+                "https://github.com/CapCeph/ship-lens/releases/download/v{}/{}",
+                version, filename
+            );
+            ("rpm", url)
+        },
+        "apt" | "dpkg" => {
+            let filename = format!("Ship.Lens_{}_amd64.deb", version);
+            let url = format!(
+                "https://github.com/CapCeph/ship-lens/releases/download/v{}/{}",
+                version, filename
+            );
+            ("deb", url)
+        },
+        _ => return Err(format!("Unsupported package manager: {}", pkg_manager)),
+    };
+
+    // Download package to temp directory
+    let temp_dir = std::env::temp_dir();
+    let pkg_filename = if pkg_type == "rpm" {
+        format!("ship-lens-{}.rpm", version)
+    } else {
+        format!("ship-lens-{}.deb", version)
+    };
+    let pkg_path = temp_dir.join(&pkg_filename);
+
+    eprintln!("Downloading {} to {:?}", pkg_url, pkg_path);
+
+    // Download the package using ureq
+    let response = ureq::get(&pkg_url)
+        .call()
+        .map_err(|e| format!("Failed to download package: {}", e))?;
+
+    let mut file = fs::File::create(&pkg_path)
+        .map_err(|e| format!("Failed to create temp file: {}", e))?;
+
+    std::io::copy(&mut response.into_reader(), &mut file)
+        .map_err(|e| format!("Failed to write package: {}", e))?;
+
+    file.flush()
+        .map_err(|e| format!("Failed to flush file: {}", e))?;
+
+    drop(file); // Close file before installing
+
+    eprintln!("Downloaded package to {:?}, installing via pkexec...", pkg_path);
+
+    // Build the install command based on package manager
+    let install_cmd = match pkg_manager {
+        "dnf" => format!("dnf install -y '{}'", pkg_path.display()),
+        "apt" => format!("apt install -y '{}'", pkg_path.display()),
+        "rpm" => format!("rpm -U '{}'", pkg_path.display()),
+        "dpkg" => format!("dpkg -i '{}'", pkg_path.display()),
+        _ => return Err("Unknown package manager".to_string()),
+    };
+
+    // Run via pkexec for privilege elevation
+    let output = Command::new("pkexec")
+        .arg("sh")
+        .arg("-c")
+        .arg(&install_cmd)
+        .output()
+        .map_err(|e| format!("Failed to run pkexec: {}", e))?;
+
+    // Clean up temp file
+    let _ = fs::remove_file(&pkg_path);
+
+    if output.status.success() {
+        Ok("Update installed successfully. Please restart the application.".to_string())
+    } else {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        Err(format!("Install failed:\n{}\n{}", stdout, stderr))
+    }
+}
+
+/// Stub for non-Linux platforms
+#[cfg(not(target_os = "linux"))]
+#[tauri::command]
+fn install_linux_update(_version: String) -> Result<String, String> {
+    Err("Linux update only available on Linux".to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // Load game data
@@ -461,6 +581,7 @@ pub fn run() {
             save_fleet_preset,
             load_fleet_presets,
             delete_fleet_preset,
+            install_linux_update,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

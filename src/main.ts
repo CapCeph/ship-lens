@@ -1489,7 +1489,7 @@ function showUpdateModal(update: Awaited<ReturnType<typeof check>>) {
 
   if (!updateModal) return;
 
-  // Detect if we're on Linux (system install can't auto-update)
+  // Detect if we're on Linux
   const isLinux = navigator.platform.toLowerCase().includes("linux");
 
   // Update the version display
@@ -1497,13 +1497,10 @@ function showUpdateModal(update: Awaited<ReturnType<typeof check>>) {
     updateVersion.textContent = `Version ${update.version}`;
   }
 
-  // For Linux, change button to open releases page instead of auto-update
-  if (isLinux && updateInstall instanceof HTMLButtonElement) {
-    updateInstall.textContent = "View on GitHub";
-    if (updateProgress) {
-      updateProgress.style.display = "block";
-      updateProgress.textContent = "Linux: Re-run the install command from the README to update.";
-    }
+  // For Linux, show note about password prompt
+  if (isLinux && updateProgress) {
+    updateProgress.style.display = "block";
+    updateProgress.textContent = "You'll be prompted for your password to install.";
   }
 
   // Show the modal
@@ -1526,13 +1523,6 @@ function showUpdateModal(update: Awaited<ReturnType<typeof check>>) {
 
   // Install button handler
   updateInstall?.addEventListener("click", async () => {
-    // On Linux, open GitHub releases page instead of trying to auto-update
-    if (isLinux) {
-      window.open("https://github.com/CapCeph/ship-lens/releases/latest", "_blank");
-      updateModal.classList.remove("open");
-      return;
-    }
-
     try {
       // Disable button and show progress
       if (updateInstall instanceof HTMLButtonElement) {
@@ -1544,7 +1534,44 @@ function showUpdateModal(update: Awaited<ReturnType<typeof check>>) {
         updateProgress.textContent = "Downloading update...";
       }
 
-      // Download and install the update
+      // On Linux, use custom pkexec-based update
+      if (isLinux) {
+        if (updateProgress) {
+          updateProgress.textContent = "Downloading package... (this may take a moment)";
+        }
+
+        try {
+          const result = await invoke<string>("install_linux_update", { version: update.version });
+          console.log("Linux update result:", result);
+
+          if (updateProgress) {
+            updateProgress.textContent = "Update installed! Restarting...";
+          }
+
+          // Give user a moment to see the success message
+          setTimeout(async () => {
+            await relaunch();
+          }, 1500);
+        } catch (e) {
+          console.error("Linux update failed:", e);
+          if (updateInstall instanceof HTMLButtonElement) {
+            updateInstall.disabled = false;
+            updateInstall.textContent = "Download & Install";
+          }
+          if (updateProgress) {
+            // Check if user cancelled the pkexec dialog
+            const errorStr = String(e);
+            if (errorStr.includes("126") || errorStr.includes("cancelled") || errorStr.includes("dismissed")) {
+              updateProgress.textContent = "Update cancelled.";
+            } else {
+              updateProgress.textContent = `Update failed: ${e}`;
+            }
+          }
+        }
+        return;
+      }
+
+      // Windows/Mac: Use Tauri's built-in updater
       await update.downloadAndInstall((event) => {
         if (event.event === "Started" && updateProgress) {
           const contentLength = event.data.contentLength;
