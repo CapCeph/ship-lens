@@ -28,7 +28,7 @@
 
 ## What is Ship Lens?
 
-Ship Lens is a fast, native desktop app that calculates **Time-To-Kill (TTK)** between Star Citizen ships. TTK is the time to reach **power plant failure** - the point of no return where the ship will explode if the pilot doesn't eject. No browser needed - just launch and go.
+Ship Lens is a fast, native desktop app that calculates **Time-To-Kill (TTK)** between Star Citizen ships. TTK is the time to reach **power plant failure** - the point of no return where the ship will explode if the pilot/crew doesn't eject or repair. No browser needed - just launch and go.
 
 ## Note: TTK values are typically accurate within 5-10 seconds based on testing against live Alpha 4.5 combat. Real fights vary based on pilot skill, hit rate, and maneuvering.
 
