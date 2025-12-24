@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-  <img src="https://robertsspaceindustries.com/media/a2u5vfrvz1u4br/source/CreatedByTheCommunity_1920.1.90.jpg" alt="Made By TheCeph for The Community" width="400">
+  <img src="https://robertsspaceindustries.com/media/a2u5vfrvz1u4br/source/CreatedByTheCommunity_1920.1.100.jpg" alt="Made By TheCeph for The Community" width="400">
 </p>
 
 ---
@@ -55,12 +55,12 @@ Think of it as a varient of [Erkul](https://www.erkul.games/) but as a lightweig
 
 **Fedora / RHEL:**
 ```bash
-curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens-0.1.9-1.x86_64.rpm && sudo dnf install -y ./Ship.Lens-*.rpm
+curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens-0.1.10-1.x86_64.rpm && sudo dnf install -y ./Ship.Lens-*.rpm
 ```
 
 **Ubuntu / Debian / Zorin:**
 ```bash
-curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens_0.1.9_amd64.deb && sudo apt install -y ./Ship.Lens_*.deb
+curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens_0.1.10_amd64.deb && sudo apt install -y ./Ship.Lens_*.deb
 ```
 
 ### Windows
