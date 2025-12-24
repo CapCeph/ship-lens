@@ -37,3 +37,7 @@ venv/
 
 # Project context (contains sensitive info)
 CLAUDE.md
+
+# Internal development
+.claude/
+grsch/
