@@ -32,6 +32,10 @@ Ship Lens is a fast, native desktop app that calculates **Time-To-Kill (TTK)** b
 
 ## Note: Please keep in mind that this is a new project. Solidification of the proper calculation systems are still in development and current results may not be accurate.
 
+<p align="center">
+  <img src="assets/Ship Lens.png" alt="Ship Lens Screenshot" width="700">
+</p>
+
 Think of it as a variant of [Erkul](https://www.erkul.games/) but as a lightweight desktop app built in Rust.
 
 ### Current Support: Star Citizen Alpha 4.5 LIVE
