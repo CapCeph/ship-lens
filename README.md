@@ -28,24 +28,24 @@
 
 ## What is Ship Lens?
 
-Ship Lens is a fast, native desktop app that calculates **Time-To-Kill (TTK)** between Star Citizen ships. No browser needed - just launch and go.
+Ship Lens is a fast, native desktop app that calculates **Time-To-Kill (TTK)** between Star Citizen ships. TTK is the time to reach **power plant failure** - the point of no return where the ship will explode if the pilot doesn't eject. No browser needed - just launch and go.
 
 Note: Please keep in mind that this is a new project. Solidification of the proper calculation systems are still in development and current results may not be accurate.
 
-Think of it as a varient of [Erkul](https://www.erkul.games/) but as a lightweight desktop app built in Rust.
+Think of it as a variant of [Erkul](https://www.erkul.games/) but as a lightweight desktop app built in Rust.
+
+### Current Support: Star Citizen Alpha 4.5 LIVE
 
 ### Features
 
-- **Alpha 4.5 Damage Model** - Accurate TTK with dual-layer armor, shield absorption, and damage type resistances
-- **279+ Ships** - All flyable ships with hull, armor, and component HP
-- **114+ Weapons** - Player-equippable weapons with proper in-game names
-- **Weapon Categories** - Pilot weapons, turrets, PDCs, and specialized mounts
-- **Combat Scenarios** - Dogfight, Jousting, and Synthetic test modes
-- **Damage Breakdown** - Physical, Energy, and Distortion DPS with shield bypass
-- **Real-time TTK** - Instant calculations as you adjust loadouts
-- **Fleet Presets** - Save your favorite ship configurations
-- **Multiple Themes** - Crusader, Drake, MISC, Origin, and Aegis color schemes
-- **Auto-Updates** - Get notified when new versions are available
+- **Answer "Can I Kill That?"** - See exactly how long any fight takes before you engage
+- **Every Flyable Ship** - 279+ ships with accurate hull, armor, and shield stats
+- **All Player Weapons** - 114+ guns you can actually equip (no NPC/template junk)
+- **Test Before You Die** - Dogfight vs Jousting scenarios to plan your approach
+- **See What Hurts** - Breakdown of physical, energy, and distortion damage
+- **Instant Results** - Tweak loadouts and see TTK update live
+- **Save Your Builds** - Fleet presets for your favorite configurations
+- **Rep Your Manufacturer** - Crusader, Drake, MISC, Origin, and Aegis themes
 
 ---
 
