@@ -1421,10 +1421,41 @@ function initAboutModal() {
   });
 }
 
+// Check GitHub releases API for latest version (fallback for Linux)
+async function checkGitHubRelease(currentVersion: string): Promise<{ version: string } | null> {
+  try {
+    const response = await fetch("https://api.github.com/repos/CapCeph/ship-lens/releases/latest");
+    if (!response.ok) return null;
+
+    const release = await response.json();
+    const latestVersion = release.tag_name?.replace(/^v/, "") || "";
+
+    // Simple version comparison (works for semver x.y.z)
+    if (latestVersion && latestVersion !== currentVersion) {
+      // Compare versions
+      const current = currentVersion.split(".").map(Number);
+      const latest = latestVersion.split(".").map(Number);
+
+      for (let i = 0; i < 3; i++) {
+        if ((latest[i] || 0) > (current[i] || 0)) {
+          return { version: latestVersion };
+        } else if ((latest[i] || 0) < (current[i] || 0)) {
+          return null;
+        }
+      }
+    }
+    return null;
+  } catch (e) {
+    console.warn("GitHub release check failed:", e);
+    return null;
+  }
+}
+
 // Initialize Update modal and check for updates
 async function checkForUpdates(manual: boolean = false) {
   const checkBtn = document.getElementById("check-updates-btn");
   const statusEl = document.getElementById("update-status");
+  const isLinux = navigator.platform.toLowerCase().includes("linux");
 
   // Update UI for manual check
   if (manual && checkBtn) {
@@ -1439,6 +1470,7 @@ async function checkForUpdates(manual: boolean = false) {
   }
 
   try {
+    // Try Tauri's built-in updater first (works for Windows)
     const update = await check();
     if (update) {
       console.log(`Update available: ${update.version}`);
@@ -1447,15 +1479,61 @@ async function checkForUpdates(manual: boolean = false) {
         statusEl.className = "update-status available";
       }
       showUpdateModal(update);
-    } else {
-      console.log("No updates available");
-      if (manual && statusEl) {
-        statusEl.textContent = "You're up to date!";
-        statusEl.className = "update-status success";
+      return;
+    }
+
+    // Tauri updater returned null - might be up to date OR Linux with no platform entry
+    // On Linux, fall back to checking GitHub releases directly
+    if (isLinux) {
+      const currentVersion = await getVersion();
+      const githubUpdate = await checkGitHubRelease(currentVersion);
+
+      if (githubUpdate) {
+        console.log(`Update available (GitHub): ${githubUpdate.version}`);
+        if (manual && statusEl) {
+          statusEl.textContent = `Update available: v${githubUpdate.version}`;
+          statusEl.className = "update-status available";
+        }
+        // Show modal with a minimal update object for Linux
+        showUpdateModalLinux(githubUpdate.version);
+        return;
       }
+    }
+
+    console.log("No updates available");
+    if (manual && statusEl) {
+      statusEl.textContent = "You're up to date!";
+      statusEl.className = "update-status success";
     }
   } catch (e) {
     console.warn("Failed to check for updates:", e);
+
+    // On Linux, if Tauri updater fails, try GitHub fallback
+    if (isLinux) {
+      try {
+        const currentVersion = await getVersion();
+        const githubUpdate = await checkGitHubRelease(currentVersion);
+
+        if (githubUpdate) {
+          console.log(`Update available (GitHub fallback): ${githubUpdate.version}`);
+          if (manual && statusEl) {
+            statusEl.textContent = `Update available: v${githubUpdate.version}`;
+            statusEl.className = "update-status available";
+          }
+          showUpdateModalLinux(githubUpdate.version);
+          return;
+        } else {
+          if (manual && statusEl) {
+            statusEl.textContent = "You're up to date!";
+            statusEl.className = "update-status success";
+          }
+          return;
+        }
+      } catch (e2) {
+        console.warn("GitHub fallback also failed:", e2);
+      }
+    }
+
     if (manual && statusEl) {
       statusEl.textContent = "Could not check for updates";
       statusEl.className = "update-status error";
@@ -1469,6 +1547,81 @@ async function checkForUpdates(manual: boolean = false) {
       }
     }
   }
+}
+
+// Show update modal for Linux (when using GitHub API fallback)
+function showUpdateModalLinux(version: string) {
+  const updateModal = document.getElementById("update-modal");
+  const updateClose = document.getElementById("update-close");
+  const updateVersion = document.getElementById("update-version");
+  const updateInstall = document.getElementById("update-install");
+  const updateLater = document.getElementById("update-later");
+  const updateProgress = document.getElementById("update-progress");
+
+  if (!updateModal) return;
+
+  // Update the version display
+  if (updateVersion) {
+    updateVersion.textContent = `Version ${version}`;
+  }
+
+  // Show note about password prompt
+  if (updateProgress) {
+    updateProgress.style.display = "block";
+    updateProgress.textContent = "You'll be prompted for your password to install.";
+  }
+
+  // Show the modal
+  updateModal.classList.add("open");
+
+  // Close button handler
+  const closeHandler = () => updateModal.classList.remove("open");
+  updateClose?.addEventListener("click", closeHandler, { once: true });
+  updateLater?.addEventListener("click", closeHandler, { once: true });
+
+  // Close on overlay click
+  updateModal.addEventListener("click", (e) => {
+    if (e.target === updateModal) updateModal.classList.remove("open");
+  }, { once: true });
+
+  // Install button handler
+  updateInstall?.addEventListener("click", async () => {
+    try {
+      if (updateInstall instanceof HTMLButtonElement) {
+        updateInstall.disabled = true;
+        updateInstall.textContent = "Downloading...";
+      }
+      if (updateProgress) {
+        updateProgress.style.display = "block";
+        updateProgress.textContent = "Downloading package... (this may take a moment)";
+      }
+
+      const result = await invoke<string>("install_linux_update", { version });
+      console.log("Linux update result:", result);
+
+      if (updateProgress) {
+        updateProgress.textContent = "Update installed! Restarting...";
+      }
+
+      setTimeout(async () => {
+        await relaunch();
+      }, 1500);
+    } catch (e) {
+      console.error("Linux update failed:", e);
+      if (updateInstall instanceof HTMLButtonElement) {
+        updateInstall.disabled = false;
+        updateInstall.textContent = "Download & Install";
+      }
+      if (updateProgress) {
+        const errorStr = String(e);
+        if (errorStr.includes("126") || errorStr.includes("cancelled") || errorStr.includes("dismissed")) {
+          updateProgress.textContent = "Update cancelled.";
+        } else {
+          updateProgress.textContent = `Update failed: ${e}`;
+        }
+      }
+    }
+  }, { once: true });
 }
 
 // Initialize manual update check button
