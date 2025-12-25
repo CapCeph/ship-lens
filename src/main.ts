@@ -14,6 +14,9 @@ interface WeaponHardpoint {
   control_type: string;
   category: 'pilot' | 'manned_turret' | 'auto_pdw' | 'specialized';
   default_weapon: string;  // filename of default weapon
+  mount_name: string;  // gimbal/turret mount name
+  sub_port_count: number;  // number of weapon sub-ports (1=single, 2=dual mount)
+  sub_port_sizes: string;  // comma-separated sizes (e.g., "3,3" for dual S3)
 }
 
 interface Ship {
@@ -493,70 +496,110 @@ class WeaponSlotManager {
       const categorySlotsList: CategorySlot[] = [];
 
       categoryHardpoints.forEach((hp) => {
-        const slotId = `weapon-slot-${globalSlotIndex}`;
-        slotsContainer.insertAdjacentHTML("beforeend", `
-          <div class="weapon-slot">
-            <span class="weapon-slot-size">S${hp.max_size}</span>
-            <div class="searchable-select" id="${slotId}-container">
-              <input type="text" class="search-input" id="${slotId}-search" placeholder="Select weapon..." autocomplete="off">
-              <div class="select-dropdown" id="${slotId}-dropdown"></div>
-              <input type="hidden" id="${slotId}" value="">
+        // Parse sub-port sizes (e.g., "3,3" for dual S3)
+        const subPortCount = hp.sub_port_count || 1;
+        const subPortSizes = hp.sub_port_sizes ? hp.sub_port_sizes.split(',').map(s => parseInt(s.trim()) || hp.max_size) : [hp.max_size];
+
+        // For dual/multi mounts, create a grouped container
+        const isDualMount = subPortCount > 1;
+
+        if (isDualMount) {
+          // Create a container for the dual mount group
+          const groupId = `weapon-group-${globalSlotIndex}`;
+          slotsContainer.insertAdjacentHTML("beforeend", `
+            <div class="weapon-slot-group dual-mount" id="${groupId}">
+              <span class="weapon-group-label" title="${hp.port_name}">${hp.mount_name || hp.port_name}</span>
+              <div class="weapon-group-slots"></div>
             </div>
-          </div>
-        `);
+          `);
+          const groupSlotsContainer = document.querySelector(`#${groupId} .weapon-group-slots`) as HTMLElement;
 
-        const dropdown = new SearchableDropdown(`${slotId}-container`);
-        let weapons = this.weaponsBySize.get(hp.max_size) || [];
+          // Create individual slots for each sub-port
+          for (let subIdx = 0; subIdx < subPortCount; subIdx++) {
+            const subPortSize = subPortSizes[subIdx] || hp.max_size;
+            const slotId = `weapon-slot-${globalSlotIndex}`;
+            const subPortLabel = subPortCount === 2 ? (subIdx === 0 ? 'Left' : 'Right') : `#${subIdx + 1}`;
 
-        // Filter weapons based on hardpoint type
-        const isPdcHardpoint = hp.port_name.toLowerCase().includes('pdc');
-        const isSpecializedHardpoint = hp.category === 'specialized';
+            groupSlotsContainer.insertAdjacentHTML("beforeend", `
+              <div class="weapon-slot sub-port">
+                <span class="weapon-slot-size" title="Sub-port ${subIdx + 1}">${subPortLabel}</span>
+                <span class="weapon-slot-size-badge">S${subPortSize}</span>
+                <div class="searchable-select" id="${slotId}-container">
+                  <input type="text" class="search-input" id="${slotId}-search" placeholder="Select weapon..." autocomplete="off">
+                  <div class="select-dropdown" id="${slotId}-dropdown"></div>
+                  <input type="hidden" id="${slotId}" value="">
+                </div>
+              </div>
+            `);
 
-        if (isSpecializedHardpoint && hp.default_weapon) {
-          // Specialized hardpoints are bespoke - only allow the designated weapon
-          weapons = weapons.filter(w => w.filename === hp.default_weapon);
-        } else if (isPdcHardpoint) {
-          // PDC hardpoints can only mount PDC weapons
-          weapons = weapons.filter(w => w.filename.toLowerCase().includes('pdc'));
-        }
+            const dropdown = new SearchableDropdown(`${slotId}-container`);
+            let weapons = this.weaponsBySize.get(subPortSize) || [];
 
-        const options = weapons.map(w => ({ value: w.display_name, label: `${w.display_name} (${Math.round(w.sustained_dps)} DPS)` }));
-        dropdown.setOptions(options);
+            const options = weapons.map(w => ({ value: w.display_name, label: `${w.display_name} (${Math.round(w.sustained_dps)} DPS)` }));
+            dropdown.setOptions(options);
 
-        // Pre-select default weapon if available, otherwise use first option (highest DPS)
-        let selectedWeapon: string | null = null;
+            // Pre-select first weapon (highest DPS)
+            if (options.length > 0) {
+              dropdown.setValue(options[0].value);
+            }
+            dropdown.onChange(() => { if (this.onChangeCallback) this.onChangeCallback(); });
 
-        if (hp.default_weapon && hp.default_weapon.length > 0) {
-          const defaultWeapon = weapons.find(w => w.filename === hp.default_weapon);
-          if (defaultWeapon) {
-            selectedWeapon = defaultWeapon.display_name;
-            console.log(`Slot ${globalSlotIndex}: default weapon "${hp.default_weapon}" found -> "${selectedWeapon}"`);
-          } else {
-            console.log(`Slot ${globalSlotIndex}: default weapon "${hp.default_weapon}" NOT found in ${weapons.length} S${hp.max_size} weapons`);
+            // Create a modified hardpoint for this sub-port (sub_port_count = 1 since it's individual now)
+            const subPortHardpoint: WeaponHardpoint = {
+              ...hp,
+              max_size: subPortSize,
+              sub_port_count: 1,  // Individual sub-port
+            };
+            categorySlotsList.push({ hardpoint: subPortHardpoint, dropdown, slotIndex: globalSlotIndex });
+            globalSlotIndex++;
           }
-        }
+        } else {
+          // Single weapon slot (original behavior)
+          const slotId = `weapon-slot-${globalSlotIndex}`;
+          slotsContainer.insertAdjacentHTML("beforeend", `
+            <div class="weapon-slot">
+              <span class="weapon-slot-size" title="${hp.port_name}">S${hp.max_size}</span>
+              <div class="searchable-select" id="${slotId}-container">
+                <input type="text" class="search-input" id="${slotId}-search" placeholder="Select weapon..." autocomplete="off">
+                <div class="select-dropdown" id="${slotId}-dropdown"></div>
+                <input type="hidden" id="${slotId}" value="">
+              </div>
+            </div>
+          `);
 
-        // If no default found, use the first option (already sorted by DPS)
-        if (!selectedWeapon && options.length > 0) {
-          selectedWeapon = options[0].value;
-          console.log(`Slot ${globalSlotIndex}: no default, using first option "${selectedWeapon}"`);
-        }
+          const dropdown = new SearchableDropdown(`${slotId}-container`);
+          let weapons = this.weaponsBySize.get(hp.max_size) || [];
 
-        if (!selectedWeapon) {
-          console.warn(`Slot ${globalSlotIndex} S${hp.max_size}: NO weapon selected! options.length=${options.length}, weaponsBySize has sizes: [${Array.from(this.weaponsBySize.keys()).join(', ')}]`);
-        }
+          // Filter weapons based on hardpoint type
+          const isPdcHardpoint = hp.port_name.toLowerCase().includes('pdc');
+          const isSpecializedHardpoint = hp.category === 'specialized';
 
-        if (selectedWeapon) {
-          dropdown.setValue(selectedWeapon);
-        } else if (options.length > 0) {
-          // Extra safety: if we somehow got here without selectedWeapon but have options, use first
-          console.warn(`Slot ${globalSlotIndex}: Forcing first option selection`);
-          dropdown.setValue(options[0].value);
-        }
-        dropdown.onChange(() => { if (this.onChangeCallback) this.onChangeCallback(); });
+          if (isSpecializedHardpoint && hp.default_weapon) {
+            weapons = weapons.filter(w => w.filename === hp.default_weapon);
+          } else if (isPdcHardpoint) {
+            weapons = weapons.filter(w => w.filename.toLowerCase().includes('pdc'));
+          }
 
-        categorySlotsList.push({ hardpoint: hp, dropdown, slotIndex: globalSlotIndex });
-        globalSlotIndex++;
+          const options = weapons.map(w => ({ value: w.display_name, label: `${w.display_name} (${Math.round(w.sustained_dps)} DPS)` }));
+          dropdown.setOptions(options);
+
+          // Pre-select default weapon if available, otherwise use first option
+          let selectedWeapon: string | null = null;
+          if (hp.default_weapon && hp.default_weapon.length > 0) {
+            const defaultWeapon = weapons.find(w => w.filename === hp.default_weapon);
+            if (defaultWeapon) selectedWeapon = defaultWeapon.display_name;
+          }
+          if (!selectedWeapon && options.length > 0) {
+            selectedWeapon = options[0].value;
+          }
+          if (selectedWeapon) {
+            dropdown.setValue(selectedWeapon);
+          }
+          dropdown.onChange(() => { if (this.onChangeCallback) this.onChangeCallback(); });
+
+          categorySlotsList.push({ hardpoint: hp, dropdown, slotIndex: globalSlotIndex });
+          globalSlotIndex++;
+        }
       });
 
       this.categorySlots.set(category, categorySlotsList);
@@ -584,6 +627,9 @@ class WeaponSlotManager {
       control_type: 'Pilot',
       category: 'pilot' as const,
       default_weapon: '',
+      mount_name: '',
+      sub_port_count: 1,
+      sub_port_sizes: String(size),
     }));
 
     this.updateSlotsFromHardpoints(hardpoints);
@@ -699,17 +745,43 @@ class WeaponSlotManager {
   onChange(callback: () => void) { this.onChangeCallback = callback; }
 
   getTotalDps(weapons: Weapon[]): number {
-    return this.getSelectedWeapons().reduce((total, name) => {
-      const weapon = weapons.find(w => w.display_name === name);
-      return total + (weapon?.sustained_dps || 0);
-    }, 0);
+    let total = 0;
+    this.categorySlots.forEach((slots, category) => {
+      if (this.enabledCategories.has(category)) {
+        slots.forEach(slot => {
+          if (slot.dropdown) {
+            const weaponName = slot.dropdown.getValue();
+            const weapon = weapons.find(w => w.display_name === weaponName);
+            if (weapon) {
+              // Multiply by sub_port_count for dual mounts
+              const subPortCount = slot.hardpoint.sub_port_count || 1;
+              total += weapon.sustained_dps * subPortCount;
+            }
+          }
+        });
+      }
+    });
+    return total;
   }
 
   getPowerDraw(weapons: Weapon[]): number {
-    return this.getSelectedWeapons().reduce((total, name) => {
-      const weapon = weapons.find(w => w.display_name === name);
-      return total + (weapon?.power_consumption || 0);
-    }, 0);
+    let total = 0;
+    this.categorySlots.forEach((slots, category) => {
+      if (this.enabledCategories.has(category)) {
+        slots.forEach(slot => {
+          if (slot.dropdown) {
+            const weaponName = slot.dropdown.getValue();
+            const weapon = weapons.find(w => w.display_name === weaponName);
+            if (weapon) {
+              // Multiply by sub_port_count for dual mounts
+              const subPortCount = slot.hardpoint.sub_port_count || 1;
+              total += (weapon.power_consumption || 0) * subPortCount;
+            }
+          }
+        });
+      }
+    });
+    return total;
   }
 
   getDamageTypes(weapons: Weapon[]): string[] {

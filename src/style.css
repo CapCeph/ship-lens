@@ -655,6 +655,60 @@ body {
   text-align: center;
 }
 
+/* Dual mount group container */
+.weapon-slot-group.dual-mount {
+  border: 1px solid var(--accent-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  background: linear-gradient(135deg, var(--bg-input) 0%, rgba(255, 170, 0, 0.05) 100%);
+  margin-bottom: var(--space-sm);
+}
+
+.weapon-group-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--accent-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-xs);
+  padding: 0 var(--space-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.weapon-group-slots {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.weapon-slot.sub-port {
+  background: var(--bg-secondary);
+  border: 1px solid rgba(255, 170, 0, 0.3);
+}
+
+.weapon-slot.sub-port .weapon-slot-size {
+  color: var(--accent-secondary);
+  background: rgba(255, 170, 0, 0.15);
+  min-width: clamp(36px, 4vmin, 48px);
+}
+
+.weapon-slot-size-badge {
+  font-family: var(--font-display);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--accent-primary);
+  background: rgba(74, 158, 255, 0.15);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  margin-right: var(--space-xs);
+  min-width: 24px;
+  text-align: center;
+}
+
 .weapon-slot .searchable-select {
   flex: 1;
 }

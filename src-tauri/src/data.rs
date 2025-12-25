@@ -16,6 +16,9 @@ pub struct WeaponHardpoint {
     pub control_type: String,
     pub category: String,  // "pilot", "manned_turret", "auto_pdw", "specialized"
     pub default_weapon: String,  // filename of default weapon for this hardpoint
+    pub mount_name: String,  // gimbal/turret mount name (e.g., "crus_spirit_nose_turret_s3")
+    pub sub_port_count: i32,  // number of weapon sub-ports (1 for single, 2 for dual mount)
+    pub sub_port_sizes: String,  // comma-separated sizes of sub-ports (e.g., "3,3" for dual S3)
 }
 
 /// Ship data with survivability and loadout information
@@ -194,7 +197,10 @@ impl GameData {
                     gimbal_type: record.get(4).unwrap_or("Unknown").to_string(),
                     control_type: control_type.clone(),
                     category,
-                    default_weapon: record.get(6).unwrap_or("").to_string(),
+                    default_weapon: String::new(),  // Not in CSV anymore, could be added later
+                    mount_name: record.get(6).unwrap_or("").to_string(),
+                    sub_port_count: record.get(7).and_then(|s| s.parse().ok()).unwrap_or(1),
+                    sub_port_sizes: record.get(8).unwrap_or("").to_string(),
                 };
 
                 weapon_hardpoints_lookup
