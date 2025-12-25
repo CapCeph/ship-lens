@@ -14,7 +14,7 @@ pub struct WeaponHardpoint {
     pub max_size: i32,
     pub gimbal_type: String,
     pub control_type: String,
-    pub category: String,  // "pilot", "manned_turret", "auto_pdw", "specialized"
+    pub category: String,  // "pilot", "manned_turret", "remote_turret", "pdc", "specialized", "torpedo", "missile", "bomb"
     pub default_weapon: String,  // filename of default weapon for this hardpoint
     pub mount_name: String,  // gimbal/turret mount name (e.g., "crus_spirit_nose_turret_s3")
     pub sub_port_count: i32,  // number of weapon sub-ports (1 for single, 2 for dual mount)
@@ -166,7 +166,7 @@ impl GameData {
         }
 
         // Build detailed weapon hardpoints lookup
-        // CSV columns: ship_name,slot_number,port_name,max_size,gimbal_type,control_type
+        // CSV v4 columns: ship_name,slot_number,port_name,max_size,gimbal_type,category,mount_name,sub_port_count,sub_port_sizes,default_weapon
         let mut weapon_hardpoints_lookup: HashMap<String, Vec<WeaponHardpoint>> = HashMap::new();
         if weapon_hardpoints_path.exists() {
             let mut rdr = csv::Reader::from_path(&weapon_hardpoints_path)?;
@@ -174,7 +174,7 @@ impl GameData {
                 let record = result?;
                 let ship_name = record.get(0).unwrap_or("").to_uppercase();
                 let port_name = record.get(2).unwrap_or("").to_lowercase();
-                let control_type = record.get(5).unwrap_or("Unknown").to_string();
+                let category = record.get(5).unwrap_or("Unknown").to_string();
                 let mut max_size: i32 = record.get(3).and_then(|s| s.parse().ok()).unwrap_or(0);
 
                 // If size is 0, try to infer from port_name patterns (for ships with incomplete data)
@@ -187,17 +187,14 @@ impl GameData {
                     continue;
                 }
 
-                // Derive category from port_name and control_type
-                let category = Self::derive_hardpoint_category(&port_name, &control_type);
-
                 let hardpoint = WeaponHardpoint {
                     slot_number: record.get(1).and_then(|s| s.parse().ok()).unwrap_or(0),
                     port_name: port_name.clone(),
                     max_size,
                     gimbal_type: record.get(4).unwrap_or("Unknown").to_string(),
-                    control_type: control_type.clone(),
+                    control_type: category.clone(),  // Populate control_type field with category value
                     category,
-                    default_weapon: record.get(9).unwrap_or("").to_string(),  // v3: default_weapon column
+                    default_weapon: record.get(9).unwrap_or("").to_string(),  // v4: default_weapon column
                     mount_name: record.get(6).unwrap_or("").to_string(),
                     sub_port_count: record.get(7).and_then(|s| s.parse().ok()).unwrap_or(1),
                     sub_port_sizes: record.get(8).unwrap_or("").to_string(),
@@ -373,56 +370,74 @@ impl GameData {
     }
 
     /// Derive weapon hardpoint category from port_name and control_type
+    /// Returns one of: "torpedo", "missile", "bomb", "pdc", "specialized",
+    /// "remote_turret", "manned_turret", "pilot"
+    ///
+    /// NOTE: This function is no longer used for hardpoint loading (v4 CSV has category column).
+    /// Kept for potential future use or fallback scenarios.
     fn derive_hardpoint_category(port_name: &str, control_type: &str) -> String {
         let port_lower = port_name.to_lowercase();
 
-        // Check for specialized weapons first (main cannons, chin guns, railguns, or explicit Specialized control type)
-        if port_lower.contains("main_cannon") || port_lower.contains("chin") || port_lower.contains("rail")
-            || port_lower.contains("spinal") || control_type == "Specialized" {
+        // 1. Ordnance patterns (highest priority)
+        if port_lower.contains("torpedo") {
+            return "torpedo".to_string();
+        }
+        if port_lower.contains("missile") || port_lower.contains("rack") {
+            return "missile".to_string();
+        }
+        if port_lower.contains("bomb") {
+            return "bomb".to_string();
+        }
+
+        // 2. Special patterns
+        // PDC/PDT (Point Defense Cannons/Turrets)
+        if port_lower.contains("pdc") || port_lower.contains("pdt") {
+            return "pdc".to_string();
+        }
+        // Specialized weapons (chin guns, main cannons, railguns, spinal mounts)
+        if port_lower.contains("chin") || port_lower.contains("main_cannon")
+            || port_lower.contains("rail") || port_lower.contains("spinal")
+            || control_type == "Specialized" {
             return "specialized".to_string();
         }
 
-        // Check for PDC/PDT hardpoints - must have "pdc" in the name
-        // Note: "remote" turrets without "pdc" are regular remote-operated turrets, not PDCs
-        if port_lower.contains("pdc") || port_lower.contains("pdt") {
-            return "auto_pdw".to_string();
+        // 3. Turret patterns
+        // Remote turrets (remotely-operated, not auto-PDC)
+        if port_lower.contains("remote") && (port_lower.contains("turret") || control_type == "Turret") {
+            return "remote_turret".to_string();
         }
-
-        // Check for manned turrets - explicit turret indicators
+        // Manned turrets (without "remote")
         if port_lower.contains("turret") || control_type == "Turret" {
             return "manned_turret".to_string();
         }
 
-        // Capital ship pattern detection:
-        // Capital ships often have hardpoints named "hardpoint_weapon_left/right" with numbered slots
-        // These are typically turret-mounted, not pilot-controlled, even if data says "Pilot"
-        // Heuristic: if port name is just "hardpoint_weapon_left" or "hardpoint_weapon_right"
-        // (generic pattern used by capital ships), treat as manned turret
-        if (port_lower == "hardpoint_weapon_left" || port_lower == "hardpoint_weapon_right")
-            || (port_lower.starts_with("hardpoint_weapon_") &&
-                (port_lower.ends_with("_left") || port_lower.ends_with("_right"))) {
-            return "manned_turret".to_string();
-        }
-
-        // Default to pilot-controlled for actual pilot control types
+        // 4. Pilot patterns
         if control_type == "Pilot" {
-            // Check for typical pilot weapon port names (nose guns, wing guns, etc.)
-            if port_lower.contains("nose") || port_lower.contains("wing")
-                || port_lower.contains("gun_") || port_lower.contains("hardpoint_gun") {
+            // Check for typical pilot weapon port names
+            if port_lower.contains("nose") || port_lower.contains("wing") || port_lower.contains("gun") {
                 return "pilot".to_string();
             }
         }
 
-        // Fallback for unknown - treat as pilot if it has "gun" in name (typically pilot weapons)
+        // 5. Fallbacks
+        // "gun" pattern typically indicates pilot weapons
         if port_lower.contains("gun") {
             return "pilot".to_string();
         }
 
-        // Generic "weapon" without "gun" - likely a turret on larger ships
+        // Generic "weapon" - check context
         if port_lower.contains("weapon") {
-            return "manned_turret".to_string();
+            // Capital ship patterns (generic weapon hardpoints on large ships)
+            if (port_lower == "hardpoint_weapon_left" || port_lower == "hardpoint_weapon_right")
+                || (port_lower.starts_with("hardpoint_weapon_") &&
+                    (port_lower.ends_with("_left") || port_lower.ends_with("_right"))) {
+                return "manned_turret".to_string();
+            }
+            // Default weapon to pilot for smaller ships
+            return "pilot".to_string();
         }
 
+        // Default fallback
         "pilot".to_string()
     }
 

@@ -59,12 +59,12 @@ Think of it as a variant of [Erkul](https://www.erkul.games/) but as a lightweig
 
 **Fedora / RHEL:**
 ```bash
-curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens-0.1.10-1.x86_64.rpm && sudo dnf install -y ./Ship.Lens-*.rpm
+curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens-0.1.16-1.x86_64.rpm && sudo dnf install -y ./Ship.Lens-*.rpm
 ```
 
 **Ubuntu / Debian / Zorin:**
 ```bash
-curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens_0.1.10_amd64.deb && sudo apt install -y ./Ship.Lens_*.deb
+curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens_0.1.16_amd64.deb && sudo apt install -y ./Ship.Lens_*.deb
 ```
 
 ### Windows
