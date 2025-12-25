@@ -245,6 +245,7 @@ fn calculate_armor_damage(damage: &DamageBreakdown, target: &Ship) -> f64 {
 /// 3. Rule of Two for multi-shield ships
 /// 4. Armor damage with typed resistances
 /// 5. Hull damage with zone modifiers
+/// 6. Passthrough damage path (armor/hull can be destroyed while shields are up)
 pub fn calculate_ttk(
     weapons: &[EquippedWeapon],
     target: &Ship,
@@ -276,8 +277,8 @@ pub fn calculate_ttk(
     // 3. Apply Rule of Two for multi-shield ships
     let effective_shield = apply_rule_of_two(shield, target.shield_count);
 
-    // 4. Shield time calculation
-    let shield_time = if effective_shield.total_hp > 0.0 {
+    // 4. Shield time calculation (time to fully deplete shields)
+    let theoretical_shield_time = if effective_shield.total_hp > 0.0 {
         let net_shield_dps = (shield_dps - effective_shield.regen).max(0.0);
         if net_shield_dps > 0.0 {
             effective_shield.total_hp / net_shield_dps
@@ -289,23 +290,85 @@ pub fn calculate_ttk(
     };
 
     // 5. Apply zone modifiers to effective HP
-    // Zone modifiers represent focusing damage on specific ship areas
-    // E.g., center-mass: 60% hull, 30% armor, 5% thruster, 5% component
     let zone_armor_hp = target.armor_hp as f64 * zone.armor;
     let zone_hull_hp = target.hull_hp as f64 * zone.hull;
     let zone_thruster_hp = target.thruster_total_hp as f64 * zone.thruster;
     let zone_component_hp = (target.powerplant_total_hp + target.cooler_total_hp + target.shield_gen_total_hp) as f64 * zone.component;
+    let total_hull_hp = zone_hull_hp + zone_thruster_hp + zone_component_hp;
 
-    // 6. Armor damage during shield phase (passthrough from ballistics)
-    let armor_damage_during_shields = if shield_time.is_finite() {
-        passthrough_dps * shield_time
+    // 6. Calculate passthrough damage path
+    // With ballistics, armor/hull can be destroyed while shields are up via passthrough
+    let armor_passthrough_dps = if passthrough_dps > 0.0 {
+        // Passthrough goes to armor first, apply armor resistances
+        calculate_armor_damage(&DamageBreakdown {
+            physical: passthrough_dps,
+            energy: 0.0,
+            distortion: 0.0,
+        }, target)
+    } else {
+        0.0
+    };
+
+    // Time to destroy armor via passthrough alone
+    let time_to_destroy_armor_via_passthrough = if armor_passthrough_dps > 0.0 && zone_armor_hp > 0.0 {
+        zone_armor_hp / armor_passthrough_dps
+    } else if zone_armor_hp <= 0.0 {
+        0.0
+    } else {
+        f64::INFINITY
+    };
+
+    // Time to destroy hull via passthrough (after armor is gone)
+    let time_to_destroy_hull_via_passthrough = if passthrough_dps > 0.0 && total_hull_hp > 0.0 {
+        total_hull_hp / passthrough_dps
+    } else if total_hull_hp <= 0.0 {
+        0.0
+    } else {
+        f64::INFINITY
+    };
+
+    // Total time to kill via passthrough path (target dies while shields are still up)
+    let passthrough_kill_time = time_to_destroy_armor_via_passthrough + time_to_destroy_hull_via_passthrough;
+
+    // 7. Calculate normal path (shields break, then armor, then hull)
+    // Armor damage during shield phase (passthrough from ballistics)
+    let armor_damage_during_shields = if theoretical_shield_time.is_finite() && passthrough_dps > 0.0 {
+        // Calculate how much armor passthrough damages during shield phase
+        let max_armor_damage = armor_passthrough_dps * theoretical_shield_time;
+        max_armor_damage.min(zone_armor_hp) // Can't do more damage than armor HP
+    } else if theoretical_shield_time.is_infinite() && passthrough_dps > 0.0 {
+        // Shields never break, all armor damage happens via passthrough
+        zone_armor_hp
+    } else {
+        0.0
+    };
+
+    // Hull damage during shield phase (if armor is destroyed before shields)
+    let hull_damage_during_shields = if theoretical_shield_time.is_finite() && passthrough_dps > 0.0 {
+        let time_armor_depleted = if armor_passthrough_dps > 0.0 && zone_armor_hp > 0.0 {
+            zone_armor_hp / armor_passthrough_dps
+        } else {
+            0.0
+        };
+
+        if time_armor_depleted < theoretical_shield_time {
+            // Armor is destroyed before shields - passthrough hits hull for remaining time
+            let remaining_shield_time = theoretical_shield_time - time_armor_depleted;
+            (passthrough_dps * remaining_shield_time).min(total_hull_hp)
+        } else {
+            0.0
+        }
+    } else if theoretical_shield_time.is_infinite() && passthrough_dps > 0.0 {
+        // Shields never break, all damage happens via passthrough
+        total_hull_hp
     } else {
         0.0
     };
 
     let remaining_armor = (zone_armor_hp - armor_damage_during_shields).max(0.0);
+    let remaining_hull = (total_hull_hp - hull_damage_during_shields).max(0.0);
 
-    // 7. Armor phase with resistances
+    // Armor phase with resistances (after shields are down)
     let armor_dps = calculate_armor_damage(&damage, target);
     let armor_time = if remaining_armor > 0.0 && armor_dps > 0.0 {
         remaining_armor / armor_dps
@@ -313,27 +376,49 @@ pub fn calculate_ttk(
         0.0
     };
 
-    // 8. Hull phase (includes thruster and component damage based on zone)
-    // Hull, thrusters, and components all take full damage (no armor resistances)
-    let total_hull_hp = zone_hull_hp + zone_thruster_hp + zone_component_hp;
+    // Hull phase (after armor, when shields are down)
     let hull_dps = damage.total();
-    let hull_time = if total_hull_hp > 0.0 && hull_dps > 0.0 {
-        total_hull_hp / hull_dps
+    let hull_time = if remaining_hull > 0.0 && hull_dps > 0.0 {
+        remaining_hull / hull_dps
     } else {
         0.0
     };
 
-    // Total TTK
-    let total_ttk = if shield_time.is_finite() {
-        shield_time + armor_time + hull_time
+    // 8. Calculate total TTK - take the shorter path
+    // Path A: Break shields, then destroy remaining armor/hull
+    // Path B: Kill via passthrough while shields are up
+
+    let shield_break_path_ttk = if theoretical_shield_time.is_finite() {
+        theoretical_shield_time + armor_time + hull_time
     } else {
         f64::INFINITY
     };
 
+    // Choose the shorter path
+    let (total_ttk, actual_shield_time) = if passthrough_dps > 0.0 && passthrough_kill_time < shield_break_path_ttk {
+        // Target dies via passthrough before shields would break
+        // Redistribute timeline: shield_time = passthrough_kill_time, armor/hull = 0
+        // This shows that during the entire fight, shields were "active" but passthrough was killing
+        (passthrough_kill_time, passthrough_kill_time)
+    } else {
+        (shield_break_path_ttk, theoretical_shield_time)
+    };
+
+    // Recalculate timeline phases for display
+    // If killed via passthrough, show armor/hull times as portions of total passthrough time
+    let (display_shield_time, display_armor_time, display_hull_time) = if passthrough_dps > 0.0 && passthrough_kill_time < shield_break_path_ttk && passthrough_kill_time.is_finite() {
+        // Killed via passthrough - redistribute timeline to show armor/hull phases during passthrough
+        (0.0, time_to_destroy_armor_via_passthrough, time_to_destroy_hull_via_passthrough)
+    } else if actual_shield_time.is_finite() {
+        (actual_shield_time, armor_time, hull_time)
+    } else {
+        (f64::INFINITY, 0.0, 0.0)
+    };
+
     TTKResult {
-        shield_time,
-        armor_time,
-        hull_time,
+        shield_time: display_shield_time,
+        armor_time: display_armor_time,
+        hull_time: display_hull_time,
         total_ttk,
         damage_breakdown: damage,
         effective_dps: hull_dps,
@@ -566,9 +651,12 @@ mod tests {
         // Should complete and have positive times
         assert!(result.total_ttk > 0.0);
         assert!(result.total_ttk.is_finite());
-        assert!(result.shield_time > 0.0);
+        // With passthrough, the timeline might show shield_time = 0 if killed via passthrough
+        // But armor_time + hull_time should be positive
+        assert!(result.armor_time + result.hull_time > 0.0 || result.shield_time > 0.0,
+            "At least one timeline phase should be positive");
         assert!(result.armor_time >= 0.0);
-        assert!(result.hull_time > 0.0);
+        assert!(result.hull_time >= 0.0);
 
         // Passthrough should be present (ballistic component)
         assert!(result.passthrough_dps > 0.0);
@@ -601,15 +689,16 @@ mod tests {
         };
         let result_engines = calculate_ttk(&equipped, &target, &shield, &scenario, &zone_engines);
 
-        // Shield time is infinite in this test because pure ballistic weapon
-        // with 196 DPS absorbed can't overcome 500 shield regen.
-        // Both should be infinite (zones don't affect shields).
-        assert!(result_center.shield_time.is_infinite() && result_engines.shield_time.is_infinite(),
-            "Both shield times should be infinite for this loadout");
+        // With passthrough damage, pure ballistic weapons can now kill without breaking shields
+        // Shields can't be broken (196 DPS absorbed < 500 regen), but passthrough (775 DPS) kills
+        // So shield_time = 0 (killed via passthrough path), armor_time + hull_time shows actual TTK
+        // Total TTK should be finite for both
+        assert!(result_center.total_ttk.is_finite(),
+            "Center mass TTK should be finite: {}", result_center.total_ttk);
+        assert!(result_engines.total_ttk.is_finite(),
+            "Engines TTK should be finite: {}", result_engines.total_ttk);
 
         // Armor and hull times should differ due to zone targeting
-        // Center mass: 30% armor = 900 HP, hull phase = 60%*5000 + 5%*900 + 5%*1200 = 3105 HP
-        // Engines: 20% armor = 600 HP, hull phase = 10%*5000 + 60%*900 + 10%*1200 = 1160 HP
         assert!((result_center.armor_time - result_engines.armor_time).abs() > 0.1,
             "Armor time should differ: center={}, engines={}",
             result_center.armor_time, result_engines.armor_time);
@@ -618,11 +707,9 @@ mod tests {
             "Hull time should differ: center={}, engines={}",
             result_center.hull_time, result_engines.hull_time);
 
-        // Engines target should have faster post-shield time (less HP to destroy)
-        let center_post_shield = result_center.armor_time + result_center.hull_time;
-        let engines_post_shield = result_engines.armor_time + result_engines.hull_time;
-        assert!(engines_post_shield < center_post_shield,
-            "Targeting engines should be faster post-shield: engines={}, center={}",
-            engines_post_shield, center_post_shield);
+        // Engines target should have faster TTK (less HP to destroy)
+        assert!(result_engines.total_ttk < result_center.total_ttk,
+            "Targeting engines should be faster: engines={}, center={}",
+            result_engines.total_ttk, result_center.total_ttk);
     }
 }
