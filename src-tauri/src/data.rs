@@ -305,8 +305,9 @@ impl GameData {
     fn infer_weapon_size_from_port(port_name: &str) -> i32 {
         let port_lower = port_name.to_lowercase();
 
-        // Skip torpedo and missile hardpoints (not regular weapons)
-        if port_lower.contains("torpedo") || port_lower.contains("missile") {
+        // Skip ordnance hardpoints (missiles, torpedoes, bombs, racks - not direct-fire weapons)
+        if port_lower.contains("torpedo") || port_lower.contains("missile")
+            || port_lower.contains("rack") || port_lower.contains("bomb") {
             return 0;
         }
 
@@ -346,9 +347,14 @@ impl GameData {
             return 5;
         }
 
-        // Generic turret - S4
-        if port_lower.contains("turret") {
+        // Generic weapon turret - S4 (must have "weapon" in name to distinguish from utility turrets)
+        if port_lower.contains("turret") && port_lower.contains("weapon") {
             return 4;
+        }
+
+        // Skip utility turrets (turret without "weapon" in name - tractor beams, mining, etc.)
+        if port_lower.contains("turret") && !port_lower.contains("weapon") {
+            return 0;
         }
 
         // Generic weapon hardpoints - S3 default
