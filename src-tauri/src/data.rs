@@ -197,7 +197,7 @@ impl GameData {
                     gimbal_type: record.get(4).unwrap_or("Unknown").to_string(),
                     control_type: control_type.clone(),
                     category,
-                    default_weapon: String::new(),  // Not in CSV anymore, could be added later
+                    default_weapon: record.get(9).unwrap_or("").to_string(),  // v3: default_weapon column
                     mount_name: record.get(6).unwrap_or("").to_string(),
                     sub_port_count: record.get(7).and_then(|s| s.parse().ok()).unwrap_or(1),
                     sub_port_sizes: record.get(8).unwrap_or("").to_string(),
