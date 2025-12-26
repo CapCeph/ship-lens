@@ -54,13 +54,16 @@ Think of it as a variant of [Erkul](https://www.erkul.games/) but as a lightweig
 
 ---
 
-# Changes in v0.1.17:
+# Changes in v0.1.18:
 
 - Migrate ship data from CSV to individual JSON files (279 ships)
 - Fix Idris AI turrets categorized as remote_turret
 - Remove camera turrets from Idris weapon loadouts
 - Add all 12 PDCs for Idris variants
 - Add S10 Destroyer Mass Driver to weapons
+- Fixed 9 weapon display names to match in-game localization
+- Mantis GT-220, FL-33 Cannon, Tarantula GT-870, etc. now display correctly
+- Weapon names match Erkul.games
 
 ---
 
