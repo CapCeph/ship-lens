@@ -1,6 +1,6 @@
 [package]
 name = "ship-lens"
-version = "0.1.17"
+version = "0.1.18"
 description = "Star Citizen Damage Calculator"
 authors = ["kengonza"]
 license = "MIT"

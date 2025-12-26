@@ -9,11 +9,11 @@ SW16BR1,behr_ballisticrepeater_s1,Behring,1,Ballistic,277.07,8.33,36.0,1200.0,20
 NN-13,mxox_neutroncannon_s1,MaxOx,1,Energy,243.0,2.5,97.2,1400.0,2002.0,0.0,97.2,0.0,0.48,0.02,0.05,0.5
 Omnisky III,amrs_lasercannon_s1,Amon & Reese,1,Energy,243.0,2.5,97.2,1400.0,2002.0,0.0,97.2,0.0,0.9,0.05,0.09,0.5
 CF-117 Bulldog,klwe_laserrepeater_s1,Klaus & Werner,1,Energy,218.7,12.5,17.5,1800.0,1998.0,0.0,17.496,0.0,0.3,0.02,0.03,0.5
-Kroneg Laser S1,kron_lasercannon_s1,Kroneg,1,Energy,147.74,4.17,49.25,1800.0,1998.0,0.0,49.248,0.0,0.9,0.05,0.09,0.5
+FL-11 Cannon,kron_lasercannon_s1,Kroneg,1,Energy,147.74,4.17,49.25,1800.0,1998.0,0.0,49.248,0.0,0.9,0.05,0.09,0.5
 Lightstrike I,espr_lasercannon_s1,Esperia,1,Energy,147.74,4.17,49.25,1800.0,1998.0,0.0,49.248,0.0,0.9,0.05,0.09,0.5
 Klaus & Werner Ballistic Cannon,kbar_ballisticcannon_s1,Klaus & Werner,1,Ballistic,145.27,4.17,48.6,1600.0,2000.0,48.6,0.0,0.0,1.98,0.1,0.2,0.5
-Mantis GT-220 Mk1,gats_ballisticcannon_s1,Gallenson,1,Ballistic,156.01,3.33,60.75,1600.0,2000.0,60.75,0.0,0.0,1.98,0.1,0.2,0.5
-Tarantula GT-870 Mk1,gats_ballisticgatling_s1,Gallenson,1,Ballistic,169.25,26.67,7.56,1600.0,2000.0,7.56,0.0,0.0,0.66,0.03,0.07,0.5
+Tarantula GT-870 Mk1,gats_ballisticcannon_s1,Gallenson,1,Ballistic,156.01,3.33,60.75,1600.0,2000.0,60.75,0.0,0.0,1.98,0.1,0.2,0.5
+YellowJacket GT-210,gats_ballisticgatling_s1,Gallenson,1,Ballistic,169.25,26.67,7.56,1600.0,2000.0,7.56,0.0,0.0,0.66,0.03,0.07,0.5
 Suckerpunch-S,asad_distortionrepeater_s1,ASAS,1,Distortion,171.33,6.67,25.7,1300.0,2000.3,0.0,0.0,25.7,0.42,0.02,0.04,0.5
 Behring PDC S1,behr_laserrepeater_pdc_s1,Behring,1,Energy,150.0,16.67,10.0,1800.0,1998.0,0,150.0,0,3.0,0.1,0.2,0.5
 CF-117 Bulldog (ATLS),klwe_laserrepeater_s1_atls,Klaus & Werner,1,Energy,141.25,12.5,11.3,750.0,225.0,0.0,66.51,0.0,0.3,0.02,0.03,0.5
@@ -35,13 +35,13 @@ Vanguard Ballistic Repeater,behr_ballisticrepeater_vng_s2,Behring,2,Ballistic,40
 Vanguard Ballistic Cannon,behr_ballisticcannon_vng_s2,Behring,2,Ballistic,270.0,2.5,162.0,1320.0,2310.0,162.0,0.0,0.0,2.64,0.13,0.26,0.5
 NN-14,mxox_neutroncannon_s2,MaxOx,2,Energy,364.5,2.5,145.8,1400.0,2296.0,0.0,145.8,0.0,0.64,0.03,0.06,0.5
 Omnisky VI,amrs_lasercannon_s2,Amon & Reese,2,Energy,364.5,2.5,145.8,1400.0,2296.0,0.0,145.8,0.0,1.2,0.06,0.12,0.5
-Tarantula GT-870 Mk2,gats_ballisticgatling_s2,Gallenson,2,Ballistic,276.58,26.67,12.7,1600.0,2304.0,12.7,0.0,0.0,0.88,0.04,0.09,0.5
+Scorpion GT-215,gats_ballisticgatling_s2,Gallenson,2,Ballistic,276.58,26.67,12.7,1600.0,2304.0,12.7,0.0,0.0,0.88,0.04,0.09,0.5
 CF-227 Badger,klwe_laserrepeater_s2,Klaus & Werner,2,Energy,328.05,12.5,26.24,1800.0,2304.0,0.0,26.244,0.0,0.4,0.02,0.04,0.5
 Klaus & Werner PDC S2,klwe_laserrepeater_pdc_s2,Klaus & Werner,2,Energy,328.05,12.5,26.24,1800.0,2304.0,0,328.05,0,3.0,0.1,0.2,0.5
 Thermyte Lightstorm,toag_lasergatling_s2,Thermyte,2,Ballistic,256.5,18.33,17.1,1800.0,2592.0,0.0,17.1,0.0,0.4,0.02,0.04,0.5
-Kroneg Laser S2,kron_lasercannon_s2,Kroneg,2,Energy,222.1,4.17,74.03,1800.0,2304.0,0.0,74.034,0.0,1.2,0.06,0.12,0.5
+FL-22 Cannon,kron_lasercannon_s2,Kroneg,2,Energy,222.1,4.17,74.03,1800.0,2304.0,0.0,74.034,0.0,1.2,0.06,0.12,0.5
 Lightstrike II,espr_lasercannon_s2,Esperia,2,Energy,222.1,4.17,74.03,1800.0,2304.0,0.0,74.034,0.0,1.2,0.06,0.12,0.5
-Mantis GT-220 Mk2,gats_ballisticcannon_s2,Gallenson,2,Ballistic,230.11,3.33,91.26,1600.0,2304.0,91.26,0.0,0.0,2.64,0.13,0.26,0.5
+Tarantula GT-870 Mk2,gats_ballisticcannon_s2,Gallenson,2,Ballistic,230.11,3.33,91.26,1600.0,2304.0,91.26,0.0,0.0,2.64,0.13,0.26,0.5
 Klaus & Werner Ballistic Cannon,kbar_ballisticcannon_s2,Klaus & Werner,2,Ballistic,213.27,4.17,72.99,1600.0,2304.0,72.99,0.0,0.0,2.64,0.13,0.26,0.5
 Apocalypse Mass Driver,apar_massdriver_s2,Apocalypse,2,Ballistic,262.5,0.5,525.0,5000.0,5500.0,525.0,0.0,0.0,3.36,0.17,0.34,0.5
 Sledge II,klwe_massdriver_s2,Klaus & Werner,2,Ballistic,262.5,0.5,525.0,3000.0,1200.0,525.0,0.0,0.0,3.36,0.17,0.34,0.5
@@ -65,12 +65,12 @@ Kruger Laser Cannon,krig_lasercannon_s3,Kruger,3,Energy,546.75,2.5,218.7,1400.0,
 NN-15,mxox_neutroncannon_s3,MaxOx,3,Energy,546.75,2.5,218.7,1400.0,2604.0,0.0,218.7,0.0,1.2,0.06,0.12,0.5
 Omnisky IX,amrs_lasercannon_s3,Amon & Reese,3,Energy,546.75,2.5,218.7,1400.0,2604.0,0.0,218.7,0.0,2.25,0.11,0.23,0.5
 CF-337 Panther,klwe_laserrepeater_s3,Klaus & Werner,3,Energy,545.62,12.5,43.65,1800.0,2592.0,0.0,43.65,0.0,0.75,0.04,0.08,0.5
-Tarantula GT-870 Mk3,gats_ballisticgatling_s3,Gallenson,3,Ballistic,373.55,26.67,19.0,1600.0,2608.0,19.0,0.0,0.0,1.65,0.08,0.17,0.5
+Mantis GT-220,gats_ballisticgatling_s3,Gallenson,3,Ballistic,373.55,26.67,19.0,1600.0,2608.0,19.0,0.0,0.0,1.65,0.08,0.17,0.5
 Yellowjacket GT-210,glsn_laserrepeater_s3,Gallenson,3,Energy,493.75,12.5,39.5,1800.0,2592.0,0.0,39.5,0.0,0.75,0.04,0.08,0.5
-Kroneg Laser S3,kron_lasercannon_s3,Kroneg,3,Energy,332.42,4.17,110.81,1800.0,2592.0,0.0,110.808,0.0,2.25,0.11,0.23,0.5
+FL-33 Cannon,kron_lasercannon_s3,Kroneg,3,Energy,332.42,4.17,110.81,1800.0,2592.0,0.0,110.808,0.0,2.25,0.11,0.23,0.5
 Lightstrike III,espr_lasercannon_s3,Esperia,3,Energy,332.42,4.17,110.81,1800.0,2592.0,0.0,110.808,0.0,2.25,0.11,0.23,0.5
 Thermyte Repeater,toag_laserrepeater_s3,Thermyte,3,Energy,455.63,12.5,36.45,1800.0,2592.0,0.0,36.45,0.0,0.75,0.04,0.08,0.5
-Mantis GT-220 Mk3,gats_ballisticcannon_s3,Gallenson,3,Ballistic,337.83,3.33,136.62,1600.0,2608.0,136.62,0.0,0.0,4.95,0.25,0.5,0.5
+Tarantula GT-870 Mk3,gats_ballisticcannon_s3,Gallenson,3,Ballistic,337.83,3.33,136.62,1600.0,2608.0,136.62,0.0,0.0,4.95,0.25,0.5,0.5
 Klaus & Werner Ballistic Cannon,kbar_ballisticcannon_s3,Klaus & Werner,3,Ballistic,311.82,4.17,109.26,1600.0,2608.0,109.26,0.0,0.0,4.95,0.25,0.5,0.5
 Suckerpunch-L,asad_distortionrepeater_s3,ASAS,3,Distortion,386.0,6.67,57.9,1300.0,2594.8,0.0,0.0001,57.9,1.05,0.05,0.11,0.5
 Distortion Cannon S3,jokr_distortioncannon_s3,Joker,3,Distortion,304.2,1.67,182.52,1300.0,2594.8,0.0,0.0,182.52,3.15,0.16,0.32,0.5
