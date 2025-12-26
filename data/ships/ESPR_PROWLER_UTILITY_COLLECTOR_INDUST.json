@@ -1,0 +1,76 @@
+{
+  "filename": "espr_prowler_utility_collector_indust",
+  "display_name": "Esperia prowler utility collector indust",
+  "hull_hp": 30000,
+  "armor": {
+    "hp": 6300,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 0.7,
+    "damage_mult_energy": 0.5,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 39000,
+    "retro_hp": 72000,
+    "mav_hp": 428000,
+    "vtol_hp": 0,
+    "total_hp": 539000
+  },
+  "components": {
+    "turret_total_hp": 0,
+    "powerplant_total_hp": 590,
+    "cooler_total_hp": 960,
+    "shield_gen_total_hp": 1140,
+    "qd_total_hp": 570
+  },
+  "shield_count": 0,
+  "max_shield_size": 0,
+  "default_shield_ref": "",
+  "weapon_hardpoints": [
+    {
+      "port_name": "hardpoint_weapon_left",
+      "max_size": 4,
+      "gimbal_type": "Gimbal",
+      "category": "pilot",
+      "mount_name": "entityclassdefinition.mount_gimbal_s4",
+      "sub_ports": [
+        {
+          "size": 4,
+          "default_weapon": "amrs_lasercannon_s4"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_right",
+      "max_size": 4,
+      "gimbal_type": "Gimbal",
+      "category": "pilot",
+      "mount_name": "entityclassdefinition.mount_gimbal_s4",
+      "sub_ports": [
+        {
+          "size": 4,
+          "default_weapon": "amrs_lasercannon_s4"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_spine",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "remote_turret",
+      "mount_name": "espr_prowler_remote_turret_s5",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "espr_ballisticcannon_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "espr_ballisticcannon_s3"
+        }
+      ]
+    }
+  ]
+}

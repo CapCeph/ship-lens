@@ -1,0 +1,153 @@
+{
+  "filename": "crus_starfighter_ion_collector_stealth",
+  "display_name": "Crusader starfighter ion collector stealth",
+  "hull_hp": 10000,
+  "armor": {
+    "hp": 7200,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 0.75,
+    "damage_mult_energy": 0.6,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 44400,
+    "retro_hp": 44400,
+    "mav_hp": 266400,
+    "vtol_hp": 0,
+    "total_hp": 355200
+  },
+  "components": {
+    "turret_total_hp": 0,
+    "powerplant_total_hp": 1040,
+    "cooler_total_hp": 1020,
+    "shield_gen_total_hp": 800,
+    "qd_total_hp": 400
+  },
+  "shield_count": 0,
+  "max_shield_size": 0,
+  "default_shield_ref": "",
+  "weapon_hardpoints": [
+    {
+      "port_name": "hardpoint_weapon_s7",
+      "max_size": 7,
+      "gimbal_type": "Fixed",
+      "category": "pilot",
+      "mount_name": "behr_lasercannon_sf7e_s7_collector",
+      "sub_ports": [
+        {
+          "size": 7,
+          "default_weapon": "behr_lasercannon_sf7e_s7_collector"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_missile_launcher_left_s05",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s05_behr_quad_s03",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_ir_novp_viper"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_ir_novp_viper"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_ir_novp_viper"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_ir_novp_viper"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_missile_launcher_right_s05",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s05_behr_quad_s03",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_ir_novp_viper"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_ir_novp_viper"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_ir_novp_viper"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_ir_novp_viper"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_missile_launcher",
+      "max_size": 7,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s07_crus_starfighter",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
+      ]
+    }
+  ]
+}

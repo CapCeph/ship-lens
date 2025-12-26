@@ -498,6 +498,7 @@ mod tests {
             base_penetration_distance: 2.0,
             near_radius: 0.1,
             far_radius: 0.2,
+            weapon_type: "gun".to_string(),
         }
     }
 

@@ -1,0 +1,32 @@
+{
+  "filename": "argo_srv",
+  "display_name": "Argo srv",
+  "hull_hp": 10000,
+  "armor": {
+    "hp": 6000,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 0.7,
+    "damage_mult_energy": 0.5,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 42000,
+    "retro_hp": 44000,
+    "mav_hp": 252000,
+    "vtol_hp": 168000,
+    "total_hp": 506000
+  },
+  "components": {
+    "turret_total_hp": 6500,
+    "powerplant_total_hp": 640,
+    "cooler_total_hp": 420,
+    "shield_gen_total_hp": 410,
+    "qd_total_hp": 570
+  },
+  "shield_count": 1,
+  "max_shield_size": 2,
+  "default_shield_ref": "shld_behr_s02_5ma_scitem",
+  "weapon_hardpoints": []
+}

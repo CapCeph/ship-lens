@@ -1,0 +1,32 @@
+{
+  "filename": "argo_mpuv_transport",
+  "display_name": "Argo mpuv transport",
+  "hull_hp": 2500,
+  "armor": {
+    "hp": 1500,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 0.7,
+    "damage_mult_energy": 0.5,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 14000,
+    "retro_hp": 0,
+    "mav_hp": 35000,
+    "vtol_hp": 0,
+    "total_hp": 49000
+  },
+  "components": {
+    "turret_total_hp": 0,
+    "powerplant_total_hp": 82,
+    "cooler_total_hp": 92,
+    "shield_gen_total_hp": 180,
+    "qd_total_hp": 0
+  },
+  "shield_count": 1,
+  "max_shield_size": 1,
+  "default_shield_ref": "shld_basl_s01_bulwark_scitem",
+  "weapon_hardpoints": []
+}

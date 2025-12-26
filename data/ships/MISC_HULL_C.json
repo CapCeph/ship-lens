@@ -1,0 +1,84 @@
+{
+  "filename": "misc_hull_c",
+  "display_name": "MISC hull c",
+  "hull_hp": 60000,
+  "armor": {
+    "hp": 36000,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 0.7,
+    "damage_mult_energy": 0.5,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 90000,
+    "retro_hp": 60000,
+    "mav_hp": 240000,
+    "vtol_hp": 120000,
+    "total_hp": 510000
+  },
+  "components": {
+    "turret_total_hp": 0,
+    "powerplant_total_hp": 4200,
+    "cooler_total_hp": 3600,
+    "shield_gen_total_hp": 5600,
+    "qd_total_hp": 1400
+  },
+  "shield_count": 4,
+  "max_shield_size": 3,
+  "default_shield_ref": "shld_basl_s03_stronghold_scitem",
+  "weapon_hardpoints": [
+    {
+      "port_name": "hardpoint_turret_front_top",
+      "max_size": 4,
+      "gimbal_type": "Fixed",
+      "category": "remote_turret",
+      "mount_name": "misc_hull_c_scitem_remote_turret",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_rear_top",
+      "max_size": 4,
+      "gimbal_type": "Fixed",
+      "category": "remote_turret",
+      "mount_name": "misc_hull_c_scitem_remote_turret_rear",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_nose",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "manned_turret",
+      "mount_name": "misc_hull_c_nose_turret_s5",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    }
+  ]
+}

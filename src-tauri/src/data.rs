@@ -6,19 +6,28 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::path::Path;
 
+/// Individual weapon sub-port within a hardpoint
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SubPort {
+    pub size: i32,
+    #[serde(default)]
+    pub default_weapon: Option<String>,
+}
+
 /// Weapon hardpoint with category information
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WeaponHardpoint {
+    #[serde(default)]
     pub slot_number: i32,
     pub port_name: String,
     pub max_size: i32,
     pub gimbal_type: String,
+    #[serde(default)]
     pub control_type: String,
     pub category: String,  // "pilot", "manned_turret", "remote_turret", "pdc", "specialized", "torpedo", "missile", "bomb"
-    pub default_weapon: String,  // filename of default weapon for this hardpoint
+    #[serde(default)]
     pub mount_name: String,  // gimbal/turret mount name (e.g., "crus_spirit_nose_turret_s3")
-    pub sub_port_count: i32,  // number of weapon sub-ports (1 for single, 2 for dual mount)
-    pub sub_port_sizes: String,  // comma-separated sizes of sub-ports (e.g., "3,3" for dual S3)
+    pub sub_ports: Vec<SubPort>,  // individual weapon ports with size and default weapon
 }
 
 /// Ship data with survivability and loadout information
@@ -64,6 +73,7 @@ pub struct Weapon {
     pub damage_type: String,
     pub sustained_dps: f64,
     pub power_consumption: f64,
+    pub weapon_type: String,  // "gun", "missile", "torpedo", "bomb", "pdc"
     // 4.5 damage breakdown by type
     pub damage_physical: f64,
     pub damage_energy: f64,
@@ -124,7 +134,7 @@ pub struct GameData {
 }
 
 impl GameData {
-    /// Load all game data from CSV files in the data directory
+    /// Load all game data from JSON files in the data directory
     pub fn load(data_dir: &Path) -> Result<Self, Box<dyn std::error::Error>> {
         let mut data = GameData::default();
 
@@ -136,158 +146,123 @@ impl GameData {
     }
 
     fn load_ships(&mut self, data_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
-        // Filter patterns for AI variants
-        let filter_patterns = [
-            "_ai_", "_pu_ai", "_ea_ai", "_teach", "_tutorial",
-            "_hijacked", "_derelict", "_wreck", "fleetweek",
-            "citizencon", "indestructible", "gamemaster"
-        ];
+        let ships_dir = data_dir.join("ships");
 
-        // Load parts data
-        let parts_path = data_dir.join("ship_parts_comprehensive.csv");
-        let hardpoint_path = data_dir.join("ship_hardpoint_summary.csv");
-        let hull_hp_path = data_dir.join("ship_hull_hp.csv");
-        let weapon_hardpoints_path = data_dir.join("ship_weapon_hardpoints.csv");
-
-        // Build default shield lookup from ship_hull_hp.csv
-        // CSV columns: display_name,internal_name,hull_hp,shield_count,shield_size,
-        //              total_shield_hp,total_shield_regen,shield_hp_each,shield_regen_each,shield_ref,filename
-        let mut shield_ref_lookup: HashMap<String, String> = HashMap::new();
-        if hull_hp_path.exists() {
-            let mut rdr = csv::Reader::from_path(&hull_hp_path)?;
-            for result in rdr.records() {
-                let record = result?;
-                let filename = record.get(10).unwrap_or("");  // filename column
-                let shield_ref = record.get(9).unwrap_or("").to_lowercase();  // shield_ref column
-                if !shield_ref.is_empty() {
-                    shield_ref_lookup.insert(filename.to_uppercase(), shield_ref);
-                }
-            }
+        if !ships_dir.exists() {
+            return Err(format!("Ships directory not found: {:?}", ships_dir).into());
         }
 
-        // Build detailed weapon hardpoints lookup
-        // CSV v4 columns: ship_name,slot_number,port_name,max_size,gimbal_type,category,mount_name,sub_port_count,sub_port_sizes,default_weapon
-        let mut weapon_hardpoints_lookup: HashMap<String, Vec<WeaponHardpoint>> = HashMap::new();
-        if weapon_hardpoints_path.exists() {
-            let mut rdr = csv::Reader::from_path(&weapon_hardpoints_path)?;
-            for result in rdr.records() {
-                let record = result?;
-                let ship_name = record.get(0).unwrap_or("").to_uppercase();
-                let port_name = record.get(2).unwrap_or("").to_lowercase();
-                let category = record.get(5).unwrap_or("Unknown").to_string();
-                let mut max_size: i32 = record.get(3).and_then(|s| s.parse().ok()).unwrap_or(0);
+        // JSON structure for per-ship files
+        #[derive(Deserialize)]
+        struct ShipArmorJson {
+            hp: i32,
+            resist_physical: f64,
+            resist_energy: f64,
+            resist_distortion: f64,
+            damage_mult_physical: f64,
+            damage_mult_energy: f64,
+            damage_mult_distortion: f64,
+        }
 
-                // If size is 0, try to infer from port_name patterns (for ships with incomplete data)
-                if max_size == 0 {
-                    max_size = Self::infer_weapon_size_from_port(&port_name);
-                }
+        #[derive(Deserialize)]
+        struct ShipThrustersJson {
+            main_hp: i32,
+            retro_hp: i32,
+            mav_hp: i32,
+            vtol_hp: i32,
+            total_hp: i32,
+        }
 
-                // Skip slots that still have size 0 after inference (truly empty hardpoints)
-                if max_size == 0 {
-                    continue;
-                }
+        #[derive(Deserialize)]
+        struct ShipComponentsJson {
+            turret_total_hp: i32,
+            powerplant_total_hp: i32,
+            cooler_total_hp: i32,
+            shield_gen_total_hp: i32,
+            qd_total_hp: i32,
+        }
 
-                let hardpoint = WeaponHardpoint {
-                    slot_number: record.get(1).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    port_name: port_name.clone(),
-                    max_size,
-                    gimbal_type: record.get(4).unwrap_or("Unknown").to_string(),
-                    control_type: category.clone(),  // Populate control_type field with category value
-                    category,
-                    default_weapon: record.get(9).unwrap_or("").to_string(),  // v4: default_weapon column
-                    mount_name: record.get(6).unwrap_or("").to_string(),
-                    sub_port_count: record.get(7).and_then(|s| s.parse().ok()).unwrap_or(1),
-                    sub_port_sizes: record.get(8).unwrap_or("").to_string(),
+        #[derive(Deserialize)]
+        #[allow(dead_code)]
+        struct ShipJson {
+            filename: String,
+            display_name: String,
+            hull_hp: i32,
+            armor: ShipArmorJson,
+            thrusters: ShipThrustersJson,
+            components: ShipComponentsJson,
+            #[serde(default)]
+            shield_count: i32,
+            #[serde(default)]
+            max_shield_size: i32,
+            #[serde(default)]
+            default_shield_ref: String,
+            weapon_hardpoints: Vec<WeaponHardpoint>,
+        }
+
+        // Read all JSON files from ships directory
+        for entry in std::fs::read_dir(&ships_dir)? {
+            let entry = entry?;
+            let path = entry.path();
+
+            if path.extension().map_or(false, |ext| ext == "json") {
+                let json_content = std::fs::read_to_string(&path)?;
+                let ship_json: ShipJson = match serde_json::from_str(&json_content) {
+                    Ok(s) => s,
+                    Err(e) => {
+                        eprintln!("Failed to parse {:?}: {}", path, e);
+                        continue;
+                    }
                 };
 
-                weapon_hardpoints_lookup
-                    .entry(ship_name)
-                    .or_insert_with(Vec::new)
-                    .push(hardpoint);
-            }
-        }
+                let display_name = Self::format_ship_name(&ship_json.filename);
 
-        // Build hardpoint lookup
-        // CSV columns: ship_name,weapon_count,pilot_weapon_count,turret_weapon_count,
-        //              weapon_sizes,pilot_weapon_sizes,max_weapon_size,shield_count,
-        //              shield_sizes,max_shield_size,...
-        let mut hp_lookup: HashMap<String, (i32, String, i32, i32)> = HashMap::new();
-        if hardpoint_path.exists() {
-            let mut rdr = csv::Reader::from_path(&hardpoint_path)?;
-            for result in rdr.records() {
-                let record = result?;
-                let ship_name = record.get(0).unwrap_or("");
-                let pilot_count: i32 = record.get(2).and_then(|s| s.parse().ok()).unwrap_or(0);
-                let pilot_sizes = record.get(5).unwrap_or("").to_string();
-                let shield_count: i32 = record.get(7).and_then(|s| s.parse().ok()).unwrap_or(1);
-                let max_shield_size: i32 = record.get(9).and_then(|s| s.parse().ok()).unwrap_or(0);
-                hp_lookup.insert(ship_name.to_uppercase(), (pilot_count, pilot_sizes, max_shield_size, shield_count));
-            }
-        }
+                // Count pilot weapons and build sizes string
+                let pilot_hardpoints: Vec<_> = ship_json.weapon_hardpoints.iter()
+                    .filter(|hp| hp.category == "pilot")
+                    .collect();
+                let pilot_weapon_count = pilot_hardpoints.iter()
+                    .map(|hp| hp.sub_ports.len() as i32)
+                    .sum();
+                let pilot_weapon_sizes: String = pilot_hardpoints.iter()
+                    .flat_map(|hp| hp.sub_ports.iter().map(|sp| sp.size.to_string()))
+                    .collect::<Vec<_>>()
+                    .join(",");
 
-        if parts_path.exists() {
-            let mut rdr = csv::Reader::from_path(&parts_path)?;
-            for result in rdr.records() {
-                let record = result?;
-                let filename = record.get(0).unwrap_or("");
 
-                // Skip AI variants
-                if filter_patterns.iter().any(|p| filename.to_lowercase().contains(p)) {
-                    continue;
+                // Assign slot numbers to hardpoints
+                let mut hardpoints = ship_json.weapon_hardpoints;
+                for (i, hp) in hardpoints.iter_mut().enumerate() {
+                    hp.slot_number = i as i32 + 1;
+                    hp.control_type = hp.category.clone();
                 }
 
-                let ship_upper = filename.to_uppercase();
-                let (pilot_count, pilot_sizes, max_shield_size, shield_count) = hp_lookup.get(&ship_upper)
-                    .cloned()
-                    .unwrap_or((0, String::new(), 0, 1));
-
-                // Include all ships (even without pilot weapons) as they can be targets
-
-                let display_name = Self::format_ship_name(filename);
-
-                // CSV columns (after dual-layer armor update):
-                // 0: filename, 1: display_name, 2: hull_hp_normalized, 3: fuse_penetration_mult,
-                // 4: component_penetration_mult, 5: critical_explosion_chance, 6: armor_hp,
-                // 7: armor_resist_physical, 8: armor_resist_energy, 9: armor_resist_distortion,
-                // 10: armor_damage_mult_physical, 11: armor_damage_mult_energy, 12: armor_damage_mult_distortion,
-                // 13: armor_effective_physical, 14: armor_effective_energy, 15: armor_effective_distortion,
-                // 16: thruster_count, 17: thruster_main_hp, 18: thruster_retro_hp, 19: thruster_mav_hp,
-                // 20: thruster_vtol_hp, 21: thruster_total_hp, 22: turret_count, 23: turret_total_hp,
-                // 24: powerplant_count, 25: powerplant_total_hp, 26: cooler_count, 27: cooler_total_hp,
-                // 28: shield_gen_count, 29: shield_gen_total_hp, 30: qd_count, 31: qd_total_hp,...
-                // Get weapon hardpoints for this ship
-                let hardpoints = weapon_hardpoints_lookup.get(&ship_upper)
-                    .cloned()
-                    .unwrap_or_default();
-
                 let ship = Ship {
-                    filename: filename.to_string(),
+                    filename: ship_json.filename,
                     display_name: display_name.clone(),
-                    hull_hp: record.get(2).and_then(|s| s.parse().ok()).unwrap_or(0),  // hull_hp_normalized
-                    armor_hp: record.get(6).and_then(|s| s.parse().ok()).unwrap_or(0),  // armor_hp
-                    // Dual-layer armor damage system
-                    armor_damage_mult_physical: record.get(10).and_then(|s| s.parse().ok()).unwrap_or(0.75),
-                    armor_damage_mult_energy: record.get(11).and_then(|s| s.parse().ok()).unwrap_or(0.6),
-                    armor_damage_mult_distortion: record.get(12).and_then(|s| s.parse().ok()).unwrap_or(1.0),
-                    armor_resist_physical: record.get(7).and_then(|s| s.parse().ok()).unwrap_or(0.85),
-                    armor_resist_energy: record.get(8).and_then(|s| s.parse().ok()).unwrap_or(1.3),
-                    armor_resist_distortion: record.get(9).and_then(|s| s.parse().ok()).unwrap_or(1.0),
-                    // Component HP (shifted by 6 columns due to new armor fields)
-                    thruster_main_hp: record.get(17).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    thruster_retro_hp: record.get(18).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    thruster_mav_hp: record.get(19).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    thruster_vtol_hp: record.get(20).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    thruster_total_hp: record.get(21).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    turret_total_hp: record.get(23).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    powerplant_total_hp: record.get(25).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    cooler_total_hp: record.get(27).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    shield_gen_total_hp: record.get(29).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    qd_total_hp: record.get(31).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    pilot_weapon_count: pilot_count,
-                    pilot_weapon_sizes: pilot_sizes,
-                    max_shield_size,
-                    shield_count,
-                    default_shield_ref: shield_ref_lookup.get(&ship_upper).cloned().unwrap_or_default(),
+                    hull_hp: ship_json.hull_hp,
+                    armor_hp: ship_json.armor.hp,
+                    armor_damage_mult_physical: ship_json.armor.damage_mult_physical,
+                    armor_damage_mult_energy: ship_json.armor.damage_mult_energy,
+                    armor_damage_mult_distortion: ship_json.armor.damage_mult_distortion,
+                    armor_resist_physical: ship_json.armor.resist_physical,
+                    armor_resist_energy: ship_json.armor.resist_energy,
+                    armor_resist_distortion: ship_json.armor.resist_distortion,
+                    thruster_main_hp: ship_json.thrusters.main_hp,
+                    thruster_retro_hp: ship_json.thrusters.retro_hp,
+                    thruster_mav_hp: ship_json.thrusters.mav_hp,
+                    thruster_vtol_hp: ship_json.thrusters.vtol_hp,
+                    thruster_total_hp: ship_json.thrusters.total_hp,
+                    turret_total_hp: ship_json.components.turret_total_hp,
+                    powerplant_total_hp: ship_json.components.powerplant_total_hp,
+                    cooler_total_hp: ship_json.components.cooler_total_hp,
+                    shield_gen_total_hp: ship_json.components.shield_gen_total_hp,
+                    qd_total_hp: ship_json.components.qd_total_hp,
+                    pilot_weapon_count,
+                    pilot_weapon_sizes,
+                    max_shield_size: ship_json.max_shield_size,
+                    shield_count: ship_json.shield_count,
+                    default_shield_ref: ship_json.default_shield_ref,
                     weapon_hardpoints: hardpoints,
                 };
 
@@ -297,150 +272,6 @@ impl GameData {
 
         Ok(())
     }
-
-    /// Infer weapon size from port_name when actual size data is missing
-    /// Based on common Star Citizen naming conventions:
-    /// - Remote turrets (PDCs): typically S2
-    /// - Manned turrets on capital ships: typically S4-S5
-    /// - Side turrets: typically S4
-    /// - Top/bottom turrets: typically S4-S5
-    /// - Chin cannons: typically S7+
-    fn infer_weapon_size_from_port(port_name: &str) -> i32 {
-        let port_lower = port_name.to_lowercase();
-
-        // Skip ordnance hardpoints (missiles, torpedoes, bombs, racks - not direct-fire weapons)
-        if port_lower.contains("torpedo") || port_lower.contains("missile")
-            || port_lower.contains("rack") || port_lower.contains("bomb") {
-            return 0;
-        }
-
-        // Skip camera/sensor ports
-        if port_lower.contains("camera") || port_lower.contains("sensor") {
-            return 0;
-        }
-
-        // Remote turrets (PDCs) - typically S2
-        if port_lower.contains("remote") {
-            return 2;
-        }
-
-        // Chin cannons - typically large (S7)
-        if port_lower.contains("chin") {
-            return 7;
-        }
-
-        // Main cannon - very large (S10)
-        if port_lower.contains("main_cannon") {
-            return 10;
-        }
-
-        // Railgun - large (S7)
-        if port_lower.contains("rail") {
-            return 7;
-        }
-
-        // Side turrets on capital ships - typically S4
-        if port_lower.contains("turret_side") {
-            return 4;
-        }
-
-        // Top/bottom turrets - typically S5
-        if port_lower.contains("turret_top") || port_lower.contains("turret_bottom")
-            || port_lower.contains("turret_lower") || port_lower.contains("turret_upper") {
-            return 5;
-        }
-
-        // Generic weapon turret - S4 (must have "weapon" in name to distinguish from utility turrets)
-        if port_lower.contains("turret") && port_lower.contains("weapon") {
-            return 4;
-        }
-
-        // Skip utility turrets (turret without "weapon" in name - tractor beams, mining, etc.)
-        if port_lower.contains("turret") && !port_lower.contains("weapon") {
-            return 0;
-        }
-
-        // Generic weapon hardpoints - S3 default
-        if port_lower.contains("weapon") || port_lower.contains("gun") {
-            return 3;
-        }
-
-        // Unknown - skip
-        0
-    }
-
-    /// Derive weapon hardpoint category from port_name and control_type
-    /// Returns one of: "torpedo", "missile", "bomb", "pdc", "specialized",
-    /// "remote_turret", "manned_turret", "pilot"
-    ///
-    /// NOTE: This function is no longer used for hardpoint loading (v4 CSV has category column).
-    /// Kept for potential future use or fallback scenarios.
-    fn derive_hardpoint_category(port_name: &str, control_type: &str) -> String {
-        let port_lower = port_name.to_lowercase();
-
-        // 1. Ordnance patterns (highest priority)
-        if port_lower.contains("torpedo") {
-            return "torpedo".to_string();
-        }
-        if port_lower.contains("missile") || port_lower.contains("rack") {
-            return "missile".to_string();
-        }
-        if port_lower.contains("bomb") {
-            return "bomb".to_string();
-        }
-
-        // 2. Special patterns
-        // PDC/PDT (Point Defense Cannons/Turrets)
-        if port_lower.contains("pdc") || port_lower.contains("pdt") {
-            return "pdc".to_string();
-        }
-        // Specialized weapons (chin guns, main cannons, railguns, spinal mounts)
-        if port_lower.contains("chin") || port_lower.contains("main_cannon")
-            || port_lower.contains("rail") || port_lower.contains("spinal")
-            || control_type == "Specialized" {
-            return "specialized".to_string();
-        }
-
-        // 3. Turret patterns
-        // Remote turrets (remotely-operated, not auto-PDC)
-        if port_lower.contains("remote") && (port_lower.contains("turret") || control_type == "Turret") {
-            return "remote_turret".to_string();
-        }
-        // Manned turrets (without "remote")
-        if port_lower.contains("turret") || control_type == "Turret" {
-            return "manned_turret".to_string();
-        }
-
-        // 4. Pilot patterns
-        if control_type == "Pilot" {
-            // Check for typical pilot weapon port names
-            if port_lower.contains("nose") || port_lower.contains("wing") || port_lower.contains("gun") {
-                return "pilot".to_string();
-            }
-        }
-
-        // 5. Fallbacks
-        // "gun" pattern typically indicates pilot weapons
-        if port_lower.contains("gun") {
-            return "pilot".to_string();
-        }
-
-        // Generic "weapon" - check context
-        if port_lower.contains("weapon") {
-            // Capital ship patterns (generic weapon hardpoints on large ships)
-            if (port_lower == "hardpoint_weapon_left" || port_lower == "hardpoint_weapon_right")
-                || (port_lower.starts_with("hardpoint_weapon_") &&
-                    (port_lower.ends_with("_left") || port_lower.ends_with("_right"))) {
-                return "manned_turret".to_string();
-            }
-            // Default weapon to pilot for smaller ships
-            return "pilot".to_string();
-        }
-
-        // Default fallback
-        "pilot".to_string()
-    }
-
     fn format_ship_name(filename: &str) -> String {
         let manufacturers: HashMap<&str, &str> = [
             ("aegs", "Aegis"), ("anvl", "Anvil"), ("argo", "Argo"), ("banu", "Banu"),
@@ -503,235 +334,87 @@ impl GameData {
     }
 
     fn load_weapons(&mut self, data_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
-        // Try the new combined CSV first, fall back to legacy
-        let combined_path = data_dir.join("weapons_combined.csv");
-        let legacy_path = data_dir.join("ship_weapons.csv");
-        let power_path = data_dir.join("weapon_power_data.csv");
+        let json_path = data_dir.join("weapons.json");
 
-        // Build power lookup for legacy format
-        let mut power_lookup: HashMap<String, f64> = HashMap::new();
-        if power_path.exists() {
-            let mut rdr = csv::Reader::from_path(&power_path)?;
-            for result in rdr.records() {
-                let record = result?;
-                if let (Some(filename), Some(power)) = (record.get(0), record.get(1)) {
-                    power_lookup.insert(
-                        filename.to_lowercase(),
-                        power.parse().unwrap_or(0.0)
-                    );
-                }
-            }
+        if !json_path.exists() {
+            return Err(format!("Weapons file not found: {:?}", json_path).into());
         }
 
-        // Use combined CSV if available (4.5 format with penetration data)
-        if combined_path.exists() {
-            let mut rdr = csv::Reader::from_path(&combined_path)?;
-            // CSV columns: display_name,filename,manufacturer,size,damage_type,
-            //              sustained_dps,fire_rate,damage_per_shot,speed,max_range,
-            //              damage_physical,damage_energy,damage_distortion,
-            //              base_penetration_distance,near_radius,far_radius,max_penetration_thickness
-            for result in rdr.records() {
-                let record = result?;
-                let display_name = record.get(0).unwrap_or("Unknown").to_string();
-                let filename = record.get(1).unwrap_or("").to_string();
-                let size: i32 = record.get(3).and_then(|s| s.parse().ok()).unwrap_or(0);
+        let json_content = std::fs::read_to_string(&json_path)?;
+        let weapons_json: HashMap<String, serde_json::Value> = serde_json::from_str(&json_content)?;
 
-                if size == 0 {
-                    continue;
-                }
-
-                let sustained_dps: f64 = record.get(5).and_then(|s| s.parse().ok()).unwrap_or(0.0);
-                let damage_per_shot: f64 = record.get(7).and_then(|s| s.parse().ok()).unwrap_or(1.0);
-
-                // Per-shot damage breakdown
-                let phys_per_shot: f64 = record.get(10).and_then(|s| s.parse().ok()).unwrap_or(0.0);
-                let energy_per_shot: f64 = record.get(11).and_then(|s| s.parse().ok()).unwrap_or(0.0);
-                let dist_per_shot: f64 = record.get(12).and_then(|s| s.parse().ok()).unwrap_or(0.0);
-
-                // Convert per-shot to DPS by ratio
-                // DPS_type = sustained_dps * (damage_type_per_shot / damage_per_shot_total)
-                let total_per_shot = phys_per_shot + energy_per_shot + dist_per_shot;
-                let (damage_physical, damage_energy, damage_distortion) = if total_per_shot > 0.0 {
-                    (
-                        sustained_dps * (phys_per_shot / total_per_shot),
-                        sustained_dps * (energy_per_shot / total_per_shot),
-                        sustained_dps * (dist_per_shot / total_per_shot),
-                    )
-                } else {
-                    // Fallback: assume all energy if no breakdown
-                    (0.0, sustained_dps, 0.0)
-                };
-
-                let weapon = Weapon {
-                    display_name: display_name.clone(),
-                    filename: filename.clone(),
-                    size,
-                    damage_type: record.get(4).unwrap_or("Unknown").to_string(),
-                    sustained_dps,
-                    power_consumption: power_lookup.get(&filename.to_lowercase()).copied().unwrap_or(0.0),
-                    // 4.5 damage breakdown (converted to DPS)
-                    damage_physical,
-                    damage_energy,
-                    damage_distortion,
-                    // Penetration data
-                    base_penetration_distance: record.get(13).and_then(|s| s.parse().ok()).unwrap_or(2.0),
-                    near_radius: record.get(14).and_then(|s| s.parse().ok()).unwrap_or(0.1),
-                    far_radius: record.get(15).and_then(|s| s.parse().ok()).unwrap_or(0.2),
-                };
-
-                self.weapons.insert(display_name, weapon);
+        for (weapon_key, weapon_data) in weapons_json {
+            let size: i32 = weapon_data["size"].as_i64().unwrap_or(0) as i32;
+            if size == 0 {
+                continue;
             }
-        } else if legacy_path.exists() {
-            // Fallback to legacy format
-            let mut rdr = csv::Reader::from_path(&legacy_path)?;
-            for result in rdr.records() {
-                let record = result?;
-                let display_name = record.get(0).unwrap_or("Unknown").to_string();
-                let filename = record.get(1).unwrap_or("").to_string();
-                let size: i32 = record.get(4).and_then(|s| s.parse().ok()).unwrap_or(0);
 
-                if size == 0 {
-                    continue;
-                }
+            let display_name = weapon_data["display_name"].as_str().unwrap_or("Unknown").to_string();
+            let sustained_dps = weapon_data["sustained_dps"].as_f64().unwrap_or(0.0);
+            let weapon_type = weapon_data["weapon_type"].as_str().unwrap_or("gun").to_string();
 
-                let sustained_dps: f64 = record.get(9).and_then(|s| s.parse().ok()).unwrap_or(0.0);
-                let damage_type = record.get(3).unwrap_or("Unknown").to_string();
+            // Get damage breakdown (already in DPS for guns, per-shot for ordnance)
+            let damage_physical = weapon_data["damage_physical"].as_f64().unwrap_or(0.0);
+            let damage_energy = weapon_data["damage_energy"].as_f64().unwrap_or(0.0);
+            let damage_distortion = weapon_data["damage_distortion"].as_f64().unwrap_or(0.0);
 
-                // Infer damage breakdown from type for legacy data
-                let (damage_physical, damage_energy, damage_distortion) = match damage_type.to_lowercase().as_str() {
-                    s if s.contains("ballistic") || s.contains("physical") => (sustained_dps, 0.0, 0.0),
-                    s if s.contains("distortion") => (0.0, 0.0, sustained_dps),
-                    _ => (0.0, sustained_dps, 0.0), // Default to energy
-                };
+            let weapon = Weapon {
+                display_name: display_name.clone(),
+                filename: weapon_key.clone(),
+                size,
+                damage_type: weapon_data["damage_type"].as_str().unwrap_or("Unknown").to_string(),
+                sustained_dps,
+                power_consumption: 0.0,  // Power data now in JSON if needed
+                weapon_type,
+                damage_physical,
+                damage_energy,
+                damage_distortion,
+                base_penetration_distance: 2.0,
+                near_radius: 0.1,
+                far_radius: 0.2,
+            };
 
-                let weapon = Weapon {
-                    display_name: display_name.clone(),
-                    filename: filename.clone(),
-                    size,
-                    damage_type,
-                    sustained_dps,
-                    power_consumption: power_lookup.get(&filename.to_lowercase()).copied().unwrap_or(0.0),
-                    damage_physical,
-                    damage_energy,
-                    damage_distortion,
-                    base_penetration_distance: 2.0, // Default
-                    near_radius: 0.1,
-                    far_radius: 0.2,
-                };
-
-                self.weapons.insert(display_name, weapon);
-            }
+            self.weapons.insert(weapon_key.clone(), weapon);
         }
 
         Ok(())
     }
 
     fn load_shields(&mut self, data_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
-        // Try the new combined CSV first, fall back to legacy
-        let combined_path = data_dir.join("shields_combined.csv");
-        let legacy_path = data_dir.join("shields.csv");
+        let json_path = data_dir.join("shields.json");
 
-        let mfr_codes: HashMap<&str, &str> = [
-            ("godi", "Gorgon Defender"), ("asas", "ASAS"), ("basl", "Basilisk"),
-            ("seco", "Seal Corp"), ("banu", "Banu"), ("behr", "Behring"),
-        ].into_iter().collect();
+        if !json_path.exists() {
+            return Err(format!("Shields file not found: {:?}", json_path).into());
+        }
 
-        // Use combined CSV if available (4.5 format with absorption data)
-        if combined_path.exists() {
-            let mut rdr = csv::Reader::from_path(&combined_path)?;
-            // CSV columns: display_name,internal_name,size,max_hp,regen,damage_regen_delay,
-            //              down_regen_delay,resist_physical,resist_energy,resist_distortion,
-            //              absorb_physical,absorb_energy,absorb_distortion
-            for result in rdr.records() {
-                let record = result?;
-                let display_name = record.get(0).unwrap_or("Unknown").to_string();
-                let internal_name = record.get(1).unwrap_or("").to_string();
+        let json_content = std::fs::read_to_string(&json_path)?;
+        let shields_json: HashMap<String, serde_json::Value> = serde_json::from_str(&json_content)?;
 
-                if internal_name.contains("Template") {
-                    continue;
-                }
-
-                let max_hp: f64 = record.get(3).and_then(|s| s.parse().ok()).unwrap_or(0.0);
-                if max_hp <= 0.0 {
-                    continue;
-                }
-
-                let shield = Shield {
-                    display_name: display_name.clone(),
-                    internal_name,
-                    size: record.get(2).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    max_hp,
-                    regen: record.get(4).and_then(|s| s.parse().ok()).unwrap_or(0.0),
-                    resist_physical: record.get(7).and_then(|s| s.parse().ok()).unwrap_or(0.0),
-                    resist_energy: record.get(8).and_then(|s| s.parse().ok()).unwrap_or(0.0),
-                    resist_distortion: record.get(9).and_then(|s| s.parse().ok()).unwrap_or(0.0),
-                    // 4.5 absorption values
-                    absorb_physical: record.get(10).and_then(|s| s.parse().ok()).unwrap_or(0.225),
-                    absorb_energy: record.get(11).and_then(|s| s.parse().ok()).unwrap_or(1.0),
-                    absorb_distortion: record.get(12).and_then(|s| s.parse().ok()).unwrap_or(1.0),
-                };
-
-                self.shields.insert(display_name, shield);
+        for (internal_name, shield_data) in shields_json {
+            if internal_name.contains("Template") {
+                continue;
             }
-        } else if legacy_path.exists() {
-            // Fallback to legacy format
-            let mut rdr = csv::Reader::from_path(&legacy_path)?;
-            for result in rdr.records() {
-                let record = result?;
-                let name = record.get(0).unwrap_or("");
 
-                if name.contains("Template") {
-                    continue;
-                }
-
-                let max_hp: f64 = record.get(2).and_then(|s| s.parse().ok()).unwrap_or(0.0);
-                if max_hp <= 0.0 {
-                    continue;
-                }
-
-                // Format display name from internal name
-                let display_name = {
-                    let clean_name = name.to_lowercase().replace("_scitem", "");
-                    let parts: Vec<&str> = clean_name.split('_').collect();
-                    if parts.len() >= 4 && parts[0] == "shld" {
-                        let mfr = mfr_codes.get(parts[1]).unwrap_or(&parts[1]);
-                        let model: String = parts[3..].iter()
-                            .map(|p| {
-                                let mut chars: Vec<char> = p.chars().collect();
-                                if !chars.is_empty() {
-                                    chars[0] = chars[0].to_uppercase().next().unwrap_or(chars[0]);
-                                }
-                                chars.into_iter().collect::<String>()
-                            })
-                            .collect::<Vec<_>>()
-                            .join(" ");
-                        format!("{} {}", mfr, model)
-                    } else {
-                        name.to_string()
-                    }
-                };
-
-                // CSV columns: name,size,shield_max_hp,shield_regen,shield_damage_regen_delay,
-                // shield_down_regen_delay,reserve_pool_drain_ratio,resist_physical_min,
-                // resist_physical_max,resist_physical_avg,resist_energy_min,resist_energy_max,
-                // resist_energy_avg,resist_distortion_min,resist_distortion_max,resist_distortion_avg,...
-                let shield = Shield {
-                    display_name: display_name.clone(),
-                    internal_name: name.to_string(),
-                    size: record.get(1).and_then(|s| s.parse().ok()).unwrap_or(0),
-                    max_hp,
-                    regen: record.get(3).and_then(|s| s.parse().ok()).unwrap_or(0.0),
-                    resist_physical: record.get(9).and_then(|s| s.parse().ok()).unwrap_or(0.0),
-                    resist_energy: record.get(12).and_then(|s| s.parse().ok()).unwrap_or(0.0),
-                    resist_distortion: record.get(15).and_then(|s| s.parse().ok()).unwrap_or(0.0),
-                    // Default absorption values for legacy data (typical 4.5 values)
-                    absorb_physical: 0.225,  // Only 22.5% absorbed, 77.5% passes through
-                    absorb_energy: 1.0,       // Fully absorbed
-                    absorb_distortion: 1.0,   // Fully absorbed
-                };
-
-                self.shields.insert(display_name, shield);
+            let max_hp = shield_data["max_hp"].as_f64().unwrap_or(0.0);
+            if max_hp <= 0.0 {
+                continue;
             }
+
+            let shield = Shield {
+                display_name: shield_data["display_name"].as_str().unwrap_or("Unknown").to_string(),
+                internal_name: internal_name.clone(),
+                size: shield_data["size"].as_i64().unwrap_or(0) as i32,
+                max_hp,
+                regen: shield_data["regen"].as_f64().unwrap_or(0.0),
+                resist_physical: shield_data["resist_physical"].as_f64().unwrap_or(0.0),
+                resist_energy: shield_data["resist_energy"].as_f64().unwrap_or(0.0),
+                resist_distortion: shield_data["resist_distortion"].as_f64().unwrap_or(0.0),
+                absorb_physical: shield_data["absorb_physical"].as_f64().unwrap_or(0.225),
+                absorb_energy: shield_data["absorb_energy"].as_f64().unwrap_or(1.0),
+                absorb_distortion: shield_data["absorb_distortion"].as_f64().unwrap_or(1.0),
+            };
+
+            self.shields.insert(shield.display_name.clone(), shield);
         }
 
         Ok(())
@@ -762,6 +445,16 @@ impl GameData {
             .collect();
         shields.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
         shields.into_iter().map(|(n, _)| n).collect()
+    }
+
+    /// Get weapon by display name (searches all weapons for matching display_name)
+    pub fn get_weapon_by_display_name(&self, display_name: &str) -> Option<&Weapon> {
+        self.weapons.values().find(|w| w.display_name == display_name)
+    }
+
+    /// Get weapon by filename (direct HashMap lookup)
+    pub fn get_weapon_by_filename(&self, filename: &str) -> Option<&Weapon> {
+        self.weapons.get(filename)
     }
 }
 

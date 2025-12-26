@@ -5,6 +5,12 @@ import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 
 // Type definitions matching Rust structs
+// Individual sub-port within a hardpoint
+interface SubPort {
+  size: number;
+  default_weapon: string | null;
+}
+
 // Weapon hardpoint with category information
 interface WeaponHardpoint {
   slot_number: number;
@@ -12,11 +18,9 @@ interface WeaponHardpoint {
   max_size: number;
   gimbal_type: string;
   control_type: string;
-  category: 'pilot' | 'manned_turret' | 'auto_pdw' | 'specialized';
-  default_weapon: string;  // filename of default weapon
+  category: 'pilot' | 'manned_turret' | 'remote_turret' | 'pdc' | 'missile' | 'torpedo' | 'bomb' | 'spinal' | 'specialized';
   mount_name: string;  // gimbal/turret mount name
-  sub_port_count: number;  // number of weapon sub-ports (1=single, 2=dual mount)
-  sub_port_sizes: string;  // comma-separated sizes (e.g., "3,3" for dual S3)
+  sub_ports: SubPort[];  // individual weapon ports with size and default weapon
 }
 
 interface Ship {
@@ -52,6 +56,7 @@ interface Weapon {
   damage_type: string;
   sustained_dps: number;
   power_consumption: number;
+  weapon_type: string;  // "gun", "missile", "torpedo", "bomb"
   // 4.5 damage breakdown
   damage_physical: number;
   damage_energy: number;
@@ -241,7 +246,10 @@ class SearchableDropdown {
       this.showDropdown();
     });
     document.addEventListener("click", (e) => {
-      if (!this.container.contains(e.target as Node)) this.hideDropdown();
+      // Check both container and dropdown (which may be portaled to body)
+      if (!this.container.contains(e.target as Node) && !this.dropdown.contains(e.target as Node)) {
+        this.hideDropdown();
+      }
     });
     this.searchInput.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
@@ -348,8 +356,25 @@ class SearchableDropdown {
     }
   }
 
-  private showDropdown() { this.dropdown.classList.add("open"); }
-  private hideDropdown() { this.dropdown.classList.remove("open"); }
+  private showDropdown() {
+    // Move dropdown to body as a portal to escape overflow:hidden containers
+    if (this.dropdown.parentElement !== document.body) {
+      document.body.appendChild(this.dropdown);
+    }
+    // Position dropdown using fixed positioning relative to input
+    const rect = this.searchInput.getBoundingClientRect();
+    this.dropdown.style.top = `${rect.bottom + 4}px`;
+    this.dropdown.style.left = `${rect.left}px`;
+    this.dropdown.style.width = `${rect.width}px`;
+    this.dropdown.classList.add("open");
+  }
+  private hideDropdown() {
+    this.dropdown.classList.remove("open");
+    // Move dropdown back to container
+    if (this.dropdown.parentElement === document.body) {
+      this.container.appendChild(this.dropdown);
+    }
+  }
   getValue(): string { return this.selectedValue; }
   getSelectedPresetId(): string { return this.selectedPresetId; }
 
@@ -380,8 +405,13 @@ class SearchableDropdown {
 const CATEGORY_CONFIG: Record<string, { title: string; cssClass: string; order: number }> = {
   'pilot': { title: 'PILOT WEAPONS', cssClass: 'pilot', order: 1 },
   'manned_turret': { title: 'MANNED TURRETS', cssClass: 'manned-turret', order: 2 },
-  'auto_pdw': { title: 'AUTO PDW', cssClass: 'auto-pdw', order: 3 },
-  'specialized': { title: 'SPECIALIZED', cssClass: 'specialized', order: 4 },
+  'remote_turret': { title: 'REMOTE TURRETS', cssClass: 'remote-turret', order: 3 },
+  'pdc': { title: 'POINT DEFENSE', cssClass: 'pdc', order: 4 },
+  'missile': { title: 'MISSILES', cssClass: 'missile', order: 5 },
+  'torpedo': { title: 'TORPEDOES', cssClass: 'torpedo', order: 6 },
+  'bomb': { title: 'BOMBS', cssClass: 'bomb', order: 7 },
+  'spinal': { title: 'SPINAL WEAPONS', cssClass: 'spinal', order: 8 },
+  'specialized': { title: 'SPECIALIZED', cssClass: 'specialized', order: 9 },
 };
 
 // Weapon slot with category info
@@ -496,9 +526,22 @@ class WeaponSlotManager {
       const categorySlotsList: CategorySlot[] = [];
 
       categoryHardpoints.forEach((hp) => {
-        // Parse sub-port sizes (e.g., "3,3" for dual S3)
-        const subPortCount = hp.sub_port_count || 1;
-        const subPortSizes = hp.sub_port_sizes ? hp.sub_port_sizes.split(',').map(s => parseInt(s.trim()) || hp.max_size) : [hp.max_size];
+        // Get sub-ports (new format) or create single port from max_size
+        const subPorts = hp.sub_ports && hp.sub_ports.length > 0
+          ? hp.sub_ports
+          : [{ size: hp.max_size, default_weapon: null }];
+
+        // Skip camera turrets (remote/torpedo turrets with no default weapon and single port)
+        // These are observation turrets, not weapon turrets
+        const hasAnyDefault = subPorts.some(sp => sp.default_weapon);
+        const isCameraTurret = (hp.category === 'remote_turret' || hp.category === 'torpedo')
+          && !hasAnyDefault
+          && subPorts.length === 1;
+        if (isCameraTurret) {
+          return;
+        }
+
+        const subPortCount = subPorts.length;
 
         // For dual/multi mounts, create a grouped container
         const isDualMount = subPortCount > 1;
@@ -514,9 +557,69 @@ class WeaponSlotManager {
           `);
           const groupSlotsContainer = document.querySelector(`#${groupId} .weapon-group-slots`) as HTMLElement;
 
+          // Check for bespoke weapon (any sub-port with bespoke in default_weapon filename)
+          const hasBespokeWeapon = subPorts.some(sp =>
+            sp.default_weapon && sp.default_weapon.toLowerCase().includes('bespoke')
+          );
+
+          // For bespoke dual mounts, render entire group as locked
+          if (hasBespokeWeapon) {
+            let allBespoke = true;
+            for (let subIdx = 0; subIdx < subPortCount; subIdx++) {
+              const subPort = subPorts[subIdx];
+              const subPortSize = subPort.size;
+              const subPortDefault = subPort.default_weapon;
+              const isBespoke = subPortDefault && subPortDefault.toLowerCase().includes('bespoke');
+
+              if (isBespoke) {
+                const bespokeWeapon = (this.weaponsBySize.get(subPortSize) || [])
+                  .find(w => w.filename === subPortDefault);
+
+                if (bespokeWeapon) {
+                  const subPortLabel = subPortCount === 2 ? (subIdx === 0 ? 'Left' : 'Right') : `#${subIdx + 1}`;
+                  groupSlotsContainer.insertAdjacentHTML("beforeend", `
+                    <div class="weapon-slot sub-port">
+                      <span class="weapon-slot-size">${subPortLabel}</span>
+                      <span class="weapon-slot-size-badge">S${subPortSize}</span>
+                      <div class="weapon-bespoke">
+                        <span class="weapon-bespoke-name">${bespokeWeapon.display_name}</span>
+                        <span class="weapon-bespoke-badge">BESPOKE</span>
+                      </div>
+                    </div>
+                  `);
+
+                  // Create a "virtual" dropdown that always returns the bespoke weapon
+                  const virtualDropdown = {
+                    getValue: () => bespokeWeapon.display_name,
+                    setValue: () => {},
+                    onChange: () => {},
+                  } as any;
+
+                  // Create a modified hardpoint for this sub-port
+                  const subPortHardpoint: WeaponHardpoint = {
+                    ...hp,
+                    max_size: subPortSize,
+                    sub_ports: [subPort],
+                  };
+                  categorySlotsList.push({ hardpoint: subPortHardpoint, dropdown: virtualDropdown, slotIndex: globalSlotIndex });
+                  globalSlotIndex++;
+                } else {
+                  allBespoke = false;
+                }
+              } else {
+                allBespoke = false;
+              }
+            }
+            if (allBespoke) {
+              return; // Skip normal dropdown creation if all are bespoke
+            }
+          }
+
           // Create individual slots for each sub-port
           for (let subIdx = 0; subIdx < subPortCount; subIdx++) {
-            const subPortSize = subPortSizes[subIdx] || hp.max_size;
+            const subPort = subPorts[subIdx];
+            const subPortSize = subPort.size;
+            const subPortDefault = subPort.default_weapon;
             const slotId = `weapon-slot-${globalSlotIndex}`;
             const subPortLabel = subPortCount === 2 ? (subIdx === 0 ? 'Left' : 'Right') : `#${subIdx + 1}`;
 
@@ -535,30 +638,128 @@ class WeaponSlotManager {
             const dropdown = new SearchableDropdown(`${slotId}-container`);
             let weapons = this.weaponsBySize.get(subPortSize) || [];
 
-            const options = weapons.map(w => ({ value: w.display_name, label: `${w.display_name} (${Math.round(w.sustained_dps)} DPS)` }));
+            // Filter weapons by type based on hardpoint category
+            // For missile/torpedo categories, accept both 'missile' and 'torpedo' weapon_type
+            if (hp.category === 'missile' || hp.category === 'torpedo') {
+              weapons = weapons.filter(w => w.weapon_type === 'missile' || w.weapon_type === 'torpedo');
+            } else if (hp.category === 'bomb') {
+              weapons = weapons.filter(w => w.weapon_type === 'bomb');
+            } else if (hp.category === 'pdc') {
+              weapons = weapons.filter(w => w.weapon_type === 'pdc');
+            } else {
+              weapons = weapons.filter(w => w.weapon_type === 'gun');
+            }
+
+            // For missiles/torpedoes/bombs, show total damage per shot instead of DPS
+            const isMissileType = (w: Weapon) =>
+              w.weapon_type === 'missile' || w.weapon_type === 'torpedo' || w.weapon_type === 'bomb';
+
+            const options = weapons.map(w => {
+              if (isMissileType(w)) {
+                const totalDamage = Math.round(w.damage_physical + w.damage_energy + w.damage_distortion);
+                return { value: w.display_name, label: `${w.display_name} (${totalDamage} dmg)` };
+              } else {
+                return { value: w.display_name, label: `${w.display_name} (${Math.round(w.sustained_dps)} DPS)` };
+              }
+            });
             dropdown.setOptions(options);
 
-            // Pre-select first weapon (highest DPS)
-            if (options.length > 0) {
-              dropdown.setValue(options[0].value);
+            // Pre-select default weapon if available (per-sub-port), otherwise use first option (highest DPS)
+            let selectedWeapon: string | null = null;
+            if (subPortDefault && subPortDefault.length > 0) {
+              const defaultWeapon = weapons.find(w => w.filename === subPortDefault);
+              if (defaultWeapon) selectedWeapon = defaultWeapon.display_name;
+            }
+            if (!selectedWeapon && options.length > 0) {
+              selectedWeapon = options[0].value;
+            }
+            if (selectedWeapon) {
+              dropdown.setValue(selectedWeapon);
             }
             dropdown.onChange(() => { if (this.onChangeCallback) this.onChangeCallback(); });
 
-            // Create a modified hardpoint for this sub-port (sub_port_count = 1 since it's individual now)
+            // Create a modified hardpoint for this sub-port
             const subPortHardpoint: WeaponHardpoint = {
               ...hp,
               max_size: subPortSize,
-              sub_port_count: 1,  // Individual sub-port
+              sub_ports: [subPort],  // Individual sub-port
             };
             categorySlotsList.push({ hardpoint: subPortHardpoint, dropdown, slotIndex: globalSlotIndex });
             globalSlotIndex++;
           }
         } else {
-          // Single weapon slot (original behavior)
+          // Single weapon slot
+          const subPort = subPorts[0];
+          const weaponSize = subPort.size;
+          const displaySize = subPort.size;
+          const subPortDefault = subPort.default_weapon;
+
+          let weapons = this.weaponsBySize.get(weaponSize) || [];
+
+          // Check for bespoke weapon
+          const isBespokeWeapon = subPortDefault && subPortDefault.toLowerCase().includes('bespoke');
+
+          // For bespoke hardpoints, lock to the specific default weapon REGARDLESS of category
+          if (isBespokeWeapon && subPortDefault) {
+            weapons = weapons.filter(w => w.filename === subPortDefault);
+          } else if (hp.category === 'specialized' && subPortDefault) {
+            // For other specialized hardpoints, lock to default weapon
+            weapons = weapons.filter(w => w.filename === subPortDefault);
+          } else {
+            // For non-specialized hardpoints, filter by weapon type
+            if (hp.category === 'missile' || hp.category === 'torpedo') {
+              weapons = weapons.filter(w => w.weapon_type === 'missile' || w.weapon_type === 'torpedo');
+            } else if (hp.category === 'bomb') {
+              weapons = weapons.filter(w => w.weapon_type === 'bomb');
+            } else if (hp.category === 'pdc') {
+              weapons = weapons.filter(w => w.weapon_type === 'pdc');
+            } else {
+              weapons = weapons.filter(w => w.weapon_type === 'gun');
+            }
+          }
+
+          // Skip hardpoints with no matching weapons
+          if (weapons.length === 0) {
+            return;
+          }
+
+          // Skip hardpoints where default_weapon doesn't match any available weapon
+          if (subPortDefault && !isBespokeWeapon) {
+            const hasMatchingWeapon = weapons.some(w => w.filename === subPortDefault);
+            if (!hasMatchingWeapon) {
+              return;
+            }
+          }
+
+          // For bespoke weapons, render as plain text (no dropdown)
+          if (isBespokeWeapon && weapons.length === 1) {
+            const bespokeWeapon = weapons[0];
+            const slotId = `weapon-slot-${globalSlotIndex}`;
+            slotsContainer.insertAdjacentHTML("beforeend", `
+              <div class="weapon-slot">
+                <span class="weapon-slot-size" title="${hp.port_name}">S${displaySize}</span>
+                <div class="weapon-bespoke" id="${slotId}-bespoke">
+                  <span class="weapon-bespoke-name">${bespokeWeapon.display_name}</span>
+                  <span class="weapon-bespoke-badge">BESPOKE</span>
+                </div>
+              </div>
+            `);
+
+            const virtualDropdown = {
+              getValue: () => bespokeWeapon.display_name,
+              setValue: () => {},
+              onChange: () => {},
+            } as any;
+
+            categorySlotsList.push({ hardpoint: hp, dropdown: virtualDropdown, slotIndex: globalSlotIndex });
+            globalSlotIndex++;
+            return;
+          }
+
           const slotId = `weapon-slot-${globalSlotIndex}`;
           slotsContainer.insertAdjacentHTML("beforeend", `
             <div class="weapon-slot">
-              <span class="weapon-slot-size" title="${hp.port_name}">S${hp.max_size}</span>
+              <span class="weapon-slot-size" title="${hp.port_name}">S${displaySize}</span>
               <div class="searchable-select" id="${slotId}-container">
                 <input type="text" class="search-input" id="${slotId}-search" placeholder="Select weapon..." autocomplete="off">
                 <div class="select-dropdown" id="${slotId}-dropdown"></div>
@@ -568,25 +769,24 @@ class WeaponSlotManager {
           `);
 
           const dropdown = new SearchableDropdown(`${slotId}-container`);
-          let weapons = this.weaponsBySize.get(hp.max_size) || [];
 
-          // Filter weapons based on hardpoint type
-          const isPdcHardpoint = hp.port_name.toLowerCase().includes('pdc');
-          const isSpecializedHardpoint = hp.category === 'specialized';
+          const isMissileType = (w: Weapon) =>
+            w.weapon_type === 'missile' || w.weapon_type === 'torpedo' || w.weapon_type === 'bomb';
 
-          if (isSpecializedHardpoint && hp.default_weapon) {
-            weapons = weapons.filter(w => w.filename === hp.default_weapon);
-          } else if (isPdcHardpoint) {
-            weapons = weapons.filter(w => w.filename.toLowerCase().includes('pdc'));
-          }
-
-          const options = weapons.map(w => ({ value: w.display_name, label: `${w.display_name} (${Math.round(w.sustained_dps)} DPS)` }));
+          const options = weapons.map(w => {
+            if (isMissileType(w)) {
+              const totalDamage = Math.round(w.damage_physical + w.damage_energy + w.damage_distortion);
+              return { value: w.display_name, label: `${w.display_name} (${totalDamage} dmg)` };
+            } else {
+              return { value: w.display_name, label: `${w.display_name} (${Math.round(w.sustained_dps)} DPS)` };
+            }
+          });
           dropdown.setOptions(options);
 
-          // Pre-select default weapon if available, otherwise use first option
+          // Pre-select default weapon if available
           let selectedWeapon: string | null = null;
-          if (hp.default_weapon && hp.default_weapon.length > 0) {
-            const defaultWeapon = weapons.find(w => w.filename === hp.default_weapon);
+          if (subPortDefault && subPortDefault.length > 0) {
+            const defaultWeapon = weapons.find(w => w.filename === subPortDefault);
             if (defaultWeapon) selectedWeapon = defaultWeapon.display_name;
           }
           if (!selectedWeapon && options.length > 0) {
@@ -595,6 +795,7 @@ class WeaponSlotManager {
           if (selectedWeapon) {
             dropdown.setValue(selectedWeapon);
           }
+
           dropdown.onChange(() => { if (this.onChangeCallback) this.onChangeCallback(); });
 
           categorySlotsList.push({ hardpoint: hp, dropdown, slotIndex: globalSlotIndex });
@@ -626,10 +827,8 @@ class WeaponSlotManager {
       gimbal_type: 'Gimbal',
       control_type: 'Pilot',
       category: 'pilot' as const,
-      default_weapon: '',
       mount_name: '',
-      sub_port_count: 1,
-      sub_port_sizes: String(size),
+      sub_ports: [{ size, default_weapon: null }],
     }));
 
     this.updateSlotsFromHardpoints(hardpoints);
@@ -753,9 +952,8 @@ class WeaponSlotManager {
             const weaponName = slot.dropdown.getValue();
             const weapon = weapons.find(w => w.display_name === weaponName);
             if (weapon) {
-              // Multiply by sub_port_count for dual mounts
-              const subPortCount = slot.hardpoint.sub_port_count || 1;
-              total += weapon.sustained_dps * subPortCount;
+              // Each slot represents one weapon (sub-ports are now individual slots)
+              total += weapon.sustained_dps;
             }
           }
         });
@@ -773,9 +971,8 @@ class WeaponSlotManager {
             const weaponName = slot.dropdown.getValue();
             const weapon = weapons.find(w => w.display_name === weaponName);
             if (weapon) {
-              // Multiply by sub_port_count for dual mounts
-              const subPortCount = slot.hardpoint.sub_port_count || 1;
-              total += (weapon.power_consumption || 0) * subPortCount;
+              // Each slot represents one weapon (sub-ports are now individual slots)
+              total += weapon.power_consumption || 0;
             }
           }
         });

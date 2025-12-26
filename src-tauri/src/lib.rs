@@ -210,7 +210,8 @@ fn calculate_ttk_v2(
             continue;
         }
 
-        if let Some(weapon) = data.weapons.get(name) {
+        // Try lookup by display_name (frontend passes display names)
+        if let Some(weapon) = data.get_weapon_by_display_name(name) {
             equipped_weapons.push(EquippedWeapon {
                 weapon: weapon.clone(),
                 count,
@@ -266,11 +267,11 @@ fn calculate_ttk_v2(
     Ok(result)
 }
 
-/// Get a weapon by name
+/// Get a weapon by name (searches by display_name)
 #[tauri::command]
 fn get_weapon(state: State<AppState>, name: String) -> Option<Weapon> {
     let data = state.data.lock().unwrap();
-    data.weapons.get(&name).cloned()
+    data.get_weapon_by_display_name(&name).cloned()
 }
 
 /// Get a shield by name

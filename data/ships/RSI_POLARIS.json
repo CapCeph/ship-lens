@@ -1,0 +1,490 @@
+{
+  "filename": "rsi_polaris",
+  "display_name": "RSI polaris",
+  "hull_hp": 800000,
+  "armor": {
+    "hp": 550800,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 0.75,
+    "damage_mult_energy": 0.6,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 90000,
+    "retro_hp": 270000,
+    "mav_hp": 54000,
+    "vtol_hp": 9000,
+    "total_hp": 423000
+  },
+  "components": {
+    "turret_total_hp": 85500,
+    "powerplant_total_hp": 14000,
+    "cooler_total_hp": 9500,
+    "shield_gen_total_hp": 13000,
+    "qd_total_hp": 1500
+  },
+  "shield_count": 1,
+  "max_shield_size": 4,
+  "default_shield_ref": "shld_rsi_s04_polaris_scitem",
+  "weapon_hardpoints": [
+    {
+      "port_name": "hardpoint_missile_rack_right",
+      "max_size": 10,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s10_rsi_polaris_right",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_missile_rack_left",
+      "max_size": 10,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s10_rsi_polaris_left",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_left_upper",
+      "max_size": 10,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s10_rsi_polaris_torpedo_lt",
+      "sub_ports": [
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_left_lower",
+      "max_size": 10,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s10_rsi_polaris_torpedo_lb",
+      "sub_ports": [
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_right_upper",
+      "max_size": 10,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s10_rsi_polaris_torpedo_rt",
+      "sub_ports": [
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_right_lower",
+      "max_size": 10,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s10_rsi_polaris_torpedo_rb",
+      "sub_ports": [
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        },
+        {
+          "size": 10,
+          "default_weapon": "misl_s10_ir_behr_torpedo"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_torpedo_camera",
+      "max_size": 4,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "rsi_polaris_scitem_remote_turret_torpedo",
+      "sub_ports": [
+        {
+          "size": 4,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_remote_top_missile",
+      "max_size": 4,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s4_rsi_polaris_turret",
+      "sub_ports": [
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
+        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"}
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_remote_bottom",
+      "max_size": 4,
+      "gimbal_type": "Gimbal",
+      "category": "remote_turret",
+      "mount_name": "rsi_polaris_scitem_remote_turret_rearbottom",
+      "sub_ports": [
+        {"size": 3, "default_weapon": "klwe_laserrepeater_s3"},
+        {"size": 3, "default_weapon": "klwe_laserrepeater_s3"},
+        {"size": 3, "default_weapon": "klwe_laserrepeater_s3"},
+        {"size": 3, "default_weapon": "klwe_laserrepeater_s3"}
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_side_left",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "manned_turret",
+      "mount_name": "rsi_polaris_turret_side_left",
+      "sub_ports": [
+        {
+          "size": 4,
+          "default_weapon": "amrs_lasercannon_s4"
+        },
+        {
+          "size": 4,
+          "default_weapon": "amrs_lasercannon_s4"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_side_right",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "manned_turret",
+      "mount_name": "rsi_polaris_turret_side_right",
+      "sub_ports": [
+        {
+          "size": 4,
+          "default_weapon": "amrs_lasercannon_s4"
+        },
+        {
+          "size": 4,
+          "default_weapon": "amrs_lasercannon_s4"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_top_left",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "manned_turret",
+      "mount_name": "rsi_polaris_turret_top_left",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_top_right",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "manned_turret",
+      "mount_name": "rsi_polaris_turret_top_right",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_lower_front",
+      "max_size": 7,
+      "gimbal_type": "Gimbal",
+      "category": "manned_turret",
+      "mount_name": "rsi_polaris_turret_front",
+      "sub_ports": [
+        {"size": 6, "default_weapon": "rsi_bespoke_ballisticcannon_a"},
+        {"size": 6, "default_weapon": "rsi_bespoke_ballisticcannon_a"}
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_top_01",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_top_02",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_top_03",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_bottom_01",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_bottom_02",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_bottom_03",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_bottom_04",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_remote_turret_interior_tractor",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "utility",
+      "mount_name": "rsi_polaris_scitem_remote_turret_tractor",
+      "sub_ports": [
+        {"size": 2, "default_weapon": "trac_suregri_s2"}
+      ]
+    }
+  ]
+}

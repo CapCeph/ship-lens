@@ -1,0 +1,85 @@
+{
+  "filename": "misc_razor_ex",
+  "display_name": "MISC razor ex",
+  "hull_hp": 800,
+  "armor": {
+    "hp": 480,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 0.85,
+    "damage_mult_energy": 0.7,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 11340,
+    "retro_hp": 10000,
+    "mav_hp": 54720,
+    "vtol_hp": 0,
+    "total_hp": 76060
+  },
+  "components": {
+    "turret_total_hp": 0,
+    "powerplant_total_hp": 170,
+    "cooler_total_hp": 220,
+    "shield_gen_total_hp": 130,
+    "qd_total_hp": 130
+  },
+  "shield_count": 1,
+  "max_shield_size": 1,
+  "default_shield_ref": "shld_asas_s01_shimmer_scitem",
+  "weapon_hardpoints": [
+    {
+      "port_name": "hardpoint_weapon_left",
+      "max_size": 2,
+      "gimbal_type": "Gimbal",
+      "category": "pilot",
+      "mount_name": "entityclassdefinition.mount_gimbal_s2",
+      "sub_ports": [
+        {
+          "size": 2,
+          "default_weapon": "apar_ballisticscattergun_s2"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_right",
+      "max_size": 2,
+      "gimbal_type": "Gimbal",
+      "category": "pilot",
+      "mount_name": "entityclassdefinition.mount_gimbal_s2",
+      "sub_ports": [
+        {
+          "size": 2,
+          "default_weapon": "apar_ballisticscattergun_s2"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_missilerack_left",
+      "max_size": 1,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s01_behr_single_s01",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_missilerack_right",
+      "max_size": 1,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s01_behr_single_s01",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        }
+      ]
+    }
+  ]
+}

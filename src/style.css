@@ -381,6 +381,18 @@ body {
   border-radius: var(--radius-md);
   padding: var(--space-md);
   transition: border-color var(--transition-fast), box-shadow var(--transition-smooth);
+  position: relative;
+}
+
+/* Weapon loadout section needs higher z-index so dropdowns appear above combat settings */
+#weapon-loadout-section {
+  z-index: 10;
+  contain: layout;
+}
+
+/* Combat settings must be lower z-index than weapon loadout */
+#combat-settings-section {
+  z-index: 1;
 }
 
 .panel-section:hover {
@@ -456,16 +468,26 @@ body {
   z-index: 1;
 }
 
+.search-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--bg-panel);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.search-input:disabled:hover {
+  border-color: var(--border);
+  cursor: not-allowed;
+}
+
 /* Ensure dropdown is above the focused input's glow */
 .searchable-select:focus-within .select-dropdown {
   z-index: 1001;
 }
 
 .select-dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
+  position: fixed;
   max-height: 0;
   overflow: hidden;
   background: rgba(26, 30, 36, 0.95);
@@ -473,11 +495,12 @@ body {
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  z-index: 1000;
+  z-index: 9999;
   opacity: 0;
   transform: translateY(-5px) scaleY(0.95);
   transform-origin: top center;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  min-width: 200px;
   transition:
     max-height var(--transition-smooth),
     opacity var(--transition-fast),
@@ -597,6 +620,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
+  position: relative;
+  z-index: 100; /* Ensure weapon dropdowns appear above combat settings below */
 }
 
 .placeholder-text {
@@ -713,12 +738,45 @@ body {
   flex: 1;
 }
 
+/* Bespoke weapon display (non-editable) */
+.weapon-bespoke {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: rgba(255, 170, 0, 0.1);
+  border: 1px solid rgba(255, 170, 0, 0.3);
+  border-radius: var(--radius-sm);
+}
+
+.weapon-bespoke-name {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.weapon-bespoke-badge {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-secondary);
+  background: rgba(255, 170, 0, 0.2);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* Weapon Category Sections */
 .weapon-category {
   margin-bottom: var(--space-md);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  overflow: visible;
+  overflow: hidden;
+  position: relative;
 }
 
 .weapon-category-header {
@@ -889,8 +947,8 @@ body {
   padding: var(--space-sm);
   background: var(--bg-card);
   transition: max-height var(--transition-smooth), padding var(--transition-smooth), opacity var(--transition-fast);
-  overflow: visible; /* Allow dropdowns to overflow */
-  max-height: 2000px; /* Large enough to fit any content */
+  overflow: hidden; /* Contain content within bounds */
+  max-height: none; /* Remove max-height constraint */
 }
 
 /* Collapsed state - hide slots with animation */

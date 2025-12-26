@@ -1,0 +1,566 @@
+{
+  "filename": "rsi_perseus",
+  "display_name": "RSI perseus",
+  "hull_hp": 2500,
+  "armor": {
+    "hp": 57000,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 0.7,
+    "damage_mult_energy": 0.5,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 0,
+    "retro_hp": 0,
+    "mav_hp": 0,
+    "vtol_hp": 0,
+    "total_hp": 0
+  },
+  "components": {
+    "turret_total_hp": 0,
+    "powerplant_total_hp": 0,
+    "cooler_total_hp": 0,
+    "shield_gen_total_hp": 0,
+    "qd_total_hp": 0
+  },
+  "shield_count": 0,
+  "max_shield_size": 0,
+  "default_shield_ref": "",
+  "weapon_hardpoints": [
+    {
+      "port_name": "hardpoint_turret_remote_top",
+      "max_size": 3,
+      "gimbal_type": "Fixed",
+      "category": "remote_turret",
+      "mount_name": "rsi_perseus_remote_turret_top_s3",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "gats_ballisticgatling_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "gats_ballisticgatling_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_remote_bottom",
+      "max_size": 3,
+      "gimbal_type": "Fixed",
+      "category": "remote_turret",
+      "mount_name": "rsi_perseus_remote_turret_bottom_s3",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "gats_ballisticgatling_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "gats_ballisticgatling_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_manned_top",
+      "max_size": 8,
+      "gimbal_type": "Fixed",
+      "category": "manned_turret",
+      "mount_name": "rsi_perseus_mannedturret_top",
+      "sub_ports": [
+        {
+          "size": 8,
+          "default_weapon": "rsi_perseus_ballisticcannon_b_s8"
+        },
+        {
+          "size": 8,
+          "default_weapon": "rsi_perseus_ballisticcannon_b_s8"
+        },
+        {
+          "size": 3,
+          "default_weapon": "gats_ballisticgatling_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "gats_ballisticgatling_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_manned_bottom",
+      "max_size": 8,
+      "gimbal_type": "Fixed",
+      "category": "manned_turret",
+      "mount_name": "rsi_perseus_mannedturret_bottom",
+      "sub_ports": [
+        {
+          "size": 8,
+          "default_weapon": "rsi_perseus_ballisticcannon_b_s8"
+        },
+        {
+          "size": 8,
+          "default_weapon": "rsi_perseus_ballisticcannon_b_s8"
+        },
+        {
+          "size": 3,
+          "default_weapon": "gats_ballisticgatling_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "gats_ballisticgatling_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_rack_r",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_r",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_rack_l",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_l",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        },
+        {
+          "size": 5,
+          "default_weapon": "misl_s05_em_taln_reaper"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_torpedo_camera",
+      "max_size": 4,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "rsi_perseus_remote_turret_torpedo",
+      "sub_ports": [
+        {
+          "size": 4,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_top_right",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_top_left",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_bottom_right",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_bottom_left",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_rear_bottom",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_rear_top",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_left_01",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_left_02",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_left_03",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_left_04",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_left_05",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_left_06",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_left_07",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_left_08",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_left_09",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_left_10",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_right_01",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_right_02",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_right_03",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_right_04",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_right_05",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_right_06",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_right_07",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_right_08",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_right_09",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_torpedo_storage_right_10",
+      "max_size": 5,
+      "gimbal_type": "Fixed",
+      "category": "torpedo",
+      "mount_name": "mrck_s05_rsi_perseus_torpedo_holder",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": null
+        }
+      ]
+    }
+  ]
+}

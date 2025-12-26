@@ -1,0 +1,98 @@
+{
+  "filename": "orig_350r",
+  "display_name": "Origin 350r",
+  "hull_hp": 1650,
+  "armor": {
+    "hp": 720,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 0.8,
+    "damage_mult_energy": 0.65,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 8700,
+    "retro_hp": 16200,
+    "mav_hp": 87000,
+    "vtol_hp": 0,
+    "total_hp": 111900
+  },
+  "components": {
+    "turret_total_hp": 0,
+    "powerplant_total_hp": 0,
+    "cooler_total_hp": 124,
+    "shield_gen_total_hp": 162,
+    "qd_total_hp": 150
+  },
+  "shield_count": 2,
+  "max_shield_size": 1,
+  "default_shield_ref": "shld_yorm_s01_targa_scitem",
+  "weapon_hardpoints": [
+    {
+      "port_name": "hardpoint_weapon_nose",
+      "max_size": 3,
+      "gimbal_type": "Gimbal",
+      "category": "pilot",
+      "mount_name": "entityclassdefinition.mount_gimbal_s3",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "behr_lasercannon_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_wing_right",
+      "max_size": 3,
+      "gimbal_type": "Gimbal",
+      "category": "pilot",
+      "mount_name": "entityclassdefinition.mount_gimbal_s3",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_wing_left",
+      "max_size": 3,
+      "gimbal_type": "Gimbal",
+      "category": "pilot",
+      "mount_name": "entityclassdefinition.mount_gimbal_s3",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_missilerack_left",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s02_behr_single_s02",
+      "sub_ports": [
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_thcn_strikeforce"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_missilerack_right",
+      "max_size": 2,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s02_behr_single_s02",
+      "sub_ports": [
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_thcn_strikeforce"
+        }
+      ]
+    }
+  ]
+}
