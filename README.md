@@ -54,16 +54,14 @@ Think of it as a variant of [Erkul](https://www.erkul.games/) but as a lightweig
 
 ---
 
-# Changes in v0.1.18:
+# Changes in v0.1.19:
 
-- Migrate ship data from CSV to individual JSON files (279 ships)
-- Fix Idris AI turrets categorized as remote_turret
-- Remove camera turrets from Idris weapon loadouts
-- Add all 12 PDCs for Idris variants
-- Add S10 Destroyer Mass Driver to weapons
-- Fixed 9 weapon display names to match in-game localization
-- Mantis GT-220, FL-33 Cannon, Tarantula GT-870, etc. now display correctly
-- Weapon names match Erkul.games
+  - 307 ships regenerated from P4K source
+  - New missiles, mounts and shields added to internal files (46 missiles)
+  - Mount selection system for swappable hardpoints
+  - Ship-exclusive Vanduul weapons
+  - RSI ship loadout fixes (Polaris, Perseus, Scorpius, Zeus)
+  - Windows bug fix - ships should now load correctly for selection
 
 ---
 
