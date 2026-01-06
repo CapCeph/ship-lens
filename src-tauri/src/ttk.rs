@@ -290,8 +290,8 @@ pub fn calculate_ttk(
     };
 
     // 5. Apply zone modifiers to effective HP
-    let zone_armor_hp = target.armor_hp as f64 * zone.armor;
-    let zone_hull_hp = target.hull_hp as f64 * zone.hull;
+    let zone_armor_hp = target.armor_hp * zone.armor;
+    let zone_hull_hp = target.hull_hp * zone.hull;
     let zone_thruster_hp = target.thruster_total_hp as f64 * zone.thruster;
     let zone_component_hp = (target.powerplant_total_hp + target.cooler_total_hp + target.shield_gen_total_hp) as f64 * zone.component;
     let total_hull_hp = zone_hull_hp + zone_thruster_hp + zone_component_hp;
@@ -453,15 +453,15 @@ pub fn calculate_ttk_no_shields(
     }
 
     let armor_dps = calculate_armor_damage(&damage, target);
-    let armor_time = if target.armor_hp > 0 && armor_dps > 0.0 {
-        target.armor_hp as f64 / armor_dps
+    let armor_time = if target.armor_hp > 0.0 && armor_dps > 0.0 {
+        target.armor_hp / armor_dps
     } else {
         0.0
     };
 
     let hull_dps = damage.total();
-    let hull_time = if target.hull_hp > 0 && hull_dps > 0.0 {
-        target.hull_hp as f64 / hull_dps
+    let hull_time = if target.hull_hp > 0.0 && hull_dps > 0.0 {
+        target.hull_hp / hull_dps
     } else {
         0.0
     };
@@ -499,6 +499,8 @@ mod tests {
             near_radius: 0.1,
             far_radius: 0.2,
             weapon_type: "gun".to_string(),
+            restricted_to: vec![],
+            ship_exclusive: false,
         }
     }
 
@@ -522,8 +524,8 @@ mod tests {
         Ship {
             filename: "test_ship".to_string(),
             display_name: "Test Ship".to_string(),
-            hull_hp: 5000,
-            armor_hp: 3000,
+            hull_hp: 5000.0,
+            armor_hp: 3000.0,
             // Dual-layer armor values (typical fighter)
             armor_damage_mult_physical: 0.75,
             armor_damage_mult_energy: 0.6,

@@ -1,0 +1,243 @@
+{
+  "filename": "aegs_reclaimer",
+  "display_name": "Aegis Reclaimer",
+  "hull_hp": 50000,
+  "armor": {
+    "hp": 0,
+    "resist_physical": 1.0,
+    "resist_energy": 1.0,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 1.0,
+    "damage_mult_energy": 1.0,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 0,
+    "retro_hp": 0,
+    "mav_hp": 0,
+    "vtol_hp": 0,
+    "total_hp": 0
+  },
+  "components": {
+    "turret_total_hp": 0,
+    "powerplant_total_hp": 0,
+    "cooler_total_hp": 0,
+    "shield_gen_total_hp": 0,
+    "qd_total_hp": 0
+  },
+  "shield_count": 1,
+  "max_shield_size": 4,
+  "default_shield_ref": "",
+  "weapon_hardpoints": [
+    {
+      "port_name": "hardpoint_turret",
+      "max_size": 5,
+      "gimbal_type": "Turret",
+      "category": "manned_turret",
+      "mount_name": "aegs_reclaimer_scitem_turret",
+      "sub_ports": [
+        {
+          "size": 5,
+          "default_weapon": "klwe_laserrepeater_s5"
+        },
+        {
+          "size": 5,
+          "default_weapon": "klwe_laserrepeater_s5"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_remote_turret_top",
+      "max_size": 5,
+      "gimbal_type": "Turret",
+      "category": "remote_turret",
+      "mount_name": "aegs_reclaimer_scitem_remote_turret_top",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_remote_turret_bottom",
+      "max_size": 5,
+      "gimbal_type": "Turret",
+      "category": "remote_turret",
+      "mount_name": "aegs_reclaimer_scitem_remote_turret_bottom",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_remote_turret_front_left",
+      "max_size": 5,
+      "gimbal_type": "Turret",
+      "category": "remote_turret",
+      "mount_name": "aegs_reclaimer_scitem_remote_turret_front_left",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_remote_turret_front_right",
+      "max_size": 5,
+      "gimbal_type": "Turret",
+      "category": "remote_turret",
+      "mount_name": "aegs_reclaimer_scitem_remote_turret_front_right",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_remote_turret_rear_left",
+      "max_size": 5,
+      "gimbal_type": "Turret",
+      "category": "remote_turret",
+      "mount_name": "aegs_reclaimer_scitem_remote_turret_rear_left",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_remote_turret_rear_right",
+      "max_size": 5,
+      "gimbal_type": "Turret",
+      "category": "remote_turret",
+      "mount_name": "aegs_reclaimer_scitem_remote_turret_rear_right",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_top_01",
+      "max_size": 2,
+      "gimbal_type": "Turret",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_top_02",
+      "max_size": 2,
+      "gimbal_type": "Turret",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_top_03",
+      "max_size": 2,
+      "gimbal_type": "Turret",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_bottom_01",
+      "max_size": 2,
+      "gimbal_type": "Turret",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_bottom_02",
+      "max_size": 2,
+      "gimbal_type": "Turret",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_bottom_03",
+      "max_size": 2,
+      "gimbal_type": "Turret",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_pdc_bottom_04",
+      "max_size": 2,
+      "gimbal_type": "Turret",
+      "category": "pdc",
+      "mount_name": "turret_pdc_behr_a",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "behr_laserrepeater_pdc_s1"
+        }
+      ]
+    }
+  ]
+}

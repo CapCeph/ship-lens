@@ -1,0 +1,109 @@
+{
+  "filename": "krig_l21_wolf_collector_stealth",
+  "display_name": "Kruger L-21 Wolf Wikelo Sneak Special",
+  "hull_hp": 2500,
+  "armor": {
+    "hp": 1050,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 0.75,
+    "damage_mult_energy": 0.6,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 0,
+    "retro_hp": 0,
+    "mav_hp": 0,
+    "vtol_hp": 0,
+    "total_hp": 0
+  },
+  "components": {
+    "turret_total_hp": 0,
+    "powerplant_total_hp": 0,
+    "cooler_total_hp": 0,
+    "shield_gen_total_hp": 0,
+    "qd_total_hp": 0
+  },
+  "shield_count": 2,
+  "max_shield_size": 1,
+  "default_shield_ref": "",
+  "weapon_hardpoints": [
+    {
+      "port_name": "hardpoint_weapon_left",
+      "max_size": 4,
+      "gimbal_type": "Gimbal",
+      "category": "pilot",
+      "mount_name": "mount_gimbal_s4_wolf",
+      "sub_ports": [
+        {
+          "size": 4,
+          "default_weapon": "krig_ballisticgatling_bespoke_s4"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_right",
+      "max_size": 4,
+      "gimbal_type": "Gimbal",
+      "category": "pilot",
+      "mount_name": "mount_gimbal_s4_wolf",
+      "sub_ports": [
+        {
+          "size": 4,
+          "default_weapon": "krig_ballisticgatling_bespoke_s4"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_missile_rack_left",
+      "max_size": 1,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s01_krig_quad",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_missile_rack_right",
+      "max_size": 1,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s01_krig_quad_right",
+      "sub_ports": [
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        }
+      ]
+    }
+  ]
+}

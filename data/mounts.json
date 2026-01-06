@@ -1,0 +1,2477 @@
+[
+  {
+    "ref": "mount_gimbal_s1",
+    "display_name": "VariPuck S1 Gimbal Mount",
+    "size": 1,
+    "ports": 1,
+    "port_size": 1,
+    "hp": 525,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s1_nosafety",
+    "display_name": "VariPuck S1 Gimbal Mount",
+    "size": 1,
+    "ports": 1,
+    "port_size": 1,
+    "hp": 525,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s2",
+    "display_name": "VariPuck S2 Gimbal Mount",
+    "size": 2,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 850,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s2_vncl_blade",
+    "display_name": "VariPuck S2 Gimbal Mount",
+    "size": 2,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 850,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mrai_pulse_mount_gimbal_s2",
+    "display_name": "San'tok.y\u0101i Gimbal Mount",
+    "size": 2,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 850,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s3",
+    "display_name": "VariPuck S3 Gimbal Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 1024,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s3_allsizes",
+    "display_name": "VariPuck S3 Gimbal Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 13,
+    "hp": 1024,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s3_perseus",
+    "display_name": "VariPuck S3 Gimbal Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 1024,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s3_perseus_bottom",
+    "display_name": "VariPuck S3 Gimbal Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 1024,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s3_perseus_bottom_left",
+    "display_name": "VariPuck S3 Gimbal Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 1024,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s3_perseus_remote_l",
+    "display_name": "VariPuck S3 Gimbal Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 1024,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s3_perseus_remote_r",
+    "display_name": "VariPuck S3 Gimbal Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 1024,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s3_perseus_right",
+    "display_name": "VariPuck S3 Gimbal Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 1024,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s3_polaris",
+    "display_name": "VariPuck S3 Gimbal Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 1024,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s3_vncl_blade",
+    "display_name": "VariPuck S3 Gimbal Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 1024,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "xnaa_santokyai_mount_gimbal_s3",
+    "display_name": "San'tok.y\u0101i Gimbal Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 150,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "aegs_avenger_nose_s3",
+    "display_name": "VariPuck S3 Gimbal Mount",
+    "size": 4,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 250,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "gmnt_misc_s03_pl01",
+    "display_name": "Reliant Gilroy Gimbal",
+    "size": 4,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 150,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_behr_ballisticgatling_hornet_bespoke",
+    "display_name": "TMSB-5 Gimbal Mount",
+    "size": 4,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 1024,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s4",
+    "display_name": "VariPuck S4 Gimbal Mount",
+    "size": 4,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 1650,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s4_crus_intrepid",
+    "display_name": "VariPuck S4 Gimbal Mount",
+    "size": 4,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 1650,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s4_paladin_turret",
+    "display_name": "VariPuck S4 Gimbal Mount",
+    "size": 4,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 1650,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s4_polaris",
+    "display_name": "VariPuck S4 Gimbal Mount",
+    "size": 4,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 1650,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s4_vncl_stinger",
+    "display_name": "VariPuck S4 Gimbal Mount",
+    "size": 4,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 1650,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s4_wolf",
+    "display_name": "VariPuck S4 Gimbal Mount",
+    "size": 4,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 800,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "aegs_javelin_manned_turret_gimbal_s5",
+    "display_name": "VariPuck S5 Gimbal Mount",
+    "size": 5,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 400,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s5",
+    "display_name": "VariPuck S5 Gimbal Mount",
+    "size": 5,
+    "ports": 1,
+    "port_size": 5,
+    "hp": 2640,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s5_invsi",
+    "display_name": "VariPuck S5 Gimbal Mount",
+    "size": 5,
+    "ports": 1,
+    "port_size": 5,
+    "hp": 2640,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s5_rsi_meteor",
+    "display_name": "VariPuck S5 Gimbal Mount",
+    "size": 5,
+    "ports": 1,
+    "port_size": 5,
+    "hp": 2640,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s6",
+    "display_name": "VariPuck S6 Gimbal Mount",
+    "size": 6,
+    "ports": 1,
+    "port_size": 6,
+    "hp": 4224,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s6_polaris",
+    "display_name": "VariPuck S6 Gimbal Mount",
+    "size": 6,
+    "ports": 1,
+    "port_size": 6,
+    "hp": 4224,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s6_polaris_right",
+    "display_name": "VariPuck S6 Gimbal Mount",
+    "size": 6,
+    "ports": 1,
+    "port_size": 6,
+    "hp": 4224,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s7",
+    "display_name": "VariPuck S6 Gimbal Mount",
+    "size": 6,
+    "ports": 1,
+    "port_size": 7,
+    "hp": 6750,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s7_idris",
+    "display_name": "VariPuck S6 Gimbal Mount",
+    "size": 7,
+    "ports": 1,
+    "port_size": 7,
+    "hp": 6750,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s8",
+    "display_name": "VariPuck S6 Gimbal Mount",
+    "size": 8,
+    "ports": 1,
+    "port_size": 8,
+    "hp": 10240,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s8_perseus",
+    "display_name": "VariPuck S6 Gimbal Mount",
+    "size": 8,
+    "ports": 1,
+    "port_size": 8,
+    "hp": 10240,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "mount_gimbal_s8_perseus_bottom",
+    "display_name": "VariPuck S6 Gimbal Mount",
+    "size": 8,
+    "ports": 1,
+    "port_size": 8,
+    "hp": 10240,
+    "mount_type": "gimbal"
+  },
+  {
+    "ref": "default_fixed_mount_s3",
+    "display_name": "Size 3 Fixed Mount",
+    "size": 3,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 250,
+    "mount_type": "fixed"
+  },
+  {
+    "ref": "default_fixed_mount_s4",
+    "display_name": "Size 4 Fixed Mount",
+    "size": 4,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 400,
+    "mount_type": "fixed"
+  },
+  {
+    "ref": "anvl_fixed_mount_hornet_ball_s4",
+    "display_name": "Specialty Hornet S5 VariPuck Mount",
+    "size": 5,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 1400,
+    "mount_type": "fixed"
+  },
+  {
+    "ref": "drak_fixed_mount_s4",
+    "display_name": "Cutlass Flashfire Specialty Mount",
+    "size": 6,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 400,
+    "mount_type": "fixed"
+  },
+  {
+    "ref": "crus_spirit_scitem_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 1,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 6000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_star_runner_turret_bottom",
+    "display_name": "Manned Turret",
+    "size": 1,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_star_runner_turret_top",
+    "display_name": "Manned Turret",
+    "size": 1,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_corsair_turret_manned",
+    "display_name": "Manned Turret",
+    "size": 1,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 6000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starlancer_tac_turret_door_left",
+    "display_name": "Turret",
+    "size": 1,
+    "ports": 1,
+    "port_size": 1,
+    "hp": 1000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starlancer_tac_turret_door_right",
+    "display_name": "Turret",
+    "size": 1,
+    "ports": 1,
+    "port_size": 1,
+    "hp": 1000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "turretmanned_template",
+    "display_name": "Manned Turret",
+    "size": 1,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 3000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_caterpillar_remote_turret_left",
+    "display_name": "Remote Turret",
+    "size": 2,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_315p_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 2,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "turret_pdc_behr_a",
+    "display_name": "M2C \"Swarm\"",
+    "size": 2,
+    "ports": 1,
+    "port_size": 1,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "turret_pdc_behr_g",
+    "display_name": "MRX \"Torrent\"",
+    "size": 2,
+    "ports": 1,
+    "port_size": 1,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_redeemer_scitem_remote_turret_front",
+    "display_name": "Remote Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_redeemer_scitem_remote_turret_rear",
+    "display_name": "Remote Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_arrow_turret",
+    "display_name": "Anvil Arrow Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 1,
+    "hp": 1000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_asgard_nose_turret_s4",
+    "display_name": "PC2 Dual S3 Mount",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_hornet_f7a_mk1_nose_turret",
+    "display_name": "Anvil F7A Hornet Mk I Nose Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 650,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_hornet_f7a_nose_turret",
+    "display_name": "Anvil Hornet Mk II S3 Nose Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 700,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_hornet_f7c_mk2_nose_turret",
+    "display_name": "Anvil Hornet Mk II S2 Nose Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 650,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_hornet_f7c_nose_turret",
+    "display_name": "Anvil Hornet F7C Nose Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 1,
+    "hp": 600,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_lightning_f8c_turret_s3",
+    "display_name": "Anvil Lightning F8C Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 3500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_terrapin_nose_turret_s3",
+    "display_name": "Anvil Terrapin Nose Mount",
+    "size": 3,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 3000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_valkyrie_nose_turret_s3",
+    "display_name": "PC2 Dual S3 Mount",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_valkyrie_turret_door",
+    "display_name": "Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 1000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_valkyrie_turret_door_left",
+    "display_name": "Turret",
+    "size": 3,
+    "ports": 1,
+    "port_size": 1,
+    "hp": 1000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_valkyrie_turret_door_right",
+    "display_name": "Turret",
+    "size": 3,
+    "ports": 1,
+    "port_size": 1,
+    "hp": 1000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "behr_pc2_dual_s1",
+    "display_name": "PC2 Dual S1 Mount",
+    "size": 3,
+    "ports": 2,
+    "port_size": 1,
+    "hp": 150,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "cnou_mustang_nose_turret_s3",
+    "display_name": "Consolidated Outland Mustang Nose Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 1000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_spirit_nose_turret_s3",
+    "display_name": "Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_dual_s1",
+    "display_name": "Drake Caterpillar Weapon Mount",
+    "size": 3,
+    "ports": 2,
+    "port_size": 1,
+    "hp": 100,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "glsn_shiv_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 3,
+    "ports": 4,
+    "port_size": 3,
+    "hp": 4000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_85x_turret",
+    "display_name": "Origin Jumpworks 85X Remote Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 0,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_apollo_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_perseus_remote_turret_bottom_s3",
+    "display_name": "Remote Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_perseus_remote_turret_top_s3",
+    "display_name": "Remote Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_scorpius_scitem_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 3,
+    "ports": 4,
+    "port_size": 3,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_zeus_remote_turret_bottom_s3",
+    "display_name": "Remote Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_zeus_remote_turret_top_s3",
+    "display_name": "Remote Turret",
+    "size": 3,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_lower_camera_mount",
+    "display_name": "<= PLACEHOLDER =>",
+    "size": 4,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_remote_camera_turret_lower",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_remote_camera_turret_upper",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_upper_camera_mount",
+    "display_name": "<= PLACEHOLDER =>",
+    "size": 4,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_redeemer_front_scitem_turret",
+    "display_name": "Manned Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_redeemer_rear_scitem_turret",
+    "display_name": "Manned Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_retaliator_scitem_turret_lower",
+    "display_name": "Manned Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_retaliator_scitem_turret_lower_rear",
+    "display_name": "Manned Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_retaliator_scitem_turret_upper",
+    "display_name": "Manned Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_retaliator_scitem_turret_upper_rear_left",
+    "display_name": "Manned Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_retaliator_scitem_turret_upper_rear_right",
+    "display_name": "Manned Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_asgard_turret_bubble",
+    "display_name": "Manned Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 8200,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_valkyrie_turret_bubble",
+    "display_name": "Manned Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_valkyrie_turret_top",
+    "display_name": "Manned Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 4500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_valkyrie_turret_top_citizencon",
+    "display_name": "Manned Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 4500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "argo_raft_scitem_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 6500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "cnou_nomad_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 1,
+    "port_size": 1,
+    "hp": 2500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_buccaneer_dual_s2",
+    "display_name": "Drake Buccaneer Spinal Mount",
+    "size": 4,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 1200,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_caterpillar_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_caterpillar_remote_turret_right",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_corsair_remote_turret_s4",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 4000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_corsair_remote_turret_tail",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 6000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_cutlass_steel_rear_remote_dual_turret_s4",
+    "display_name": "Drake Cutlass Steel Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 3500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_hull_c_scitem_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_hull_c_scitem_remote_turret_rear",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_hull_c_scitem_tractor_beam_turret",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_hull_c_scitem_tractor_beam_turret_bottom",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_hull_c_scitem_tractor_beam_turret_bottom_rear",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_hull_c_scitem_tractor_beam_turret_rear",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_reliant_wing_dual_turret_s4",
+    "display_name": "Reliant Toshima Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 1000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starlancer_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starlancer_remote_turret_rear",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_400i_scitem_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_400i_scitem_remote_turret_bottom",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_400i_scitem_remote_turret_top",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_polaris_scitem_remote_turret_rearbottom",
+    "display_name": "Remote Turret",
+    "size": 4,
+    "ports": 4,
+    "port_size": 3,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_hammerhead_scitem_turret_rear",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 4,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_hammerhead_scitem_turret_side_backleft",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 4,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_hammerhead_scitem_turret_side_backright",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 4,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_hammerhead_scitem_turret_side_frontleft",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 4,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_hammerhead_scitem_turret_side_frontright",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 4,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_hammerhead_scitem_turret_top",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 4,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_ai_turret",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 7000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_ai_turret_bottom_left",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 7000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_ai_turret_bottom_right",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 7000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_ai_turret_top_left",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 7000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_ai_turret_top_right",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 7000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_lower",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_lower_short",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_lower_short_left",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_lower_short_left_stanton",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_lower_short_right",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_lower_short_right_stanton",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_upper",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_upper_front",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_upper_front_left",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_upper_front_right",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_upper_rear_left",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_upper_rear_left_stanton",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_upper_rear_right",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_upper_rear_right_stanton",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_upper_stanton",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_upper_stanton_left",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_upper_stanton_right",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_javelin_scitem_turret_lower_manned",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 20000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_javelin_scitem_turret_lower_manned_invulnerable",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 20000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_javelin_scitem_turret_manned",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 20000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_javelin_scitem_turret_manned_invulnerable",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 20000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_javelin_scitem_turret_manned_left",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 20000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_javelin_scitem_turret_manned_left_invulnerable",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 20000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_javelin_side_turret",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 7,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_javelin_side_turret_invulnerable",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 7,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_javelin_side_turret_player_c01",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 7,
+    "hp": 80000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_reclaimer_scitem_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_reclaimer_scitem_remote_turret_02",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_reclaimer_scitem_remote_turret_bottom",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_reclaimer_scitem_remote_turret_front_left",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_reclaimer_scitem_remote_turret_front_right",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_reclaimer_scitem_remote_turret_rear_left",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_reclaimer_scitem_remote_turret_rear_right",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_reclaimer_scitem_remote_turret_top",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_reclaimer_scitem_turret",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_reclaimer_tractor_beam",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 3000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_asgard_scitem_remote_turret_left",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 12000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_asgard_scitem_remote_turret_right",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_carrack_scitem_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_carrack_scitem_turret_bubble",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_carrack_scitem_turret_side",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_carrack_scitem_turret_side_left",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_carrack_scitem_turret_side_right",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_hornet_f7a_ball_turret",
+    "display_name": "C5-173f S5 Hornet Mk II Ball Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 1350,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_hornet_f7a_mk1_ball_turret",
+    "display_name": "C4-163f S5 Hornet Mk I Ball Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 1300,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_hornet_f7c_ball_turret",
+    "display_name": "C4-160f S5 Hornet Ball Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 1250,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_hornet_f7cm_mk2_ball_turret",
+    "display_name": "Anvil F7C-M Mk II Ball Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_hornet_f7cm_mk2_ball_turret_bespoke",
+    "display_name": "TMSB-5 Ball Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_hurricane_scitem_turret",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 3,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_lightning_f8_turret_s5",
+    "display_name": "Anvil Lightning F8 Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 400,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_paladin_scitem_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 5500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_paladin_scitem_remote_turret_left",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 5500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_paladin_scitem_remote_turret_left_right",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 5500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_paladin_scitem_remote_turret_middle",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 5500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_valkyrie_scitem_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 12000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_valkyrie_scitem_remote_turret_left",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 12000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_valkyrie_scitem_remote_turret_right",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 12000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "behr_pc2_dual_s3",
+    "display_name": "PC2 Dual S3 Mount",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 2500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "behr_pc2_dual_s4_fixed",
+    "display_name": "PC2 Dual S4 Mount",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 400,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_star_runner_nose_turret_s5",
+    "display_name": "Crusader Mercury Star Runner Nose Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_starlifter_bomb_turret",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 1,
+    "port_size": 5,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_starlifter_scitem_remote_turret_front_left",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 1,
+    "port_size": 5,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_starlifter_scitem_remote_turret_front_right",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 1,
+    "port_size": 5,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_starlifter_scitem_remote_turret_main",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_starlifter_scitem_remote_turret_main_a2",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_starlifter_scitem_remote_turret_nose",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_starlifter_scitem_remote_turret_rear",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_starlifter_scitem_remote_turret_single",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 1,
+    "port_size": 5,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_cutlass_scitem_turret_black",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_cutlass_scitem_turret_blue",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_dual_s3",
+    "display_name": "Drake Caterpillar Weapon Mount",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 100,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "espr_prowler_remote_turret_s5",
+    "display_name": "Esperia Prowler Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_hull_a_nose_turret_s5",
+    "display_name": "Crusader Mercury Star Runner Nose Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 1,
+    "hp": 2500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_hull_c_nose_turret_s5",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starlancer_tac_side_turret",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starlancer_tac_side_turret_left",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orbital_sentry_scitem_ai_turret",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 10,
+    "hp": 30000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_600i_scitem_remote_turret_bottom_exec_s5",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_600i_scitem_remote_turret_bottom_s5",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_600i_scitem_remote_turret_exec_s5",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_600i_scitem_remote_turret_s5",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_890j_scitem_remote_turret_2_s5",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_890j_scitem_remote_turret_s5",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_890j_scitem_turret_lower",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "orig_890j_scitem_turret_upper",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_bengal_scitem_remote_turret",
+    "display_name": "Remote Turret",
+    "size": 5,
+    "ports": 1,
+    "port_size": 3,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_polaris_turret_front",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 2,
+    "port_size": 6,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_polaris_turret_side_left",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 3,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_polaris_turret_side_right",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 3,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_polaris_turret_top_left",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 4,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_polaris_turret_top_right",
+    "display_name": "Manned Turret",
+    "size": 5,
+    "ports": 4,
+    "port_size": 4,
+    "hp": 10000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_vanguard_harbinger_scitem_turret",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_vanguard_scitem_turret",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_gladiator_scitem_turret",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "anvl_paladin_scitem_remote_turret_large",
+    "display_name": "Remote Turret",
+    "size": 6,
+    "ports": 4,
+    "port_size": 5,
+    "hp": 13000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "behr_pc2_dual_s4",
+    "display_name": "PC2 Dual S4 Mount",
+    "size": 6,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 600,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_starlifter_scitem_remote_turret_dual",
+    "display_name": "Remote Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_starlifter_scitem_remote_turret_rear_left",
+    "display_name": "Remote Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "crus_starlifter_scitem_remote_turret_rear_right",
+    "display_name": "Remote Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_caterpillar_scitem_turret_bottom",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "drak_caterpillar_scitem_turret_top",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 12500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_freelancer_base_scitem_turret",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 6500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starfarer_scitem_turret_small",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 4000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starfarer_scitem_turret_small_right",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 4000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starlancer_dual_gimbal",
+    "display_name": "PC2 Dual S4 Mount",
+    "size": 6,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 600,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_bengal_scitem_remote_turret_missilelauncher",
+    "display_name": "Remote Turret",
+    "size": 6,
+    "ports": 1,
+    "port_size": 6,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_bengal_scitem_remote_turret_phalanx",
+    "display_name": "Remote Turret",
+    "size": 6,
+    "ports": 1,
+    "port_size": 6,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_constellation_phoenix_turret_lower",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_constellation_phoenix_turret_upper",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_constellation_scitem_turret_lower",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_constellation_scitem_turret_upper",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_constellation_taurus_turret_lower",
+    "display_name": "Manned Turret",
+    "size": 6,
+    "ports": 2,
+    "port_size": 2,
+    "hp": 8000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_large",
+    "display_name": "IFR-A77 Turret",
+    "size": 7,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_large_p",
+    "display_name": "IFR-W57 Turret",
+    "size": 7,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_large_stanton",
+    "display_name": "IFR-A77 Turret",
+    "size": 7,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_scitem_turret_large_t",
+    "display_name": "IFR-BC7 Turret",
+    "size": 7,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 15000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_javelin_scitem_turret_large",
+    "display_name": "Remote Turret",
+    "size": 8,
+    "ports": 1,
+    "port_size": 9,
+    "hp": 25000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_javelin_scitem_turret_large_invulnerable",
+    "display_name": "Remote Turret",
+    "size": 8,
+    "ports": 1,
+    "port_size": 9,
+    "hp": 25000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starfarer_gemini_scitem_turret_small",
+    "display_name": "Manned Turret",
+    "size": 8,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 4000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starfarer_gemini_scitem_turret_small_right",
+    "display_name": "Manned Turret",
+    "size": 8,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 4000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_bengal_scitem_remote_turret_aa",
+    "display_name": "Remote Turret",
+    "size": 8,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_bengal_scitem_remote_turret_medium",
+    "display_name": "Remote Turret",
+    "size": 8,
+    "ports": 2,
+    "port_size": 7,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_perseus_mannedturret_bottom",
+    "display_name": "Manned Turret",
+    "size": 8,
+    "ports": 4,
+    "port_size": 8,
+    "hp": 35000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_perseus_mannedturret_top",
+    "display_name": "Manned Turret",
+    "size": 8,
+    "ports": 4,
+    "port_size": 8,
+    "hp": 35000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_01",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_02",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_03",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_04",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_05",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_06",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_07",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_08",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_09",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_10",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_11",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 1,
+    "port_size": 2,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "aegs_idris_turret_pdc_scitem_template",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 2,
+    "port_size": 8,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_bengal_scitem_ai_sts_turret",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 2,
+    "port_size": 8,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_bengal_scitem_sts_turret",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 2,
+    "port_size": 8,
+    "hp": 5000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "turret_pdc_scitem_template",
+    "display_name": "Remote Turret",
+    "size": 9,
+    "ports": 2,
+    "port_size": 8,
+    "hp": 1500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starfarer_scitem_turret_large",
+    "display_name": "Manned Turret",
+    "size": 10,
+    "ports": 2,
+    "port_size": 4,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starfarer_gemini_scitem_turret_large",
+    "display_name": "Manned Turret",
+    "size": 12,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "misc_starfarer_gemini_scitem_turret_large_derelict",
+    "display_name": "Manned Turret",
+    "size": 12,
+    "ports": 2,
+    "port_size": 5,
+    "hp": 8500,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_bengal_scitem_remote_turret_main_gun",
+    "display_name": "Remote Turret",
+    "size": 12,
+    "ports": 2,
+    "port_size": 12,
+    "hp": 2000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "rsi_bengal_scitem_sts_large_turret",
+    "display_name": "Remote Turret",
+    "size": 12,
+    "ports": 1,
+    "port_size": 12,
+    "hp": 1000000,
+    "mount_type": "turret"
+  },
+  {
+    "ref": "mrck_s04_behr_octo_s01",
+    "display_name": "MSD-481 Missile Rack",
+    "size": 4,
+    "ports": 8,
+    "port_size": 1,
+    "hp": 200,
+    "mount_type": "missile_rack"
+  },
+  {
+    "ref": "mrck_s04_behr_quad_s02",
+    "display_name": "MSD-442 Missile Rack",
+    "size": 4,
+    "ports": 4,
+    "port_size": 2,
+    "hp": 200,
+    "mount_type": "missile_rack"
+  },
+  {
+    "ref": "mrck_s04_behr_dual_s03",
+    "display_name": "MSD-423 Missile Rack",
+    "size": 4,
+    "ports": 2,
+    "port_size": 3,
+    "hp": 200,
+    "mount_type": "missile_rack"
+  },
+  {
+    "ref": "mrck_s04_behr_single_s04",
+    "display_name": "MSD-414 Missile Rack",
+    "size": 4,
+    "ports": 1,
+    "port_size": 4,
+    "hp": 200,
+    "mount_type": "missile_rack"
+  },
+  {
+    "ref": "mrck_s04_anvl_hornet_f7cm_mk2_turret",
+    "display_name": "F7CM-MkII-481 Missile Rack",
+    "size": 4,
+    "ports": 8,
+    "port_size": 1,
+    "hp": 200,
+    "mount_type": "missile_rack"
+  }
+]

@@ -1,0 +1,146 @@
+id,name,display_name,manufacturer,size,weapon_type,damage_type,damage_physical,damage_energy,damage_distortion,damage_thermal,fire_rate,ammo_count,alpha_damage,dps,sustained_dps,range,speed,gimbal
+26838ca7-418a-47d2-8429-7339ebbb8993,amrs_lasercannon_s1,Omnisky III Cannon,Amon & Reese,1,gun,Energy,0.00,97.20,0.00,0.00,150.00,0,97.20,243.00,243.00,2002,1400,Fixed
+2ef5eb91-95ec-442c-a856-79a39f84d365,apar_ballisticscattergun_s1,Havoc Scattergun,Apocalypse,1,gun,Ballistic,46.80,0.00,0.00,0.00,60.00,2040,46.80,46.80,46.80,2000,1000,Fixed
+15596dea-2429-41fe-ac84-593bae703686,apar_ballisticscattergun_s1_shark,Havoc Scattergun Sharkmouth Edition,Apocalypse,1,gun,Ballistic,46.80,0.00,0.00,0.00,60.00,2040,46.80,46.80,46.80,2000,1000,Fixed
+34bc9924-3f20-4bc9-a6cf-81335a0608fe,asad_distortionrepeater_s1,DR Model-XJ1 Repeater,ASAD,1,gun,Distortion,0.00,0.00,25.70,0.00,400.00,0,25.70,171.33,171.33,2000,1300,Fixed
+e0c51f49-8910-4c99-92e5-ba7eca915bbb,banu_tachyoncannon_s1,Singe Cannon (S1),Banu,1,gun,Energy,0.00,202.50,0.00,0.00,90.00,0,202.50,303.75,303.75,1050,3000,Fixed
+647c70b5-1547-4c86-ba47-4aa452d3b506,behr_ballisticgatling_pdc_s1,"MRX ""Torrent""",Behring,1,pdc,Ballistic,18.00,0.00,0.00,0.00,1200.00,15000,18.00,360.00,360.00,2000,1600,Fixed
+631884a6-7e06-4612-986c-1b3e556aecac,behr_ballisticrepeater_s1,SW16BR1 “Buzzsaw” Repeater,Behring,1,gun,Ballistic,36.00,0.00,0.00,0.00,500.00,2664,36.00,300.00,300.00,2004,1200,Fixed
+42e2ddb1-7397-4299-88ee-2ddfaa0efc67,behr_lasercannon_s1,M3A Cannon,Behring,1,gun,Energy,0.00,182.25,0.00,0.00,100.00,0,182.25,303.75,303.75,2000,1000,Fixed
+18b795c5-25f1-444a-86c0-b5edd7cf0118,behr_laserrepeater_pdc_s1,"M2C ""Swarm""",Behring,1,pdc,Energy,0.00,10.00,0.00,0.00,1000.00,0,10.00,166.67,166.67,1998,1800,Fixed
+3727a5ce-bf98-43a7-a96e-c0ffedd071d0,espr_ballisticcannon_s1,Deadbolt I Cannon,Esperia,1,gun,Ballistic,202.50,0.00,0.00,0.00,100.00,396,202.50,337.50,337.50,1998,900,Fixed
+0cced6b1-acfd-4c55-96cc-d0503638b9ad,espr_lasercannon_s1,Lightstrike I Cannon,Esperia,1,gun,Energy,0.00,49.25,0.00,0.00,250.00,0,49.25,205.20,205.20,1998,1800,Fixed
+8bebf292-a9a3-4dc8-a86c-ddfa3b9b79be,gats_ballisticcannon_s1,Tarantula GT-870 Mark 1 Cannon,Gallenson,1,gun,Ballistic,60.75,0.00,0.00,0.00,200.00,330,60.75,202.50,202.50,2000,1600,Fixed
+81645f3b-2c01-4fc4-aa9f-ed860b976058,gats_ballisticgatling_s1,YellowJacket GT-210 Gatling,Gallenson,1,gun,Ballistic,7.56,0.00,0.00,0.00,1600.00,4440,7.56,201.60,201.60,2000,1600,Fixed
+ed951ee5-0873-45e8-92b2-586a277f4ba6,hrst_laserrepeater_s1,Attrition-1 Repeater,Hurston,1,gun,Energy,0.00,66.51,0.00,0.00,350.00,0,66.51,387.98,387.98,2000,1000,Fixed
+beabe016-3fb4-4e3f-b464-374076d91f04,hrst_laserscattergun_s1,Dominance-1 Scattergun,Hurston,1,gun,Energy,0.00,63.00,0.00,0.00,50.00,0,63.00,52.50,52.50,2000,1000,Fixed
+d195eb47-24b8-45c0-a4d0-1771d60dc1a8,jokr_distortioncannon_s1,Suckerpunch Cannon,Joker,1,gun,Distortion,0.00,0.00,81.00,0.00,100.00,0,81.00,135.00,135.00,2000,1300,Fixed
+85fd75f8-6c6c-4d3f-839f-988ae7660617,kbar_ballisticcannon_s1,9-Series Longsword Cannon,Klaus & Werner,1,gun,Ballistic,48.60,0.00,0.00,0.00,250.00,495,48.60,202.50,202.50,2000,1600,Fixed
+c9c2bb19-3298-448e-a117-043e082a1c74,klwe_laserrepeater_s1,CF-117 Bulldog Repeater,Klaus & Werner,1,gun,Energy,0.00,17.50,0.00,0.00,750.00,0,17.50,218.70,218.70,1998,1800,Fixed
+ba8c9920-9fd0-4253-a349-de32079edce2,klwe_laserrepeater_s1_atls,CF-117 Bulldog Repeater,Klaus & Werner,1,gun,Energy,0.00,11.30,0.00,0.00,750.00,0,11.30,141.25,141.25,225,750,Fixed
+43269af0-736e-4232-8cfe-271367b28ee1,klwe_massdriver_s1,Sledge I Mass Driver Cannon,Klaus & Werner,1,gun,Ballistic,225.00,0.00,0.00,0.00,30.00,105,225.00,112.50,112.50,1050,3000,Fixed
+3d562dad-88f9-43aa-8ed5-616bf6634ff9,kron_lasercannon_s1,FL-11 Cannon,Kroneg,1,gun,Energy,0.00,49.25,0.00,0.00,250.00,0,49.25,205.20,205.20,1998,1800,Fixed
+3fc83638-fbe5-4d75-8e18-678736fefbc4,mxox_neutroncannon_s1,NN-13 Cannon,MaxOx,1,gun,Energy,0.00,97.20,0.00,0.00,150.00,0,97.20,243.00,243.00,2002,1400,Fixed
+fecbf518-e3e5-4e58-905a-729a02e86265,mxox_neutronrepeater_s1,NDB-26 Repeater,MaxOx,1,gun,Energy,0.00,37.98,0.00,0.00,500.00,0,37.98,316.50,316.50,2002,1400,Fixed
+00ab31a0-7de2-44f7-a567-7ff88fdbad49,vncl_lasercannon_s1,'WEAK' Repeater,Vanduul,1,gun,Energy,0.00,72.90,0.00,0.00,350.00,0,72.90,425.25,425.25,1998,1800,Fixed
+1893e596-acaf-49bc-b367-e43e99c2925f,amrs_lasercannon_s2,Omnisky VI Cannon,Amon & Reese,2,gun,Energy,0.00,145.80,0.00,0.00,150.00,0,145.80,364.50,364.50,2296,1400,Fixed
+c7c36fea-dcf5-48b9-9939-bf2771f9f8f4,apar_ballisticscattergun_s2,Hellion Scattergun,Apocalypse,2,gun,Ballistic,70.00,0.00,0.00,0.00,60.00,2019,70.00,70.00,70.00,2000,1000,Fixed
+961c6667-32b3-453a-b651-2e639f6742c7,apar_ballisticscattergun_s2_shark,Hellion Scattergun Sharkmouth Edition,Apocalypse,2,gun,Ballistic,70.00,0.00,0.00,0.00,60.00,2019,70.00,70.00,70.00,2000,1000,Fixed
+86630fcf-09c3-4def-a7b4-9385cbc05a42,apar_massdriver_s2,Strife Mass Driver Cannon,Apocalypse,2,gun,Ballistic,525.00,0.00,0.00,0.00,30.00,84,525.00,262.50,262.50,5500,5000,Fixed
+a5ade53b-9c40-477a-aaf8-78b6ef485283,asad_distortionrepeater_s2,DR Model-XJ2 Repeater,ASAD,2,gun,Distortion,0.00,0.00,38.50,0.00,400.00,0,38.50,256.67,256.67,2301,1300,Fixed
+dfe5aeb2-3b56-422b-ba88-f165e827facd,banu_energyrepeater_s2,CF-227 Badger Repeater,Banu,2,gun,Energy,0.00,0.00,0.00,0.00,600.00,0,0.00,0.00,0.00,2800,1400,Fixed
+40b94722-48be-406a-9843-5c77772e4ab4,banu_tachyoncannon_s2,Singe Cannon (S2),Banu,2,gun,Energy,0.00,472.50,0.00,0.00,90.00,0,472.50,708.75,708.75,1200,3000,Fixed
+8115a034-92bf-4766-b0ce-408398ddc7e7,behr_ballisticcannon_vng_s2,CVSA Cannon,Behring,2,gun,Ballistic,162.00,0.00,0.00,0.00,150.00,327,162.00,405.00,405.00,2310,1320,Fixed
+d4ebab35-1d86-4259-82dc-cda6a7167c90,behr_ballisticrepeater_s2,SW16BR2 “Sawbuck” Repeater,Behring,2,gun,Ballistic,54.00,0.00,0.00,0.00,500.00,2637,54.00,450.00,450.00,2304,1200,Fixed
+a4f4afa6-aa15-46e4-9327-c27250c3ea83,behr_ballisticrepeater_vng_s2,BRVS Repeater,Behring,2,gun,Ballistic,54.00,0.00,0.00,0.00,500.00,2637,54.00,450.00,450.00,2310,1320,Fixed
+f8c20ae0-b9c7-4c1b-9488-27d1639fb06f,behr_distortioncannon_vng_s2,EVSD Cannon,Behring,2,gun,Distortion,0.00,0.00,81.00,0.00,150.00,0,81.00,202.50,202.50,2301,1300,Fixed
+d60d2103-fdc4-446e-8a3b-0af114f2e23e,behr_distortionrepeater_vng_s2,ATVS Repeater,Behring,2,gun,Distortion,0.00,0.00,27.00,0.00,500.00,0,27.00,225.00,225.00,2302,1430,Fixed
+2756f5f1-ef1e-454a-a171-9a5bd40e3a9d,behr_lasercannon_s2,M4A Cannon,Behring,2,gun,Energy,0.00,273.38,0.00,0.00,100.00,0,273.38,455.62,455.62,2300,1000,Fixed
+febc4b3a-09d7-446e-99a4-0f6be2387346,behr_lasercannon_vng_s2,MVSA Cannon,Behring,2,gun,Energy,0.00,272.97,0.00,0.00,100.00,0,272.97,454.95,454.95,2301,1300,Fixed
+2f68375a-3c66-4e02-9d1f-5d7f37c12725,behr_laserrepeater_vng_s2,GVSR Repeater,Behring,2,gun,Energy,0.00,99.72,0.00,0.00,350.00,0,99.72,581.70,581.70,2300,1000,Fixed
+92f60837-933a-42dc-a7b0-473a337ffc13,espr_ballisticcannon_s2,Deadbolt II Cannon,Esperia,2,gun,Ballistic,303.30,0.00,0.00,0.00,100.00,393,303.30,505.50,505.50,2304,900,Fixed
+1ee01303-ce47-447b-a2b6-ba0d0787be79,espr_lasercannon_s2,Lightstrike II Cannon,Esperia,2,gun,Energy,0.00,74.03,0.00,0.00,250.00,0,74.03,308.48,308.48,2304,1800,Fixed
+972c562f-bc9b-441c-a2fb-785293e54eda,gats_ballisticcannon_s2,Tarantula GT-870 Mark 2 Cannon,Gallenson,2,gun,Ballistic,91.26,0.00,0.00,0.00,200.00,327,91.26,304.20,304.20,2304,1600,Fixed
+7034e330-3d22-4e89-83cb-c01815dbb875,gats_ballisticgatling_s2,Scorpion GT-215 Gatling,Gallenson,2,gun,Ballistic,12.70,0.00,0.00,0.00,1600.00,4410,12.70,338.67,338.67,2304,1600,Fixed
+ea6b4297-83a4-476f-aee0-9d4f87168cf7,hrst_laserrepeater_s2,Attrition-2 Repeater,Hurston,2,gun,Energy,0.00,99.72,0.00,0.00,350.00,0,99.72,581.70,581.70,2300,1000,Fixed
+ac55431a-d662-4d92-bda7-ea44f27ca597,hrst_laserscattergun_s2,Dominance-2 Scattergun,Hurston,2,gun,Energy,0.00,99.00,0.00,0.00,50.00,0,99.00,82.50,82.50,2000,1000,Fixed
+70a98c94-9252-4fd3-a673-5a584339e273,jokr_distortioncannon_s2,Suckerpunch-L Cannon,Joker,2,gun,Distortion,0.00,0.00,121.50,0.00,100.00,0,121.50,202.50,202.50,2301,1300,Fixed
+02a7f68a-5bdd-4887-a256-20c985a65bda,kbar_ballisticcannon_s2,10-Series Greatsword Cannon,Klaus & Werner,2,gun,Ballistic,72.99,0.00,0.00,0.00,250.00,492,72.99,304.12,304.12,2304,1600,Fixed
+0e3f4b37-8085-4641-a360-40e4e372cd15,klwe_laserrepeater_pdc_s2,CF-227 Badger Repeater,Klaus & Werner,2,pdc,Energy,0.00,26.24,0.00,0.00,750.00,0,26.24,328.05,328.05,2304,1800,Fixed
+5453a817-dfd4-4143-aa11-840ca428540c,klwe_laserrepeater_s2,CF-227 Badger Repeater,Klaus & Werner,2,gun,Energy,0.00,26.24,0.00,0.00,750.00,0,26.24,328.05,328.05,2304,1800,Fixed
+c657c03c-6ac6-4da6-ab70-bfab52804444,klwe_massdriver_s2,Sledge II Mass Driver Cannon,Klaus & Werner,2,gun,Ballistic,525.00,0.00,0.00,0.00,30.00,105,525.00,262.50,262.50,1200,3000,Fixed
+d018aa87-d395-4935-8660-af9bda648b03,krig_ballisticgatling_s2,Tigerstrike T-19P,Kruger,2,gun,Ballistic,22.50,0.00,0.00,0.00,1200.00,4626,22.50,450.00,450.00,2304,1200,Fixed
+ee3e42f7-56ea-46b8-bac2-d27187005a70,kron_lasercannon_s2,FL-22 Cannon,Kroneg,2,gun,Energy,0.00,74.03,0.00,0.00,250.00,0,74.03,308.48,308.48,2304,1800,Fixed
+596ced46-195e-4f60-826a-7cc5bb2e2f02,mxox_neutroncannon_s2,NN-14 Cannon,MaxOx,2,gun,Energy,0.00,145.80,0.00,0.00,150.00,0,145.80,364.50,364.50,2296,1400,Fixed
+2365f40c-fbd3-4859-ad80-f5cfbc305c83,mxox_neutronrepeater_s2,NDB-28 Repeater,MaxOx,2,gun,Energy,0.00,56.97,0.00,0.00,500.00,0,56.97,474.75,474.75,2296,1400,Fixed
+6e3a862f-d13e-4873-ba34-24f3e554984d,toag_lasergatling_s2,Thlilye Laser Gatling,Thermyte,2,gun,Ballistic,0.00,17.10,0.00,0.00,1100.00,0,17.10,313.50,313.50,2592,1800,Fixed
+80ab18bb-9bc2-4e4f-a407-06c28e69bea7,vncl_lasercannon_s2,'WASP' Repeater,Vanduul,2,gun,Energy,0.00,89.10,0.00,0.00,350.00,0,89.10,519.75,519.75,2304,1800,Fixed
+e350773c-9131-4974-b624-e6b9e7c7200d,vncl_plasmacannon_s2,'WHIP' Cannon,Vanduul,2,gun,Energy,0.00,273.13,0.00,0.00,100.00,0,273.13,455.22,455.22,2300,1000,Fixed
+93b774da-e792-4648-bf79-acfd8b5d0f9d,amrs_aagun_cc_s3,PyroBurst Scattergun,Amon & Reese,3,gun,Energy,0.00,52.00,0.00,0.00,40.00,0,52.00,34.67,34.67,480,800,Fixed
+95c85f25-ccd9-402e-b02a-522f5a97a654,amrs_lasercannon_s3,Omnisky IX Cannon,Amon & Reese,3,gun,Energy,0.00,218.70,0.00,0.00,150.00,0,218.70,546.75,546.75,2604,1400,Fixed
+aa41e4d8-6b99-4f63-90d5-b0956e70c1d8,amrs_scattergun_s3,PyroBurst Scattergun,Amon & Reese,3,gun,Energy,0.00,49.50,0.00,0.00,70.00,0,49.50,57.75,57.75,2400,1200,Fixed
+8bd04e05-8694-4f25-801f-a92c2a6b0169,anvl_ballisticgatling_bespoke,Revenant Gatling,Anvil,3,gun,Ballistic,52.70,0.00,0.00,0.00,1200.00,3567,52.70,1054.00,1054.00,2835,1050,Fixed
+fac5a97f-64bf-450e-a2f2-90e4da5ccf73,apar_ballisticscattergun_s3,Predator Scattergun,Apocalypse,3,gun,Ballistic,105.00,0.00,0.00,0.00,60.00,1980,105.00,105.00,105.00,2000,1000,Fixed
+fd668181-1bb7-42fc-86b6-cb2db9cdc930,apar_ballisticscattergun_s3_shark,Predator Scattergun Sharkmouth Edition,Apocalypse,3,gun,Ballistic,105.00,0.00,0.00,0.00,60.00,1980,105.00,105.00,105.00,2000,1000,Fixed
+2a787ee5-d720-4490-8823-65a0f8578f4b,asad_distortionrepeater_s3,DR Model-XJ3 Repeater,ASAD,3,gun,Distortion,0.00,0.00,57.90,0.00,400.00,0,57.90,386.00,386.00,2595,1300,Fixed
+f15b742b-1457-4eb7-b7aa-078816297d29,banu_tachyoncannon_s3,Singe Cannon (S3),Banu,3,gun,Energy,0.00,1012.50,0.00,0.00,90.00,0,1012.50,1518.75,1518.75,1500,3000,Fixed
+bbfbb4b5-c26e-4bee-9d41-9679e102e860,behr_ballisticrepeater_s3,SW16BR3 “Shredder” Repeater,Behring,3,gun,Ballistic,81.00,0.00,0.00,0.00,500.00,2589,81.00,675.00,675.00,2604,1200,Fixed
+f72ca643-b48c-4f6e-abb7-d5bc8eb261aa,behr_lasercannon_s3,M5A Cannon,Behring,3,gun,Energy,0.00,410.18,0.00,0.00,100.00,0,410.18,683.64,683.64,2600,1000,Fixed
+370e4728-924a-4791-9297-a71b25ff08e9,espr_ballisticcannon_s3,Deadbolt III Cannon,Esperia,3,gun,Ballistic,455.40,0.00,0.00,0.00,100.00,387,455.40,759.00,759.00,2601,900,Fixed
+4e2b431e-916b-479b-9617-86e7e53a431a,espr_lasercannon_s3,Lightstrike III Cannon,Esperia,3,gun,Energy,0.00,110.81,0.00,0.00,250.00,0,110.81,461.70,461.70,2592,1800,Fixed
+0c60b4ec-ba9c-42e5-9246-6f241f138167,gats_ballisticcannon_s3,Tarantula GT-870 Mark 3 Cannon,Gallenson,3,gun,Ballistic,136.62,0.00,0.00,0.00,200.00,324,136.62,455.40,455.40,2608,1600,Fixed
+b837397c-47b6-45e7-b409-db290a068b47,gats_ballisticgatling_s3,Mantis GT-220 Gatling,Gallenson,3,gun,Ballistic,19.00,0.00,0.00,0.00,1600.00,4314,19.00,506.67,506.67,2608,1600,Fixed
+87d981fb-e1f3-40ad-ad6f-2f7a7a8f665e,glsn_laserrepeater_s3,Tormenter S3 Repeater,Gallenson,3,gun,Energy,0.00,39.50,0.00,0.00,750.00,0,39.50,493.75,493.75,2592,1800,Fixed
+c526f686-a3da-48fa-b9c3-d58fb8e31dc5,hrst_laserrepeater_s3,Attrition-3 Repeater,Hurston,3,gun,Energy,0.00,134.78,0.00,0.00,350.00,0,134.78,786.24,786.24,2600,1000,Fixed
+5f31f7c2-1383-4d77-892b-24507515ab0b,hrst_laserscattergun_s3,Dominance-3 Scattergun,Hurston,3,gun,Energy,0.00,139.50,0.00,0.00,50.00,0,139.50,116.25,116.25,2000,1000,Fixed
+aa7c924e-3f3b-4cea-a948-77753e2b387e,hrst_storm_laserrepeater_s3,Reign-3 Repeater,Hurston,3,gun,Energy,0.00,350.00,0.00,0.00,350.00,0,350.00,2041.67,2041.67,5000,1000,Fixed
+e09590d1-13a0-4d25-ad89-3dfc18a61c4a,jokr_distortioncannon_s3,Suckerpunch-XL Cannon,Joker,3,gun,Distortion,0.00,0.00,182.52,0.00,100.00,0,182.52,304.20,304.20,2595,1300,Fixed
+f03daac4-28e2-405c-b226-c258151cb9f1,kbar_ballisticcannon_s3,11-Series Broadsword Cannon,Klaus & Werner,3,gun,Ballistic,109.26,0.00,0.00,0.00,250.00,489,109.26,455.25,455.25,2608,1600,Fixed
+bd13235d-1261-4b71-b32f-aed1a8beb526,klwe_laserrepeater_s3,CF-337 Panther Repeater,Klaus & Werner,3,gun,Energy,0.00,43.65,0.00,0.00,750.00,0,43.65,545.62,545.62,2592,1800,Fixed
+ccd05b20-4042-4c49-a4c0-4a94f6d841ee,klwe_massdriver_s3,Sledge III Mass Driver Cannon,Klaus & Werner,3,gun,Ballistic,1125.00,0.00,0.00,0.00,30.00,102,1125.00,562.50,562.50,1500,3000,Fixed
+d20a2952-5908-40f7-a65e-8a5c9df1a0d1,krig_ballisticgatling_s3,Tigerstrike T-21 Gatling,Kruger,3,gun,Ballistic,33.80,0.00,0.00,0.00,1200.00,4548,33.80,676.00,676.00,2604,1200,Fixed
+cfacea3e-afbc-405c-b220-2d1d3b6e20b1,krig_lasercannon_s3,Quarreler Cannon,Kruger,3,gun,Energy,0.00,218.70,0.00,0.00,150.00,0,218.70,546.75,546.75,2604,1400,Fixed
+3a5bd643-3c3e-42fb-87ce-2a44b976555d,kron_lasercannon_s3,FL-33 Cannon,Kroneg,3,gun,Energy,0.00,110.81,0.00,0.00,250.00,0,110.81,461.70,461.70,2592,1800,Fixed
+231fd67b-49a6-40e9-8eef-20268cfc0b2c,mxox_neutroncannon_s3,NN-14 Cannon,MaxOx,3,gun,Energy,0.00,218.70,0.00,0.00,150.00,0,218.70,546.75,546.75,2604,1400,Fixed
+2f9fad1d-f591-4e69-ae64-af5ba0a883f7,mxox_neutronrepeater_s3,NDB-30 Repeater,MaxOx,3,gun,Energy,0.00,85.50,0.00,0.00,500.00,0,85.50,712.50,712.50,2604,1400,Fixed
+a9780953-9488-4644-9b56-61464e9dd6b9,toag_laserrepeater_s3,Yeng’tu Repeater,Thermyte,3,gun,Energy,0.00,36.45,0.00,0.00,750.00,0,36.45,455.63,455.63,2592,1800,Fixed
+2b261d0c-d208-4ab4-9217-ded64b8cb7cf,vncl_plasmacannon_s3,'WARLORD' Cannon,Vanduul,3,gun,Energy,0.00,526.50,0.00,0.00,100.00,0,526.50,877.50,877.50,2600,1600,Fixed
+19210f79-9618-42e0-9b88-6f59cad9fe2c,aegs_emp_sentinel_s4,REP-VS EMP Generator,Aegis,4,gun,Energy,0.00,0.00,0.00,0.00,60.00,0,0.00,0.00,0.00,2800,1400,Fixed
+cf57c4df-0fed-40bb-9771-10fc7853d8f9,amrs_lasercannon_s4,Omnisky XII Cannon,Amon & Reese,4,gun,Energy,0.00,327.89,0.00,0.00,150.00,0,327.89,819.72,819.72,2997,1344,Fixed
+df89e9ca-8a11-477c-8abd-f4837a277dbe,apar_ballisticgatling_s4,Revenant Gatling,Apocalypse,4,gun,Ballistic,63.30,0.00,0.00,0.00,1200.00,3660,63.30,1266.00,1266.00,3000,1200,Fixed
+6635dc5f-dfcd-4b72-9d9d-8d3620820352,behr_ballisticcannon_s4,C-788 Cannon,Behring,4,gun,Ballistic,325.00,0.00,0.00,0.00,50.00,270,325.00,270.83,270.83,6525,900,Fixed
+cfbd1437-b6aa-480a-b3a2-5d3ad001c726,behr_ballisticgatling_hornet_bespoke,TMSB-5 Gatling,Behring,4,gun,Ballistic,52.70,0.00,0.00,0.00,1050.00,5250,52.70,922.25,922.25,2835,1050,Fixed
+e4afc8b4-da61-4efb-af7e-f003d9900d96,behr_ballisticgatling_s4,AD4B Ballistic Gatling,Behring,4,gun,Ballistic,84.40,0.00,0.00,0.00,900.00,5220,84.40,1266.00,1266.00,2997,900,Fixed
+52c1793e-5610-4daa-aafe-a8cf55e60283,behr_lasercannon_s4,M6A Cannon,Behring,4,gun,Energy,0.00,615.28,0.00,0.00,100.00,0,615.28,1025.46,1025.46,3005,960,Fixed
+45a6750e-f453-4444-8a4d-67023187ac3f,espr_ballisticcannon_s4,Deadbolt IV Cannon,Esperia,4,gun,Ballistic,683.10,0.00,0.00,0.00,100.00,381,683.10,1138.50,1138.50,2998,864,Fixed
+060aac99-514a-4689-b6f9-4a1461723427,espr_lasercannon_s4,Lightstrike IV Cannon,Esperia,4,gun,Energy,0.00,166.21,0.00,0.00,250.00,0,166.21,692.55,692.55,3007,1728,Fixed
+353a4aae-1fb1-470c-a38c-2ca32e61bb12,glsn_ballisticgatling_s4,Breakneck S4 Gatling,Gallenson,4,gun,Ballistic,52.00,0.00,0.00,0.00,1100.00,10500,52.00,953.33,953.33,3001,1450,Fixed
+8d868b78-eccd-4ba5-a4a5-57e2f20bdc35,hrst_laserrepeater_s4,Attrition-4 Repeater,Hurston,4,gun,Energy,0.00,202.18,0.00,0.00,350.00,0,202.18,1179.36,1179.36,3000,1000,Fixed
+7bd374e9-9d2f-4659-94cf-840e79d23b34,hrst_laserrepeater_s4_turret,Attrition-4 Repeater,Hurston,4,gun,Energy,0.00,150.00,0.00,0.00,350.00,0,150.00,875.00,875.00,7200,2400,Fixed
+ecac1df2-4f6f-49df-9cce-f188d118a789,klwe_laserrepeater_s4,CF-447 Rhino Repeater,Klaus & Werner,4,gun,Energy,0.00,65.43,0.00,0.00,750.00,0,65.43,817.88,817.88,3006,1800,Fixed
+ea0217e9-cdbe-48d2-a192-1837c52130b9,krig_ballisticgatling_bespoke_s4,Relentless L-21 Gatling,Kruger,4,gun,Ballistic,63.00,0.00,0.00,0.00,950.00,4200,63.00,997.50,997.50,3003,1650,Fixed
+890880a7-afa7-41f9-bc1c-925d7958a436,krig_laserrepeater_bespoke_s4,Axiom L-22 Repeater,Kruger,4,gun,Energy,0.00,85.00,0.00,0.00,750.00,0,85.00,1062.50,1062.50,3003,1650,Fixed
+76706adf-4687-4a7a-aaf1-c44af0a5d2ca,prar_distortionscattergun_s4,Salvation Distortion Scattergun,Preacher,4,gun,Distortion,0.00,0.00,60.00,0.00,60.00,0,60.00,60.00,60.00,1400,700,Fixed
+c778d7c0-116a-4597-a32e-2bbf7f6b7c17,amrs_lasercannon_s5,Omnisky XV Cannon,Amon & Reese,5,gun,Energy,0.00,492.16,0.00,0.00,150.00,0,492.16,1230.39,1230.39,3310,1288,Fixed
+f52975b5-d621-4c08-9dcc-3c4bd8170383,behr_ballisticgatling_s5,AD5B Ballistic Gatling,Behring,5,gun,Ballistic,126.50,0.00,0.00,0.00,900.00,5004,126.50,1897.50,1897.50,3303,900,Fixed
+b94c54b2-a70e-4f41-bc02-ed76be87e493,behr_lasercannon_s5,M7A Cannon,Behring,5,gun,Energy,0.00,921.78,0.00,0.00,100.00,0,921.78,1536.30,1536.30,3303,920,Fixed
+56c36bd9-9090-4166-a3dd-9dc8ad225f70,behr_nova_ballisticgatling_s5,NV57 Ballistic Gatling,Behring,5,gun,Ballistic,162.50,0.00,0.00,0.00,1200.00,9600,162.50,3250.00,3250.00,4000,1000,Fixed
+76775574-fcf2-493d-859e-337f1267a7ef,espr_ballisticcannon_s5,Deadbolt V Cannon,Esperia,5,gun,Ballistic,1024.20,0.00,0.00,0.00,100.00,369,1024.20,1707.00,1707.00,3304,828,Fixed
+5eef2a62-013b-4b80-80e4-5198213da1ec,espr_lasercannon_s5,Lightstrike V Cannon,Esperia,5,gun,Energy,0.00,248.67,0.00,0.00,250.00,0,248.67,1036.12,1036.12,3295,1656,Fixed
+2c9b3880-a108-4746-a6cd-7e2b04feee36,hrst_laserrepeater_s5,Attrition-5 Repeater,Hurston,5,gun,Energy,0.00,336.78,0.00,0.00,350.00,0,336.78,1964.55,1964.55,3300,1000,Fixed
+189b0ce2-d934-4208-9970-ac633dbd67d3,hrst_nova_ballisticcannon_s5,Slayer Cannon,Hurston,5,gun,Ballistic,13500.00,0.00,0.00,0.00,12.00,363,13500.00,2700.00,2700.00,6148,564,Fixed
+4170fcb0-0cef-4228-a3d5-7efc41ba4ea3,klwe_laserrepeater_s5,CF-557 Galdereen Repeater,Klaus & Werner,5,gun,Energy,0.00,98.19,0.00,0.00,750.00,0,98.19,1227.38,1227.38,3294,1800,Fixed
+d55ffb79-a3b9-4765-8ed6-15b882ec548c,klwe_laserrepeater_s5_idris_m,CF-557 Galdereen Repeater,Klaus & Werner,5,gun,Energy,0.00,750.00,0.00,0.00,750.00,0,750.00,9375.00,9375.00,3294,1800,Fixed
+35d956a4-8297-4327-bb05-415af9f6531a,klwe_laserrepeater_s5_turret,CF-557 Galdereen Repeater,Klaus & Werner,5,gun,Energy,0.00,98.19,0.00,0.00,750.00,0,98.19,1227.38,1227.38,3294,1800,Fixed
+2e0a3446-23e2-447b-8f1c-2b01516ca396,prar_distortionscattergun_s5,Absolution Distortion Scattergun,Preacher,5,gun,Distortion,0.00,0.00,90.00,0.00,60.00,0,90.00,90.00,90.00,1400,700,Fixed
+2f92d27a-f04f-47f9-aeb5-96ad4fad15ea,rsi_ballisticcannon_s5_meteor_bespoke,Leonids Cannon,RSI,5,gun,Ballistic,1600.00,0.00,0.00,0.00,60.00,720,1600.00,1600.00,1600.00,2814,840,Fixed
+2148a144-a9a2-457c-8bb5-e96f0492a0bc,vncl_gen2_plasmacannon_s5,'WRATH' Cannon,Vanduul,5,gun,Energy,0.00,972.00,0.00,0.00,50.00,0,972.00,810.00,810.00,2795,1288,Fixed
+816aa854-7615-4add-a2ca-2d39ada7fea7,vncl_neutroncannon_s5,'WAR' Cannon,Vanduul,5,gun,Energy,0.00,567.00,0.00,0.00,200.00,0,567.00,1890.00,1890.00,3478,1288,Fixed
+fde9335b-a9b7-4d7d-a4a4-69b1158de320,vncl_plasmacannon_s5,'WRATH' Cannon,Vanduul,5,gun,Energy,0.00,972.00,0.00,0.00,50.00,0,972.00,810.00,810.00,2795,1288,Fixed
+1901415b-cfbd-49fb-82f8-42eff2c11f01,amrs_lasercannon_s6,Omnisky XVIII Cannon,Amon & Reese,6,gun,Energy,0.00,738.40,0.00,0.00,150.00,0,738.40,1845.99,1845.99,3597,1232,Fixed
+85726664-e16d-4a24-98f8-7cc8f0ba6f00,apar_ballisticgatling_s6,Draugar Gatling,Apocalypse,6,gun,Ballistic,142.40,0.00,0.00,0.00,1200.00,3309,142.40,2848.00,2848.00,3600,1200,Fixed
+6c46b8e3-81c8-4018-bce2-740b81174a00,behr_ballisticgatling_s6,AD6B Ballistic Gatling,Behring,6,gun,Ballistic,189.90,0.00,0.00,0.00,900.00,4734,189.90,2848.50,2848.50,3600,900,Fixed
+4e3897c1-a48f-4dce-b3cf-0f91fe3eb0f6,behr_lasercannon_s6,M8A Cannon,Behring,6,gun,Energy,0.00,1383.48,0.00,0.00,100.00,0,1383.48,2305.80,2305.80,3599,880,Fixed
+493338b9-a7c6-4598-ba32-dd61d5ffef8f,behr_lasercannon_s6_turret,M8A Cannon,Behring,6,gun,Energy,0.00,900.00,0.00,0.00,120.00,0,900.00,1800.00,1800.00,7802,1144,Fixed
+a710fe11-49e3-4260-9f3b-de08d304c0e0,espr_ballisticcannon_s6,Deadbolt VI Cannon,Esperia,6,gun,Ballistic,1537.20,0.00,0.00,0.00,100.00,354,1537.20,2562.00,2562.00,3604,792,Fixed
+a336be9a-ea2f-4db2-97ec-593ad6134471,espr_lasercannon_s6,Lightstrike VI Cannon,Esperia,6,gun,Energy,0.00,374.14,0.00,0.00,250.00,0,374.14,1558.91,1558.91,3596,1584,Fixed
+f02c1934-9ebb-413c-9f3e-cbcb262f25de,hrst_laserrepeater_s6,Attrition-6 Repeater,Hurston,6,gun,Energy,0.00,505.35,0.00,0.00,350.00,0,505.35,2947.88,2947.88,3600,1000,Fixed
+3bb64389-e75d-463e-a73b-115bf132667e,klwe_laserrepeater_s6,CF-667 Mammoth Repeater,Klaus & Werner,6,gun,Energy,0.00,147.33,0.00,0.00,750.00,0,147.33,1841.63,1841.63,3600,1800,Fixed
+bad19f5c-7249-4d85-9430-040733eb6e4a,prar_distortionscattergun_s6,Condemnation Distortion Scattergun,Preacher,6,gun,Distortion,0.00,0.00,130.00,0.00,60.00,0,130.00,130.00,130.00,1400,700,Fixed
+61d5e767-fcee-4e70-ae9e-7671b6692404,rsi_bespoke_ballisticcannon_a,Maris Cannon,RSI,6,gun,Ballistic,3400.00,0.00,0.00,0.00,50.00,2700,3400.00,2833.33,2833.33,4895,890,Fixed
+1c5cb632-fe64-42a4-9a4e-86147a4dcd74,behr_ballisticcannon_s7_idris,Conqueror-7,Behring,7,gun,Ballistic,4000.00,0.00,0.00,0.00,50.00,800,4000.00,3333.33,3333.33,4496,850,Fixed
+51264411-1e57-48b9-b1d8-6fab4fb3a687,behr_ballisticgatling_s7,SF7B Gatling,Behring,7,gun,Ballistic,292.00,0.00,0.00,0.00,900.00,2994,292.00,4380.00,4380.00,3996,900,Fixed
+0995529d-f2ce-4436-9807-1389fa429569,behr_ballisticgatling_s7_collector,SF7B Gatling,Behring,7,gun,Ballistic,292.00,0.00,0.00,0.00,900.00,2994,292.00,4380.00,4380.00,3996,900,Fixed
+f9a6c670-a830-4c44-9e26-7ca2a9070264,behr_javelinballisticcannon_s7,M9A Cannon,Behring,7,gun,Ballistic,2306.34,0.00,0.00,0.00,100.00,276,2306.34,3843.90,3843.90,3999,756,Fixed
+af019617-94ee-4a91-b62b-124c93f2a45e,behr_lasercannon_s7,M9A Cannon,Behring,7,gun,Energy,0.00,2075.71,0.00,0.00,100.00,0,2075.71,3459.51,3459.51,3998,840,Fixed
+aa0f8505-7284-46ee-af10-12356f3e7576,behr_lasercannon_s7_idris_m,M9A Cannon,Behring,7,gun,Energy,0.00,6750.00,0.00,0.00,100.00,0,6750.00,11250.00,11250.00,3998,672,Fixed
+c2a8fdaa-a195-4f1d-a223-70eef526e09d,behr_lasercannon_s7_turret,M9A Cannon,Behring,7,gun,Energy,0.00,14040.00,0.00,0.00,60.00,0,14040.00,14040.00,14040.00,3998,840,Fixed
+25ebe37d-5fdd-4319-ad41-71d768b5bed4,behr_lasercannon_sf7e_s7,SF7E Cannon,Behring,7,gun,Energy,0.00,5150.00,0.00,0.00,55.00,0,5150.00,4720.83,4720.83,3999,860,Fixed
+96b0e0ca-afb7-4ae2-b5f5-164ebcb29406,behr_lasercannon_sf7e_s7_collector,SF7E Cannon,Behring,7,gun,Energy,0.00,5150.00,0.00,0.00,55.00,0,5150.00,4720.83,4720.83,3999,860,Fixed
+6bf837a5-2763-4cd3-aa9c-869b0e798cb3,behr_lasercannon_s8,M9A Cannon,Behring,8,gun,Energy,0.00,3113.64,0.00,0.00,100.00,0,3113.64,5189.40,5189.40,4504,800,Fixed
+17417d27-af6d-40fc-af97-ab6db7ab313c,rsi_perseus_ballisticcannon_b_s8,RSI Medusa Cannon,RSI,8,gun,Ballistic,5400.00,0.00,0.00,0.00,50.00,900,5400.00,4500.00,4500.00,5580,900,Fixed
+bf958f42-4f50-46ce-af92-64b08e7f7c19,behr_lasercannon_s9,M9A Cannon,Behring,9,gun,Energy,0.00,4670.46,0.00,0.00,100.00,0,4670.46,7784.10,7784.10,3800,760,Fixed
+5f37d7dd-8d94-465e-a4c4-da78bd3941d8,behr_laserrepeater_s10,GVSR Repeater,Behring,10,gun,Energy,0.00,25000.00,0.00,0.00,350.00,0,25000.00,145833.33,145833.33,5000,1000,Fixed
+9fd3b3be-5653-413f-ba8f-0959a0adda89,hrst_laserbeam_bespoke,Exodus-10 Laser Beam,Hurston,10,gun,Energy,0.00,0.00,0.00,0.00,60.00,0,0.00,0.00,0.00,2800,700,Fixed
+26298097-2f16-4f25-b652-9c72170b5529,klwe_massdriver_s10,Destroyer Mass Driver Cannon,Klaus & Werner,10,gun,Ballistic,144160.00,0.00,0.00,0.00,6.00,1500,144160.00,14416.00,14416.00,10000,5000,Fixed
+a1ea51dd-1665-41cf-923a-d6a42a7130ce,behr_massdriver_s12,M9A Cannon,Behring,12,gun,Ballistic,200000.00,0.00,0.00,0.00,10.00,21,200000.00,33333.33,33333.33,10000,5000,Fixed

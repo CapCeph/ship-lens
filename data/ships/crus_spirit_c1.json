@@ -1,0 +1,98 @@
+{
+  "filename": "crus_spirit_c1",
+  "display_name": "Crusader C1 Spirit",
+  "hull_hp": 20000,
+  "armor": {
+    "hp": 9900,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 0.75,
+    "damage_mult_energy": 0.6,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 0,
+    "retro_hp": 0,
+    "mav_hp": 0,
+    "vtol_hp": 0,
+    "total_hp": 0
+  },
+  "components": {
+    "turret_total_hp": 0,
+    "powerplant_total_hp": 0,
+    "cooler_total_hp": 0,
+    "shield_gen_total_hp": 0,
+    "qd_total_hp": 0
+  },
+  "shield_count": 1,
+  "max_shield_size": 2,
+  "default_shield_ref": "",
+  "weapon_hardpoints": [
+    {
+      "port_name": "hardpoint_weapon_nose",
+      "max_size": 3,
+      "gimbal_type": "Turret",
+      "category": "pilot",
+      "mount_name": "crus_spirit_nose_turret_s3",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "behr_lasercannon_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "behr_lasercannon_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_wing_left",
+      "max_size": 3,
+      "gimbal_type": "Gimbal",
+      "category": "pilot",
+      "mount_name": "mount_gimbal_s3",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "behr_lasercannon_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_weapon_wing_right",
+      "max_size": 3,
+      "gimbal_type": "Gimbal",
+      "category": "pilot",
+      "mount_name": "mount_gimbal_s3",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "behr_lasercannon_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_missiles_wing_left",
+      "max_size": 4,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s04_behr_dual_s03",
+      "sub_ports": [
+        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"},
+        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"}
+      ]
+    },
+    {
+      "port_name": "hardpoint_missiles_wing_right",
+      "max_size": 4,
+      "gimbal_type": "Fixed",
+      "category": "missile",
+      "mount_name": "mrck_s04_behr_dual_s03",
+      "sub_ports": [
+        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"},
+        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"}
+      ]
+    }
+  ]
+}

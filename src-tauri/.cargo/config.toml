@@ -1,0 +1,14 @@
+# Cargo build configuration for Ship Lens
+
+[build]
+# Disable incremental compilation to prevent corrupted chunk errors
+# Incremental compilation can sometimes cause glibc allocator issues with complex generic code
+incremental = false
+
+[profile.dev]
+# Disable incremental in dev mode
+incremental = false
+
+[profile.release]
+# Release builds never use incremental anyway, but be explicit
+incremental = false

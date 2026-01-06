@@ -5,7 +5,7 @@
 mod data;
 mod ttk;
 
-use data::{GameData, Ship, Shield, Weapon};
+use data::{GameData, Missile, Mount, Ship, Shield, Weapon};
 use ttk::{CombatScenario as TTKScenario, EquippedWeapon, TTKResult, ZoneModifiers};
 use std::fs;
 use std::path::PathBuf;
@@ -72,8 +72,8 @@ fn get_data_dir() -> PathBuf {
 
 /// Check if a directory has data files (not just empty)
 fn has_data_files(path: &PathBuf) -> bool {
-    // Check for actual data files used by the app
-    path.join("shields.csv").exists() || path.join("ship_parts_comprehensive.csv").exists()
+    // Check for actual data files used by the app (JSON format)
+    path.join("ships").is_dir() || path.join("weapons.json").exists() || path.join("shields.json").exists()
 }
 
 /// Get all ships sorted by name
@@ -93,8 +93,12 @@ fn get_ship(state: State<AppState>, name: String) -> Option<Ship> {
 /// Get all weapons
 #[tauri::command]
 fn get_weapons(state: State<AppState>) -> Vec<Weapon> {
+    // Return all weapons - restricted filtering done on frontend if needed
     let data = state.data.lock().unwrap();
-    data.weapons.values().cloned().collect()
+    data.weapons.values()
+        
+        .cloned()
+        .collect()
 }
 
 /// Get weapons by size
@@ -102,6 +106,7 @@ fn get_weapons(state: State<AppState>) -> Vec<Weapon> {
 fn get_weapons_by_size(state: State<AppState>, size: i32) -> Vec<Weapon> {
     let data = state.data.lock().unwrap();
     data.weapons.values()
+        
         .filter(|w| w.size == size)
         .cloned()
         .collect()
@@ -122,6 +127,112 @@ fn get_shields_by_size(state: State<AppState>, size: i32) -> Vec<Shield> {
         .filter(|s| s.size == size)
         .cloned()
         .collect()
+}
+
+/// Get all missiles
+#[tauri::command]
+fn get_missiles(state: State<AppState>) -> Vec<Missile> {
+    let data = state.data.lock().unwrap();
+    data.missiles.values().cloned().collect()
+}
+
+/// Get missiles by size
+#[tauri::command]
+fn get_missiles_by_size(state: State<AppState>, size: i32) -> Vec<Missile> {
+    let data = state.data.lock().unwrap();
+    data.missiles.values()
+        .filter(|m| m.size == size)
+        .cloned()
+        .collect()
+}
+
+/// Get a missile by name
+#[tauri::command]
+fn get_missile(state: State<AppState>, name: String) -> Option<Missile> {
+    let data = state.data.lock().unwrap();
+    data.get_missile_by_display_name(&name).cloned()
+}
+
+/// Get all mounts
+#[tauri::command]
+fn get_mounts(state: State<AppState>) -> Vec<Mount> {
+    let data = state.data.lock().unwrap();
+    data.mounts.values().cloned().collect()
+}
+
+/// Get mounts by max size (returns mounts that fit in a hardpoint of given size)
+/// Filters to show only compatible mounts:
+/// - If compatible_mounts list is provided, return only those exact mounts
+/// - Otherwise, filter by ship_ref (generic mounts + ship-specific mounts)
+#[tauri::command]
+fn get_mounts_by_max_size(
+    state: State<AppState>,
+    max_size: i32,
+    ship_ref: Option<String>,
+    compatible_mounts: Option<Vec<String>>
+) -> Vec<Mount> {
+    let data = state.data.lock().unwrap();
+
+    data.mounts.values()
+        .filter(|m| {
+            // Size check
+            if m.size > max_size {
+                return false;
+            }
+
+            // If compatible_mounts list is provided, use explicit filtering
+            if let Some(ref compat_list) = compatible_mounts {
+                return compat_list.contains(&m.mount_ref);
+            }
+
+            // Legacy behavior: filter by ship_ref
+            // If no ship_ref provided, return all compatible sizes
+            let Some(ref ship) = ship_ref else {
+                return true;
+            };
+
+            let mount_ref_lower = m.mount_ref.to_lowercase();
+
+            // Generic mounts (universal compatibility)
+            // Patterns: mount_gimbal_s*, mount_fixed_s*, entityclassdefinition.mount_*
+            let is_generic = mount_ref_lower.starts_with("mount_gimbal_s")
+                || mount_ref_lower.starts_with("mount_fixed_s")
+                || mount_ref_lower.starts_with("entityclassdefinition.mount_gimbal_s")
+                || mount_ref_lower.starts_with("entityclassdefinition.mount_fixed_s")
+                || mount_ref_lower.contains("varipuck")
+                || mount_ref_lower.contains("tmsb");
+
+            if is_generic {
+                return true;
+            }
+
+            // Ship-specific mounts: check if mount_ref contains ship identifier
+            // Extract manufacturer and model from ship_ref (e.g., "anvl_hornet_f7c" -> "anvl", "hornet", "f7c")
+            let ship_lower = ship.to_lowercase();
+            let ship_parts: Vec<&str> = ship_lower.split('_').collect();
+
+            // Check if mount_ref contains any ship-specific identifiers
+            // Must match manufacturer and at least part of the model
+            if ship_parts.len() >= 2 {
+                let manufacturer = ship_parts[0]; // e.g., "anvl", "drak", "crus"
+                let model = ship_parts[1]; // e.g., "hornet", "buccaneer", "spirit"
+
+                // Mount must contain manufacturer prefix and model name
+                mount_ref_lower.contains(manufacturer) && mount_ref_lower.contains(model)
+            } else {
+                // Fallback: simple substring match
+                mount_ref_lower.contains(&ship_lower)
+            }
+        })
+        .cloned()
+        .collect()
+}
+
+/// Get a mount by ref
+#[tauri::command]
+fn get_mount(state: State<AppState>, mount_ref: String) -> Option<Mount> {
+    let data = state.data.lock().unwrap();
+    data.mounts.get(&mount_ref).cloned()
 }
 
 /// Calculate TTK between ships (legacy - kept for backwards compatibility)
@@ -148,7 +259,8 @@ fn calculate_ttk(
     let weapons: Vec<&Weapon> = weapon_sizes.iter()
         .filter_map(|&size| {
             data.weapons.values()
-                .filter(|w| w.size == size)
+                
+        .filter(|w| w.size == size)
                 .max_by(|a, b| a.sustained_dps.partial_cmp(&b.sustained_dps).unwrap())
         })
         .collect();
@@ -541,10 +653,12 @@ pub fn run() {
         GameData::default()
     });
 
-    println!("Loaded {} ships, {} weapons, {} shields",
+    eprintln!("Loaded {} ships, {} weapons, {} shields, {} missiles, {} mounts",
         game_data.ships.len(),
         game_data.weapons.len(),
-        game_data.shields.len()
+        game_data.shields.len(),
+        game_data.missiles.len(),
+        game_data.mounts.len()
     );
 
     let app_state = AppState {
@@ -574,6 +688,12 @@ pub fn run() {
             get_shields,
             get_shields_by_size,
             get_shield,
+            get_missiles,
+            get_missiles_by_size,
+            get_missile,
+            get_mounts,
+            get_mounts_by_max_size,
+            get_mount,
             calculate_ttk,
             calculate_ttk_v2,
             get_stats,

@@ -27,6 +27,8 @@ pub struct WeaponHardpoint {
     pub category: String,  // "pilot", "manned_turret", "remote_turret", "pdc", "specialized", "torpedo", "missile", "bomb"
     #[serde(default)]
     pub mount_name: String,  // gimbal/turret mount name (e.g., "crus_spirit_nose_turret_s3")
+    #[serde(default)]
+    pub compatible_mounts: Vec<String>,  // explicit list of compatible mount refs (e.g., ["anvl_hornet_f7c_nose_turret"])
     pub sub_ports: Vec<SubPort>,  // individual weapon ports with size and default weapon
 }
 
@@ -35,8 +37,8 @@ pub struct WeaponHardpoint {
 pub struct Ship {
     pub filename: String,
     pub display_name: String,
-    pub hull_hp: i32,
-    pub armor_hp: i32,
+    pub hull_hp: f64,
+    pub armor_hp: f64,
     // Dual-layer armor damage system (4.5):
     // Layer 1: SCItemVehicleArmorParams.damageMultiplier
     pub armor_damage_mult_physical: f64,
@@ -74,6 +76,10 @@ pub struct Weapon {
     pub sustained_dps: f64,
     pub power_consumption: f64,
     pub weapon_type: String,  // "gun", "missile", "torpedo", "bomb", "pdc"
+    #[serde(default)]
+    pub restricted_to: Vec<String>,  // Manufacturer restrictions (e.g., ["VNCL", "BANU"])
+    #[serde(default)]
+    pub ship_exclusive: bool,  // True if weapon can only be equipped on specific ships (not swappable)
     // 4.5 damage breakdown by type
     pub damage_physical: f64,
     pub damage_energy: f64,
@@ -82,6 +88,24 @@ pub struct Weapon {
     pub base_penetration_distance: f64,
     pub near_radius: f64,
     pub far_radius: f64,
+}
+
+/// Missile/Torpedo/Bomb data
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Missile {
+    pub name: String,
+    pub display_name: String,
+    pub size: i32,
+    pub missile_type: String,  // "missile", "torpedo", "bomb"
+    pub tracking_type: String, // "IR", "EM", "CS", "Unknown"
+    pub damage_physical: f64,
+    pub damage_energy: f64,
+    pub damage_distortion: f64,
+    pub explosion_min_radius: f64,
+    pub explosion_max_radius: f64,
+    pub max_lifetime: f64,
+    pub arm_time: f64,
+    pub lock_time: f64,
 }
 
 /// Shield data with defense and absorption values
@@ -102,6 +126,19 @@ pub struct Shield {
     pub absorb_physical: f64,
     pub absorb_energy: f64,
     pub absorb_distortion: f64,
+}
+
+/// Weapon mount data (gimbals, fixed mounts, turrets)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Mount {
+    #[serde(rename = "ref")]
+    pub mount_ref: String,
+    pub display_name: String,
+    pub size: i32,
+    pub ports: i32,
+    pub port_size: i32,
+    pub hp: i32,
+    pub mount_type: String,  // "gimbal", "fixed", "turret"
 }
 
 /// Damage calculation result
@@ -131,6 +168,8 @@ pub struct GameData {
     pub ships: HashMap<String, Ship>,
     pub weapons: HashMap<String, Weapon>,
     pub shields: HashMap<String, Shield>,
+    pub missiles: HashMap<String, Missile>,
+    pub mounts: HashMap<String, Mount>,
 }
 
 impl GameData {
@@ -141,6 +180,8 @@ impl GameData {
         data.load_ships(data_dir)?;
         data.load_weapons(data_dir)?;
         data.load_shields(data_dir)?;
+        data.load_missiles(data_dir)?;
+        data.load_mounts(data_dir)?;
 
         Ok(data)
     }
@@ -155,7 +196,7 @@ impl GameData {
         // JSON structure for per-ship files
         #[derive(Deserialize)]
         struct ShipArmorJson {
-            hp: i32,
+            hp: f64,
             resist_physical: f64,
             resist_energy: f64,
             resist_distortion: f64,
@@ -187,7 +228,7 @@ impl GameData {
         struct ShipJson {
             filename: String,
             display_name: String,
-            hull_hp: i32,
+            hull_hp: f64,
             armor: ShipArmorJson,
             thrusters: ShipThrustersJson,
             components: ShipComponentsJson,
@@ -215,7 +256,7 @@ impl GameData {
                     }
                 };
 
-                let display_name = Self::format_ship_name(&ship_json.filename);
+                let display_name = ship_json.display_name.clone();
 
                 // Count pilot weapons and build sizes string
                 let pilot_hardpoints: Vec<_> = ship_json.weapon_hardpoints.iter()
@@ -273,39 +314,112 @@ impl GameData {
         Ok(())
     }
     fn format_ship_name(filename: &str) -> String {
-        let manufacturers: HashMap<&str, &str> = [
-            ("aegs", "Aegis"), ("anvl", "Anvil"), ("argo", "Argo"), ("banu", "Banu"),
-            ("cnou", "C.O."), ("crus", "Crusader"), ("drak", "Drake"),
-            ("espr", "Esperia"), ("gama", "Gatac"), ("krig", "Kruger"),
-            ("misc", "MISC"), ("mrai", "Mirai"), ("orig", "Origin"), ("rsi", "RSI"),
-            ("tmbl", "Tumbril"), ("vncl", "Vanduul"), ("xian", "Xi'An"),
-        ].into_iter().collect();
+        use std::sync::OnceLock;
+        use std::collections::HashMap;
 
-        let name_fixes: HashMap<&str, &str> = [
-            ("avenger", "Avenger"), ("stalker", "Stalker"), ("titan", "Titan"),
-            ("gladius", "Gladius"), ("eclipse", "Eclipse"), ("hammerhead", "Hammerhead"),
-            ("sabre", "Sabre"), ("vanguard", "Vanguard"), ("hornet", "Hornet"),
-            ("arrow", "Arrow"), ("hawk", "Hawk"), ("hurricane", "Hurricane"),
-            ("valkyrie", "Valkyrie"), ("carrack", "Carrack"), ("pisces", "Pisces"),
-            ("gladiator", "Gladiator"), ("terrapin", "Terrapin"), ("redeemer", "Redeemer"),
-            ("mole", "MOLE"), ("raft", "RAFT"), ("mpuv", "MPUV"), ("srv", "SRV"),
-            ("f7a", "F7A"), ("f7c", "F7C"), ("f7cm", "F7C-M"), ("f7cr", "F7C-R"),
-            ("f7cs", "F7C-S"), ("f8", "F8"), ("f8c", "F8C"),
-            ("mk1", "Mk I"), ("mk2", "Mk II"),
-            ("c8", "C8"), ("c8r", "C8R"), ("c8x", "C8X"),
-            ("a1", "A1"), ("a2", "A2"), ("c1", "C1"), ("c2", "C2"), ("m2", "M2"),
-            ("p52", "P-52"), ("p72", "P-72"),
-            ("mustang", "Mustang"), ("aurora", "Aurora"), ("constellation", "Constellation"),
-            ("freelancer", "Freelancer"), ("starfarer", "Starfarer"), ("prospector", "Prospector"),
-            ("cutlass", "Cutlass"), ("caterpillar", "Caterpillar"), ("corsair", "Corsair"),
-            ("buccaneer", "Buccaneer"), ("herald", "Herald"), ("vulture", "Vulture"),
-            ("defender", "Defender"), ("prowler", "Prowler"), ("talon", "Talon"),
-            ("nox", "Nox"), ("dragonfly", "Dragonfly"), ("razor", "Razor"), ("reliant", "Reliant"),
-            ("polaris", "Polaris"), ("idris", "Idris"), ("javelin", "Javelin"), ("kraken", "Kraken"),
-            ("reclaimer", "Reclaimer"), ("merchantman", "Merchantman"), ("endeavor", "Endeavor"),
-            ("genesis", "Genesis"), ("hull", "Hull"), ("orion", "Orion"), ("pioneer", "Pioneer"),
-            ("nautilus", "Nautilus"), ("perseus", "Perseus"), ("liberator", "Liberator"),
-        ].into_iter().collect();
+        static MANUFACTURERS: OnceLock<HashMap<&'static str, &'static str>> = OnceLock::new();
+        static NAME_FIXES: OnceLock<HashMap<&'static str, &'static str>> = OnceLock::new();
+
+        let manufacturers = MANUFACTURERS.get_or_init(|| {
+            let mut map = HashMap::with_capacity(17);
+            map.insert("aegs", "Aegis");
+            map.insert("anvl", "Anvil");
+            map.insert("argo", "Argo");
+            map.insert("banu", "Banu");
+            map.insert("cnou", "C.O.");
+            map.insert("crus", "Crusader");
+            map.insert("drak", "Drake");
+            map.insert("espr", "Esperia");
+            map.insert("gama", "Gatac");
+            map.insert("krig", "Kruger");
+            map.insert("misc", "MISC");
+            map.insert("mrai", "Mirai");
+            map.insert("orig", "Origin");
+            map.insert("rsi", "RSI");
+            map.insert("tmbl", "Tumbril");
+            map.insert("vncl", "Vanduul");
+            map.insert("xian", "Xi'An");
+            map
+        });
+
+        let name_fixes = NAME_FIXES.get_or_init(|| {
+            let mut map = HashMap::with_capacity(50);
+            map.insert("avenger", "Avenger");
+            map.insert("stalker", "Stalker");
+            map.insert("titan", "Titan");
+            map.insert("gladius", "Gladius");
+            map.insert("eclipse", "Eclipse");
+            map.insert("hammerhead", "Hammerhead");
+            map.insert("sabre", "Sabre");
+            map.insert("vanguard", "Vanguard");
+            map.insert("hornet", "Hornet");
+            map.insert("arrow", "Arrow");
+            map.insert("hawk", "Hawk");
+            map.insert("hurricane", "Hurricane");
+            map.insert("valkyrie", "Valkyrie");
+            map.insert("carrack", "Carrack");
+            map.insert("pisces", "Pisces");
+            map.insert("gladiator", "Gladiator");
+            map.insert("terrapin", "Terrapin");
+            map.insert("redeemer", "Redeemer");
+            map.insert("mole", "MOLE");
+            map.insert("raft", "RAFT");
+            map.insert("mpuv", "MPUV");
+            map.insert("srv", "SRV");
+            map.insert("f7a", "F7A");
+            map.insert("f7c", "F7C");
+            map.insert("f7cm", "F7C-M");
+            map.insert("f7cr", "F7C-R");
+            map.insert("f7cs", "F7C-S");
+            map.insert("f8", "F8");
+            map.insert("f8c", "F8C");
+            map.insert("mk1", "Mk I");
+            map.insert("mk2", "Mk II");
+            map.insert("c8", "C8");
+            map.insert("c8r", "C8R");
+            map.insert("c8x", "C8X");
+            map.insert("a1", "A1");
+            map.insert("a2", "A2");
+            map.insert("c1", "C1");
+            map.insert("c2", "C2");
+            map.insert("m2", "M2");
+            map.insert("p52", "P-52");
+            map.insert("p72", "P-72");
+            map.insert("mustang", "Mustang");
+            map.insert("aurora", "Aurora");
+            map.insert("constellation", "Constellation");
+            map.insert("freelancer", "Freelancer");
+            map.insert("starfarer", "Starfarer");
+            map.insert("prospector", "Prospector");
+            map.insert("cutlass", "Cutlass");
+            map.insert("caterpillar", "Caterpillar");
+            map.insert("corsair", "Corsair");
+            map.insert("buccaneer", "Buccaneer");
+            map.insert("herald", "Herald");
+            map.insert("vulture", "Vulture");
+            map.insert("defender", "Defender");
+            map.insert("prowler", "Prowler");
+            map.insert("talon", "Talon");
+            map.insert("nox", "Nox");
+            map.insert("dragonfly", "Dragonfly");
+            map.insert("razor", "Razor");
+            map.insert("reliant", "Reliant");
+            map.insert("polaris", "Polaris");
+            map.insert("idris", "Idris");
+            map.insert("javelin", "Javelin");
+            map.insert("kraken", "Kraken");
+            map.insert("reclaimer", "Reclaimer");
+            map.insert("merchantman", "Merchantman");
+            map.insert("endeavor", "Endeavor");
+            map.insert("genesis", "Genesis");
+            map.insert("hull", "Hull");
+            map.insert("orion", "Orion");
+            map.insert("pioneer", "Pioneer");
+            map.insert("nautilus", "Nautilus");
+            map.insert("perseus", "Perseus");
+            map.insert("liberator", "Liberator");
+            map
+        });
 
         let lowercase = filename.to_lowercase();
         let parts: Vec<&str> = lowercase.split('_').collect();
@@ -358,6 +472,15 @@ impl GameData {
             let damage_energy = weapon_data["damage_energy"].as_f64().unwrap_or(0.0);
             let damage_distortion = weapon_data["damage_distortion"].as_f64().unwrap_or(0.0);
 
+            // Parse restricted_to array if present
+            let restricted_to: Vec<String> = weapon_data["restricted_to"]
+                .as_array()
+                .map(|arr| arr.iter().filter_map(|v| v.as_str().map(String::from)).collect())
+                .unwrap_or_default();
+
+            // Parse ship_exclusive flag (true = weapon is ship-specific, cannot be swapped to other ships)
+            let ship_exclusive = weapon_data["ship_exclusive"].as_bool().unwrap_or(false);
+
             let weapon = Weapon {
                 display_name: display_name.clone(),
                 filename: weapon_key.clone(),
@@ -372,6 +495,8 @@ impl GameData {
                 base_penetration_distance: 2.0,
                 near_radius: 0.1,
                 far_radius: 0.2,
+                restricted_to,
+                ship_exclusive,
             };
 
             self.weapons.insert(weapon_key.clone(), weapon);
@@ -405,17 +530,95 @@ impl GameData {
                 internal_name: internal_name.clone(),
                 size: shield_data["size"].as_i64().unwrap_or(0) as i32,
                 max_hp,
-                regen: shield_data["regen"].as_f64().unwrap_or(0.0),
-                resist_physical: shield_data["resist_physical"].as_f64().unwrap_or(0.0),
-                resist_energy: shield_data["resist_energy"].as_f64().unwrap_or(0.0),
-                resist_distortion: shield_data["resist_distortion"].as_f64().unwrap_or(0.0),
-                absorb_physical: shield_data["absorb_physical"].as_f64().unwrap_or(0.225),
-                absorb_energy: shield_data["absorb_energy"].as_f64().unwrap_or(1.0),
-                absorb_distortion: shield_data["absorb_distortion"].as_f64().unwrap_or(1.0),
+                // JSON uses regen_rate, code uses regen
+                regen: shield_data["regen_rate"].as_f64()
+                    .or_else(|| shield_data["regen"].as_f64())
+                    .unwrap_or(0.0),
+                // JSON uses resistance_*, code uses resist_*
+                resist_physical: shield_data["resistance_physical"].as_f64()
+                    .or_else(|| shield_data["resist_physical"].as_f64())
+                    .unwrap_or(0.0),
+                resist_energy: shield_data["resistance_energy"].as_f64()
+                    .or_else(|| shield_data["resist_energy"].as_f64())
+                    .unwrap_or(0.0),
+                resist_distortion: shield_data["resistance_distortion"].as_f64()
+                    .or_else(|| shield_data["resist_distortion"].as_f64())
+                    .unwrap_or(0.0),
+                // JSON uses absorption_*, code uses absorb_*
+                absorb_physical: shield_data["absorption_physical"].as_f64()
+                    .or_else(|| shield_data["absorb_physical"].as_f64())
+                    .unwrap_or(0.225),
+                absorb_energy: shield_data["absorption_energy"].as_f64()
+                    .or_else(|| shield_data["absorb_energy"].as_f64())
+                    .unwrap_or(1.0),
+                absorb_distortion: shield_data["absorption_distortion"].as_f64()
+                    .or_else(|| shield_data["absorb_distortion"].as_f64())
+                    .unwrap_or(1.0),
             };
 
             self.shields.insert(shield.display_name.clone(), shield);
         }
+
+        Ok(())
+    }
+
+    fn load_missiles(&mut self, data_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
+        let json_path = data_dir.join("missiles.json");
+
+        if !json_path.exists() {
+            // Missiles are optional - don't fail if not found
+            eprintln!("Missiles file not found: {:?} (skipping)", json_path);
+            return Ok(());
+        }
+
+        let json_content = std::fs::read_to_string(&json_path)?;
+        let missiles_json: HashMap<String, serde_json::Value> = serde_json::from_str(&json_content)?;
+
+        for (missile_key, missile_data) in missiles_json {
+            let size: i32 = missile_data["size"].as_i64().unwrap_or(0) as i32;
+            if size == 0 {
+                continue;
+            }
+
+            let missile = Missile {
+                name: missile_key.clone(),
+                display_name: missile_data["display_name"].as_str().unwrap_or("Unknown").to_string(),
+                size,
+                missile_type: missile_data["missile_type"].as_str().unwrap_or("missile").to_string(),
+                tracking_type: missile_data["tracking_type"].as_str().unwrap_or("Unknown").to_string(),
+                damage_physical: missile_data["damage_physical"].as_f64().unwrap_or(0.0),
+                damage_energy: missile_data["damage_energy"].as_f64().unwrap_or(0.0),
+                damage_distortion: missile_data["damage_distortion"].as_f64().unwrap_or(0.0),
+                explosion_min_radius: missile_data["explosion_min_radius"].as_f64().unwrap_or(0.0),
+                explosion_max_radius: missile_data["explosion_max_radius"].as_f64().unwrap_or(0.0),
+                max_lifetime: missile_data["max_lifetime"].as_f64().unwrap_or(0.0),
+                arm_time: missile_data["arm_time"].as_f64().unwrap_or(0.0),
+                lock_time: missile_data["lock_time"].as_f64().unwrap_or(0.0),
+            };
+
+            self.missiles.insert(missile_key.clone(), missile);
+        }
+
+        Ok(())
+    }
+
+    fn load_mounts(&mut self, data_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
+        let json_path = data_dir.join("mounts.json");
+
+        if !json_path.exists() {
+            // Mounts are optional - don't fail if not found
+            eprintln!("Mounts file not found: {:?} (skipping)", json_path);
+            return Ok(());
+        }
+
+        let json_content = std::fs::read_to_string(&json_path)?;
+        let mounts_vec: Vec<Mount> = serde_json::from_str(&json_content)?;
+
+        for mount in mounts_vec {
+            self.mounts.insert(mount.mount_ref.clone(), mount);
+        }
+
+        println!("Loaded {} mounts", self.mounts.len());
 
         Ok(())
     }
@@ -456,6 +659,21 @@ impl GameData {
     pub fn get_weapon_by_filename(&self, filename: &str) -> Option<&Weapon> {
         self.weapons.get(filename)
     }
+
+    /// Get missiles of a specific size, sorted by damage
+    pub fn get_missiles_by_size(&self, size: i32) -> Vec<String> {
+        let mut missiles: Vec<_> = self.missiles.iter()
+            .filter(|(_, m)| m.size == size)
+            .map(|(n, m)| (n.clone(), m.damage_physical + m.damage_energy + m.damage_distortion))
+            .collect();
+        missiles.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
+        missiles.into_iter().map(|(n, _)| n).collect()
+    }
+
+    /// Get missile by display name
+    pub fn get_missile_by_display_name(&self, display_name: &str) -> Option<&Missile> {
+        self.missiles.values().find(|m| m.display_name == display_name)
+    }
 }
 
 /// Calculate damage and TTK
@@ -494,20 +712,20 @@ pub fn calculate_damage(
 
     // Determine primary damage type and apply armor resistance
     let armor_resist = target.armor_resist_physical; // Default to physical
-    let armor_damage_time = if target.armor_hp > 0 {
-        let armor_effective_hp = target.armor_hp as f64 * armor_resist;
+    let armor_damage_time = if target.armor_hp > 0.0 {
+        let armor_effective_hp = target.armor_hp * armor_resist;
         armor_effective_hp / effective_dps
     } else {
         0.0
     };
 
     // Hull damage time
-    let hull_damage_time = target.hull_hp as f64 / effective_dps;
+    let hull_damage_time = target.hull_hp / effective_dps;
 
     let ttk_seconds = shield_damage_time + armor_damage_time + hull_damage_time;
     let total_hp = shield.map(|s| s.max_hp).unwrap_or(0.0)
-        + target.armor_hp as f64
-        + target.hull_hp as f64;
+        + target.armor_hp
+        + target.hull_hp;
 
     DamageResult {
         ttk_seconds,

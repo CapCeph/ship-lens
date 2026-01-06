@@ -1,0 +1,118 @@
+{
+  "filename": "aegs_retaliator",
+  "display_name": "Aegis Retaliator",
+  "hull_hp": 120000,
+  "armor": {
+    "hp": 0,
+    "resist_physical": 1.0,
+    "resist_energy": 1.0,
+    "resist_distortion": 1.0,
+    "damage_mult_physical": 1.0,
+    "damage_mult_energy": 1.0,
+    "damage_mult_distortion": 1.0
+  },
+  "thrusters": {
+    "main_hp": 0,
+    "retro_hp": 0,
+    "mav_hp": 0,
+    "vtol_hp": 0,
+    "total_hp": 0
+  },
+  "components": {
+    "turret_total_hp": 0,
+    "powerplant_total_hp": 0,
+    "cooler_total_hp": 0,
+    "shield_gen_total_hp": 0,
+    "qd_total_hp": 0
+  },
+  "shield_count": 6,
+  "max_shield_size": 2,
+  "default_shield_ref": "",
+  "weapon_hardpoints": [
+    {
+      "port_name": "hardpoint_turret_fronttop",
+      "max_size": 3,
+      "gimbal_type": "Turret",
+      "category": "manned_turret",
+      "mount_name": "aegs_retaliator_scitem_turret_upper",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_frontbottom",
+      "max_size": 3,
+      "gimbal_type": "Turret",
+      "category": "manned_turret",
+      "mount_name": "aegs_retaliator_scitem_turret_lower",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_backtopright",
+      "max_size": 3,
+      "gimbal_type": "Turret",
+      "category": "manned_turret",
+      "mount_name": "aegs_retaliator_scitem_turret_upper_rear_right",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_backtopleft",
+      "max_size": 3,
+      "gimbal_type": "Turret",
+      "category": "manned_turret",
+      "mount_name": "aegs_retaliator_scitem_turret_upper_rear_left",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    },
+    {
+      "port_name": "hardpoint_turret_backbottom",
+      "max_size": 3,
+      "gimbal_type": "Turret",
+      "category": "manned_turret",
+      "mount_name": "aegs_retaliator_scitem_turret_lower_rear",
+      "sub_ports": [
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
+      ]
+    }
+  ]
+}

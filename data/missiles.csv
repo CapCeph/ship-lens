@@ -1,0 +1,47 @@
+name,display_name,size,missile_type,tracking_type,damage_physical,damage_energy,damage_distortion,explosion_min_radius,explosion_max_radius,max_lifetime,arm_time,lock_time
+misl_s01_cs_fski_spark,Spark I Missile,1,missile,CS,1075.91,0.00,0.00,1.00,2.00,15.00,0.80,0.40
+misl_s01_em_behr_pioneer,Pioneer I Missile,1,missile,EM,1088.50,0.00,0.00,1.00,2.00,15.00,1.30,0.90
+misl_s01_em_thcn_taskforce,TaskForce I Missile,1,missile,EM,1156.00,0.00,0.00,1.00,2.00,15.00,1.00,0.10
+misl_s01_ir_behr_marksman,Marksman I Missile,1,missile,IR,1140.15,0.00,0.00,1.00,2.00,15.00,1.50,0.50
+misl_s01_ir_vncl_arrow,'Arrow' I Missile,1,missile,IR,1232.80,0.00,0.00,1.00,2.00,15.00,1.00,0.50
+misl_s02_cs_fski_tempest,Tempest II Missile,2,missile,CS,1670.25,0.00,0.00,1.50,2.50,30.00,1.25,0.10
+misl_s02_cs_fski_tempest_citcon,Citcon CS S2,2,missile,CS,3508.92,14035.68,0.00,1.50,2.50,30.00,1.25,0.10
+misl_s02_cs_thcn_strikeforce,StrikeForce II Missile,2,missile,CS,2057.53,0.00,0.00,1.50,2.50,30.00,1.25,0.10
+misl_s02_em_taln_dominator,Dominator II Missile,2,missile,EM,2400.45,0.00,0.00,1.50,2.50,30.00,1.25,0.84
+misl_s02_ir_fski_ignite,Ignite II Missile,2,missile,IR,2378.68,0.00,0.00,1.50,2.50,30.00,1.25,0.30
+misl_s02_ir_novp_rattler,Rattler II Missile,2,missile,IR,1970.00,0.00,0.00,1.50,2.50,10.00,1.25,0.80
+misl_s02_ir_vncl_bullet,'Bullet' II Missile,2,missile,IR,2799.36,0.00,0.00,1.50,2.50,30.00,1.25,0.80
+bomb_s03_fski_thunderball,Thunderball Bomb,3,bomb,Unknown,12500.00,14500.00,0.00,40.00,40.00,300.00,0.50,0.00
+misl_s03_cs_fski_arrester,Arrester III Missile,3,missile,CS,2526.42,0.00,0.00,2.50,3.50,35.00,1.50,1.00
+misl_s03_em_fski_thunderbolt,Thunderbolt III Missile,3,missile,EM,3276.37,0.00,0.00,2.50,3.50,35.00,1.50,1.00
+misl_s03_ir_novp_viper,Viper III Missile,3,missile,IR,3219.36,0.00,0.00,2.50,3.50,35.00,1.50,1.00
+misl_s03_ir_vncl_chaos,'Chaos' III Missile,3,missile,IR,3359.23,0.00,0.00,2.50,3.50,35.00,1.50,1.00
+misl_s04_cs_taln_assailant,Assailant IV Missile,4,missile,CS,4255.03,0.00,0.00,2.50,5.00,45.00,1.50,1.30
+misl_s04_em_taln_raptor,Raptor IV Missile,4,missile,EM,3950.97,0.00,0.00,2.50,5.00,45.00,1.50,1.70
+misl_s04_ir_behr_pathfinder,Pathfinder IV Missile,4,missile,IR,4202.93,0.00,0.00,2.50,5.00,45.00,1.50,1.30
+misl_s04_ir_vncl_dragon,'Dragon' IV Missile,4,missile,IR,4031.08,0.00,0.00,2.50,5.00,45.00,1.50,1.30
+bomb_s05_fski,Fski S5,5,bomb,Unknown,22346.00,24356.00,0.00,100.00,100.00,300.00,3.00,0.00
+misl_s05_cs_taln_stalker,Stalker V Missile,5,missile,CS,17091.71,0.00,0.00,3.50,5.00,60.00,2.00,1.00
+misl_s05_em_taln_reaper,Reaper V Missile,5,missile,EM,14838.21,0.00,0.00,3.50,5.00,60.00,2.00,1.00
+misl_s05_em_taln_scimitar,Scimitar V Missile,5,missile,EM,16382.54,0.00,0.00,3.50,5.00,60.00,1.50,2.30
+misl_s05_ir_taln_valkyrie,Valkyrie V Missile,5,missile,IR,15464.96,0.00,0.00,3.50,5.00,60.00,2.00,1.00
+misl_s07_ir_taln_hellion,Hellion VII Missile,7,missile,IR,94562.27,0.00,0.00,4.50,7.00,80.00,3.00,2.00
+misl_s09_cs_taln_argos,Argos IX Torpedo,9,missile,CS,395620.40,0.00,0.00,5.00,10.00,90.00,4.00,5.00
+misl_s09_cs_taln_argos_2,2 CS S9,9,missile,CS,395620.40,0.00,0.00,5.00,10.00,60.00,4.00,5.00
+misl_s09_em_taln_seeker,Seeker IX Torpedo,9,missile,EM,425676.80,0.00,0.00,5.00,10.00,90.00,4.00,5.00
+misl_s09_ir_taln_typhoon,Typhoon IX Torpedo,9,missile,IR,407676.70,0.00,0.00,5.00,10.00,90.00,1.00,5.00
+bomb_s10_fski_colossus,Colossus Bomb,10,bomb,Unknown,45676.59,522620.40,0.00,250.00,250.00,300.00,5.00,0.00
+misl_s10_cs_behr_executor,"EX-T10-CS ""Executor"" Torpedo",10,missile,CS,610000.00,0.00,0.00,10.00,25.00,135.00,1.00,7.00
+misl_s10_cs_taln_vanquisher,Vanquisher X-CS Torpedo,10,missile,CS,805000.00,0.00,0.00,10.00,25.00,165.00,1.00,7.00
+misl_s10_em_behr_executor,"EX-T10-EM ""Executor"" Torpedo",10,missile,EM,610000.00,0.00,0.00,10.00,25.00,135.00,1.00,7.00
+misl_s10_em_taln_vanquisher,Vanquisher X-EM Torpedo,10,missile,EM,805000.00,0.00,0.00,10.00,25.00,165.00,1.00,7.00
+misl_s10_ir_behr_executor,"EX-T10-IR ""Executor"" Torpedo",10,missile,IR,610000.00,0.00,0.00,10.00,25.00,135.00,1.00,7.00
+misl_s10_ir_behr_torpedo,"VT-T10 ""Veritas"" Torpedo",10,torpedo,IR,750000.00,0.00,0.00,10.00,25.00,150.00,1.00,7.00
+misl_s10_ir_taln_vanquisher,Vanquisher X-IR Torpedo,10,missile,IR,805000.00,0.00,0.00,10.00,25.00,165.00,1.00,7.00
+misl_s10_ir_vncl_cleaver,Cleaver IR S10,10,missile,IR,26065.49,395620.40,0.00,10.00,25.00,60.00,1.50,5.00
+misl_s12_cs_behr_executor,"EX-T12-CS ""Executor"" Torpedo",12,missile,CS,910000.00,0.00,0.00,10.00,30.00,135.00,5.00,10.00
+misl_s12_cs_taln_calamity,Calamity XII-CS Torpedo,12,missile,CS,1230000.00,0.00,0.00,10.00,30.00,165.00,5.00,10.00
+misl_s12_em_behr_executor,"EX-T12-EM ""Executor"" Torpedo",12,missile,EM,910000.00,0.00,0.00,10.00,30.00,135.00,5.00,10.00
+misl_s12_em_taln_calamity,Calamity XII-EM Torpedo,12,missile,EM,1230000.00,0.00,0.00,10.00,30.00,165.00,5.00,10.00
+misl_s12_ir_behr_executor,"EX-T12-IR ""Executor"" Torpedo",12,missile,IR,910000.00,0.00,0.00,10.00,30.00,135.00,5.00,10.00
+misl_s12_ir_taln_calamity,Calamity XII-IR Torpedo,12,missile,IR,1230000.00,0.00,0.00,10.00,30.00,165.00,5.00,10.00

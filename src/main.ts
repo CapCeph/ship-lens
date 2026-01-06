@@ -21,6 +21,17 @@ interface WeaponHardpoint {
   category: 'pilot' | 'manned_turret' | 'remote_turret' | 'pdc' | 'missile' | 'torpedo' | 'bomb' | 'spinal' | 'specialized';
   mount_name: string;  // gimbal/turret mount name
   sub_ports: SubPort[];  // individual weapon ports with size and default weapon
+  compatible_mounts?: string[];  // optional list of compatible mount refs
+}
+
+interface Mount {
+  ref: string;
+  display_name: string;
+  size: number;
+  ports: number;
+  port_size: number;
+  hp: number;
+  mount_type: string;
 }
 
 interface Ship {
@@ -57,6 +68,7 @@ interface Weapon {
   sustained_dps: number;
   power_consumption: number;
   weapon_type: string;  // "gun", "missile", "torpedo", "bomb"
+  ship_exclusive?: boolean;  // True if weapon can only be used on specific ships (e.g., Vanduul weapons)
   // 4.5 damage breakdown
   damage_physical: number;
   damage_energy: number;
@@ -65,6 +77,22 @@ interface Weapon {
   base_penetration_distance: number;
   near_radius: number;
   far_radius: number;
+}
+
+interface Missile {
+  name: string;
+  display_name: string;
+  size: number;
+  missile_type: string;  // "missile", "torpedo", "bomb"
+  tracking_type: string;  // "IR", "EM", "CS", "Unknown"
+  damage_physical: number;
+  damage_energy: number;
+  damage_distortion: number;
+  explosion_min_radius: number;
+  explosion_max_radius: number;
+  max_lifetime: number;
+  arm_time: number;
+  lock_time: number;
 }
 
 interface Shield {
@@ -425,6 +453,7 @@ interface CategorySlot {
 class WeaponSlotManager {
   private container: HTMLElement;
   private weaponsBySize: Map<number, Weapon[]> = new Map();
+  private missilesBySize: Map<number, Missile[]> = new Map();
   private categorySlots: Map<string, CategorySlot[]> = new Map();
   private enabledCategories: Set<string> = new Set(['pilot']); // Default: only pilot enabled
   private collapsedCategories: Set<string> = new Set(); // Track collapsed sections
@@ -434,7 +463,7 @@ class WeaponSlotManager {
     this.container = document.getElementById(containerId) as HTMLElement;
   }
 
-  setWeapons(weapons: Weapon[]) {
+  async setWeapons(weapons: Weapon[]) {
     console.log("[WeaponSlotManager] setWeapons called with", weapons.length, "weapons");
     this.weaponsBySize.clear();
     weapons.forEach(w => {
@@ -446,6 +475,24 @@ class WeaponSlotManager {
       this.weaponsBySize.set(size, weps);
     });
     console.log("weaponsBySize:", Array.from(this.weaponsBySize.entries()).map(([size, weps]) => `S${size}: ${weps.length} weapons`));
+
+    // Load missiles from backend
+    try {
+      const missiles: Missile[] = await invoke("get_missiles");
+      this.missilesBySize.clear();
+      missiles.forEach(m => {
+        if (!this.missilesBySize.has(m.size)) this.missilesBySize.set(m.size, []);
+        this.missilesBySize.get(m.size)!.push(m);
+      });
+      this.missilesBySize.forEach((msls, size) => {
+        // Sort by total damage (descending)
+        msls.sort((a, b) => (b.damage_physical + b.damage_energy + b.damage_distortion) - (a.damage_physical + a.damage_energy + a.damage_distortion));
+        this.missilesBySize.set(size, msls);
+      });
+      console.log("missilesBySize:", Array.from(this.missilesBySize.entries()).map(([size, msls]) => `S${size}: ${msls.length} missiles`));
+    } catch (e) {
+      console.error("Failed to load missiles:", e);
+    }
   }
 
   // New method: update using detailed hardpoints with categories
@@ -541,7 +588,16 @@ class WeaponSlotManager {
           return;
         }
 
-        const subPortCount = subPorts.length;
+        // Skip hardpoints where NO mount is equipped AND all sub_ports have empty default weapons
+        // These are truly unequipped slots (e.g., door gunners with no weapon)
+        // But if a mount IS equipped (like gimbals on 85X), show weapon selectors even if empty
+        const allSubPortsEmpty = subPorts.every(sp => !sp.default_weapon || sp.default_weapon === 'empty');
+        const hasMount = hp.mount_name && hp.mount_name.trim() !== '';
+        if (allSubPortsEmpty && !hasMount) {
+          return;
+        }
+
+        let subPortCount = subPorts.length;
 
         // For dual/multi mounts, create a grouped container
         const isDualMount = subPortCount > 1;
@@ -549,16 +605,49 @@ class WeaponSlotManager {
         if (isDualMount) {
           // Create a container for the dual mount group
           const groupId = `weapon-group-${globalSlotIndex}`;
+          
+          // Check if this hardpoint has swappable mounts
+
+          // Check if user has selected a different mount for this hardpoint
+          const selectedMountData = selectedMounts.get(hp.port_name);
+          const effectiveMountName = selectedMountData ? selectedMountData.mount.display_name : (hp.mount_name || hp.port_name);
+
+          // If mount was selected, update sub_ports to match the selected mount's configuration
+          let effectiveSubPorts = subPorts;
+          if (selectedMountData) {
+            effectiveSubPorts = Array(selectedMountData.mount.ports).fill(null).map(() => ({
+              size: selectedMountData.mount.port_size,
+              default_weapon: 'empty'
+            }));
+          subPortCount = effectiveSubPorts.length;
+          }
+          const hasSwappableMounts = hp.mount_name && hp.compatible_mounts && hp.compatible_mounts.length > 1;
+          
           slotsContainer.insertAdjacentHTML("beforeend", `
             <div class="weapon-slot-group dual-mount" id="${groupId}">
-              <span class="weapon-group-label" title="${hp.port_name}">${hp.mount_name || hp.port_name}</span>
+              <span class="weapon-group-label ${hasSwappableMounts ? 'swappable-mount' : ''}"
+                    title="${hp.port_name}"
+                    ${hasSwappableMounts ? 'data-swappable="true"' : ''}>
+                ${effectiveMountName}
+                ${hasSwappableMounts ? '<span class="swap-mount-badge">SWAP</span>' : ''}
+              </span>
               <div class="weapon-group-slots"></div>
             </div>
           `);
           const groupSlotsContainer = document.querySelector(`#${groupId} .weapon-group-slots`) as HTMLElement;
+          
+          // Add click handler for swappable mounts
+          if (hasSwappableMounts) {
+            setTimeout(() => {
+              const labelEl = document.querySelector(`#${groupId} .swappable-mount`) as HTMLElement;
+              if (labelEl) {
+                labelEl.addEventListener('click', () => showMountSelectionPopup(hp.max_size, hp));
+              }
+            }, 0);
+          }
 
           // Check for bespoke weapon (any sub-port with bespoke in default_weapon filename)
-          const hasBespokeWeapon = subPorts.some(sp =>
+          const hasBespokeWeapon = effectiveSubPorts.some(sp =>
             sp.default_weapon && sp.default_weapon.toLowerCase().includes('bespoke')
           );
 
@@ -566,7 +655,7 @@ class WeaponSlotManager {
           if (hasBespokeWeapon) {
             let allBespoke = true;
             for (let subIdx = 0; subIdx < subPortCount; subIdx++) {
-              const subPort = subPorts[subIdx];
+              const subPort = effectiveSubPorts[subIdx];
               const subPortSize = subPort.size;
               const subPortDefault = subPort.default_weapon;
               const isBespoke = subPortDefault && subPortDefault.toLowerCase().includes('bespoke');
@@ -617,7 +706,7 @@ class WeaponSlotManager {
 
           // Create individual slots for each sub-port
           for (let subIdx = 0; subIdx < subPortCount; subIdx++) {
-            const subPort = subPorts[subIdx];
+            const subPort = effectiveSubPorts[subIdx];
             const subPortSize = subPort.size;
             const subPortDefault = subPort.default_weapon;
             const slotId = `weapon-slot-${globalSlotIndex}`;
@@ -636,41 +725,59 @@ class WeaponSlotManager {
             `);
 
             const dropdown = new SearchableDropdown(`${slotId}-container`);
-            let weapons = this.weaponsBySize.get(subPortSize) || [];
-
-            // Filter weapons by type based on hardpoint category
-            // For missile/torpedo categories, accept both 'missile' and 'torpedo' weapon_type
-            if (hp.category === 'missile' || hp.category === 'torpedo') {
-              weapons = weapons.filter(w => w.weapon_type === 'missile' || w.weapon_type === 'torpedo');
-            } else if (hp.category === 'bomb') {
-              weapons = weapons.filter(w => w.weapon_type === 'bomb');
-            } else if (hp.category === 'pdc') {
-              weapons = weapons.filter(w => w.weapon_type === 'pdc');
+            
+            // Use missiles for missile/torpedo/bomb categories, weapons for everything else
+            let options: { value: string; label: string }[];
+            let defaultLookup: { filename: string; display_name: string }[] = [];
+            
+            if (hp.category === 'missile' || hp.category === 'torpedo' || hp.category === 'bomb') {
+              // Use missiles from missilesBySize
+              const allMissiles = this.missilesBySize.get(subPortSize) || [];
+              const missiles = allMissiles.filter(m => m.missile_type === hp.category);
+              options = missiles.map(m => {
+                const totalDamage = Math.round(m.damage_physical + m.damage_energy + m.damage_distortion);
+                return { value: m.display_name, label: `${m.display_name} (${totalDamage} dmg)` };
+              });
+              defaultLookup = missiles.map(m => ({ filename: m.name, display_name: m.display_name }));
             } else {
-              weapons = weapons.filter(w => w.weapon_type === 'gun');
+              // Use weapons from weaponsBySize
+              let weapons = this.weaponsBySize.get(subPortSize) || [];
+
+              // Filter by weapon type
+              if (hp.category === 'pdc') {
+                weapons = weapons.filter(w => w.weapon_type === 'pdc');
+              } else {
+                weapons = weapons.filter(w => w.weapon_type === 'gun');
+              }
+
+              // Filter out ship_exclusive weapons unless they are the default weapon for this slot
+              weapons = weapons.filter(w => !w.ship_exclusive || w.filename === subPortDefault);
+
+              options = weapons.map(w => {
+                return { value: w.display_name, label: `${w.display_name} (${Math.round(w.sustained_dps)} DPS)` };
+              });
+              defaultLookup = weapons.map(w => ({ filename: w.filename, display_name: w.display_name }));
             }
 
-            // For missiles/torpedoes/bombs, show total damage per shot instead of DPS
-            const isMissileType = (w: Weapon) =>
-              w.weapon_type === 'missile' || w.weapon_type === 'torpedo' || w.weapon_type === 'bomb';
+            // Add "Empty" option at the beginning for non-missile hardpoints
+            if (hp.category !== 'missile' && hp.category !== 'torpedo' && hp.category !== 'bomb') {
+              options.unshift({ value: 'Empty', label: 'Empty (0 DPS)' });
+            }
 
-            const options = weapons.map(w => {
-              if (isMissileType(w)) {
-                const totalDamage = Math.round(w.damage_physical + w.damage_energy + w.damage_distortion);
-                return { value: w.display_name, label: `${w.display_name} (${totalDamage} dmg)` };
-              } else {
-                return { value: w.display_name, label: `${w.display_name} (${Math.round(w.sustained_dps)} DPS)` };
-              }
-            });
             dropdown.setOptions(options);
 
-            // Pre-select default weapon if available (per-sub-port), otherwise use first option (highest DPS)
+            // Pre-select default weapon if available (per-sub-port)
             let selectedWeapon: string | null = null;
-            if (subPortDefault && subPortDefault.length > 0) {
-              const defaultWeapon = weapons.find(w => w.filename === subPortDefault);
-              if (defaultWeapon) selectedWeapon = defaultWeapon.display_name;
+            const isEmptyDefault = !subPortDefault || subPortDefault === '' || subPortDefault === 'empty';
+            if (isEmptyDefault) {
+              // Empty default - select "Empty" option
+              selectedWeapon = 'Empty';
+            } else if (subPortDefault && subPortDefault.length > 0) {
+              const defaultItem = defaultLookup.find(item => item.filename === subPortDefault);
+              if (defaultItem) selectedWeapon = defaultItem.display_name;
             }
-            if (!selectedWeapon && options.length > 0) {
+            // Only fall back to first weapon if no empty option and no match found
+            if (!selectedWeapon && options.length > 0 && hp.category !== 'pilot') {
               selectedWeapon = options[0].value;
             }
             if (selectedWeapon) {
@@ -694,59 +801,78 @@ class WeaponSlotManager {
           const displaySize = subPort.size;
           const subPortDefault = subPort.default_weapon;
 
-          let weapons = this.weaponsBySize.get(weaponSize) || [];
-
           // Check for bespoke weapon
           const isBespokeWeapon = subPortDefault && subPortDefault.toLowerCase().includes('bespoke');
 
-          // For bespoke hardpoints, lock to the specific default weapon REGARDLESS of category
-          if (isBespokeWeapon && subPortDefault) {
-            weapons = weapons.filter(w => w.filename === subPortDefault);
-          } else if (hp.category === 'specialized' && subPortDefault) {
-            // For other specialized hardpoints, lock to default weapon
-            weapons = weapons.filter(w => w.filename === subPortDefault);
+          // Determine if we should use missiles or weapons
+          const useMissiles = !isBespokeWeapon && hp.category !== 'specialized' && 
+                             (hp.category === 'missile' || hp.category === 'torpedo' || hp.category === 'bomb');
+
+          let items: { filename: string; display_name: string; damage_total?: number; sustained_dps?: number }[] = [];
+          
+          if (useMissiles) {
+            // Use missiles
+            const allMissiles = this.missilesBySize.get(weaponSize) || [];
+            const missiles = allMissiles.filter(m => m.missile_type === hp.category);
+            items = missiles.map(m => ({
+              filename: m.name,
+              display_name: m.display_name,
+              damage_total: m.damage_physical + m.damage_energy + m.damage_distortion
+            }));
           } else {
-            // For non-specialized hardpoints, filter by weapon type
-            if (hp.category === 'missile' || hp.category === 'torpedo') {
-              weapons = weapons.filter(w => w.weapon_type === 'missile' || w.weapon_type === 'torpedo');
-            } else if (hp.category === 'bomb') {
-              weapons = weapons.filter(w => w.weapon_type === 'bomb');
+            // Use weapons
+            let weapons = this.weaponsBySize.get(weaponSize) || [];
+
+            // Filter weapons based on category
+            if (isBespokeWeapon && subPortDefault) {
+              weapons = weapons.filter(w => w.filename === subPortDefault);
+            } else if (hp.category === 'specialized' && subPortDefault) {
+              weapons = weapons.filter(w => w.filename === subPortDefault);
             } else if (hp.category === 'pdc') {
               weapons = weapons.filter(w => w.weapon_type === 'pdc');
             } else {
               weapons = weapons.filter(w => w.weapon_type === 'gun');
             }
+
+            // Filter out ship_exclusive weapons unless they are the default weapon for this slot
+            weapons = weapons.filter(w => !w.ship_exclusive || w.filename === subPortDefault);
+
+            items = weapons.map(w => ({
+              filename: w.filename,
+              display_name: w.display_name,
+              sustained_dps: w.sustained_dps
+            }));
           }
 
-          // Skip hardpoints with no matching weapons
-          if (weapons.length === 0) {
+          // Skip hardpoints with no matching items
+          if (items.length === 0) {
             return;
           }
 
-          // Skip hardpoints where default_weapon doesn't match any available weapon
-          if (subPortDefault && !isBespokeWeapon) {
-            const hasMatchingWeapon = weapons.some(w => w.filename === subPortDefault);
-            if (!hasMatchingWeapon) {
+          // Skip hardpoints where default_weapon doesn't match any available item
+          if (subPortDefault && subPortDefault !== 'empty' && !isBespokeWeapon) {
+            const hasMatchingItem = items.some(item => item.filename === subPortDefault);
+            if (!hasMatchingItem) {
               return;
             }
           }
 
           // For bespoke weapons, render as plain text (no dropdown)
-          if (isBespokeWeapon && weapons.length === 1) {
-            const bespokeWeapon = weapons[0];
+          if (isBespokeWeapon && items.length === 1) {
+            const bespokeItem = items[0];
             const slotId = `weapon-slot-${globalSlotIndex}`;
             slotsContainer.insertAdjacentHTML("beforeend", `
               <div class="weapon-slot">
                 <span class="weapon-slot-size" title="${hp.port_name}">S${displaySize}</span>
                 <div class="weapon-bespoke" id="${slotId}-bespoke">
-                  <span class="weapon-bespoke-name">${bespokeWeapon.display_name}</span>
+                  <span class="weapon-bespoke-name">${bespokeItem.display_name}</span>
                   <span class="weapon-bespoke-badge">BESPOKE</span>
                 </div>
               </div>
             `);
 
             const virtualDropdown = {
-              getValue: () => bespokeWeapon.display_name,
+              getValue: () => bespokeItem.display_name,
               setValue: () => {},
               onChange: () => {},
             } as any;
@@ -770,26 +896,36 @@ class WeaponSlotManager {
 
           const dropdown = new SearchableDropdown(`${slotId}-container`);
 
-          const isMissileType = (w: Weapon) =>
-            w.weapon_type === 'missile' || w.weapon_type === 'torpedo' || w.weapon_type === 'bomb';
-
-          const options = weapons.map(w => {
-            if (isMissileType(w)) {
-              const totalDamage = Math.round(w.damage_physical + w.damage_energy + w.damage_distortion);
-              return { value: w.display_name, label: `${w.display_name} (${totalDamage} dmg)` };
+          const options = items.map(item => {
+            if (item.damage_total !== undefined) {
+              // Missile/torpedo/bomb
+              const totalDamage = Math.round(item.damage_total);
+              return { value: item.display_name, label: `${item.display_name} (${totalDamage} dmg)` };
             } else {
-              return { value: w.display_name, label: `${w.display_name} (${Math.round(w.sustained_dps)} DPS)` };
+              // Weapon (gun/pdc)
+              return { value: item.display_name, label: `${item.display_name} (${Math.round(item.sustained_dps || 0)} DPS)` };
             }
           });
+
+          // Add "Empty" option at the beginning for non-missile hardpoints
+          if (hp.category !== 'missile' && hp.category !== 'torpedo' && hp.category !== 'bomb') {
+            options.unshift({ value: 'Empty', label: 'Empty (0 DPS)' });
+          }
+
           dropdown.setOptions(options);
 
-          // Pre-select default weapon if available
+          // Pre-select default item if available
           let selectedWeapon: string | null = null;
-          if (subPortDefault && subPortDefault.length > 0) {
-            const defaultWeapon = weapons.find(w => w.filename === subPortDefault);
-            if (defaultWeapon) selectedWeapon = defaultWeapon.display_name;
+          const isEmptyDefault = !subPortDefault || subPortDefault === '' || subPortDefault === 'empty';
+          if (isEmptyDefault && hp.category !== 'missile' && hp.category !== 'torpedo' && hp.category !== 'bomb') {
+            // Empty default - select "Empty" option
+            selectedWeapon = 'Empty';
+          } else if (subPortDefault && subPortDefault.length > 0) {
+            const defaultItem = items.find(item => item.filename === subPortDefault);
+            if (defaultItem) selectedWeapon = defaultItem.display_name;
           }
-          if (!selectedWeapon && options.length > 0) {
+          // Only fall back to first option if no empty option and no match found
+          if (!selectedWeapon && options.length > 0 && hp.category !== 'pilot') {
             selectedWeapon = options[0].value;
           }
           if (selectedWeapon) {
@@ -912,7 +1048,7 @@ class WeaponSlotManager {
     });
   }
 
-  // Get selected weapons only from enabled categories
+  // Get selected weapons only from enabled categories (excludes "Empty")
   getSelectedWeapons(): string[] {
     const weapons: string[] = [];
     this.categorySlots.forEach((slots, category) => {
@@ -920,7 +1056,7 @@ class WeaponSlotManager {
         slots.forEach(slot => {
           if (slot.dropdown) {
             const value = slot.dropdown.getValue();
-            if (value) weapons.push(value);
+            if (value && value !== 'Empty') weapons.push(value);
           }
         });
       }
@@ -1262,7 +1398,7 @@ async function loadWeapons() {
     if (allWeapons.length > 0) {
       console.log("Sample weapon:", JSON.stringify(allWeapons[0]));
     }
-    weaponSlotManager.setWeapons(allWeapons);
+    await weaponSlotManager.setWeapons(allWeapons);
   } catch (e) { console.error("Failed to load weapons:", e); }
 }
 
@@ -1381,15 +1517,23 @@ async function calculateTTK() {
     return;
   }
 
-  // Build weapon names and counts
+  // Build weapon names and counts (filter out "Empty" selections)
   const weaponMap = new Map<string, number>();
   for (const weaponName of equippedWeapons) {
-    if (weaponName) {
+    if (weaponName && weaponName !== 'Empty') {
       weaponMap.set(weaponName, (weaponMap.get(weaponName) || 0) + 1);
     }
   }
   const weaponNames = Array.from(weaponMap.keys());
   const weaponCounts = Array.from(weaponMap.values());
+
+  // If all weapons are empty, show infinity TTK
+  if (weaponNames.length === 0) {
+    animateTextValue(ttkValueEl, "∞");
+    animateValue(effectiveDpsEl, 0, (n) => formatNumber(Math.round(n)));
+    updateTimeline(0, 0, 0);
+    return;
+  }
 
   // Get shield
   const selectedShieldName = shieldDropdown.getValue();
@@ -2351,5 +2495,112 @@ async function restoreSavedSettings() {
 
   calculateTTK();
 }
+
+// Get mounts by max size from backend
+async function getMountsByMaxSize(maxSize: number, _shipRef?: string, compatibleMounts?: string[]): Promise<Mount[]> {
+  try {
+    const allMounts: Mount[] = await invoke("get_mounts");
+    let filtered = allMounts.filter(m => m.size <= maxSize);
+    
+    if (compatibleMounts && compatibleMounts.length > 0) {
+      filtered = filtered.filter(m => compatibleMounts.includes(m.ref));
+    }
+    
+    return filtered;
+  } catch (error) {
+    console.error("Failed to get mounts:", error);
+    return [];
+  }
+}
+
+// Track selected mounts per hardpoint
+const selectedMounts: Map<string, { mount: Mount; hardpoint: WeaponHardpoint }> = new Map();
+
+// Mount Selection Popup for swappable mounts
+function showMountSelectionPopup(maxSize: number, hardpoint: WeaponHardpoint) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay mount-selection-overlay';
+  overlay.style.display = 'flex';
+
+  const modal = document.createElement('div');
+  modal.className = 'modal mount-selection-modal';
+
+  modal.innerHTML = `
+    <div class="modal-header">
+      <h3>SELECT MOUNT (S${maxSize} max)</h3>
+      <button class="modal-close mount-selection-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="mount-list" id="mount-selection-list">
+        <div class="mount-loading">Loading mounts...</div>
+      </div>
+    </div>
+  `;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  setTimeout(() => overlay.classList.add('open'), 10);
+
+  const closeBtn = modal.querySelector('.mount-selection-close') as HTMLElement;
+  const closePopup = () => {
+    overlay.classList.remove('open');
+    setTimeout(() => overlay.remove(), 300);
+  };
+
+  closeBtn.addEventListener('click', closePopup);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closePopup();
+  });
+
+  (async () => {
+    const shipRef = currentAttackerShip?.filename;
+    const compatibleMounts = hardpoint.compatible_mounts && hardpoint.compatible_mounts.length > 0
+      ? hardpoint.compatible_mounts
+      : undefined;
+    const mounts = await getMountsByMaxSize(maxSize, shipRef, compatibleMounts);
+    const listEl = modal.querySelector('#mount-selection-list') as HTMLElement;
+    const currentMountRef = hardpoint.mount_name;
+
+    listEl.innerHTML = mounts.map((m: Mount) => `
+      <div class="mount-option ${m.ref === currentMountRef ? 'current-mount' : ''}" data-mount-ref="${m.ref}">
+        <div class="mount-info">
+          <span class="mount-name">${m.display_name}</span>
+          <span class="mount-type-badge">${m.mount_type}</span>
+        </div>
+        <div class="mount-stats">
+          <span class="mount-stat">${m.ports}x S${m.port_size}</span>
+          <span class="mount-stat">${m.hp} HP</span>
+        </div>
+      </div>
+    `).join('');
+
+    listEl.addEventListener('click', (e: Event) => {
+      const mountOption = (e.target as HTMLElement).closest('.mount-option') as HTMLElement;
+      if (!mountOption) return;
+
+      const mountRef = mountOption.dataset.mountRef;
+      if (mountRef) {
+        const selectedMount = mounts.find((m: Mount) => m.ref === mountRef);
+        if (selectedMount) {
+          applyMountToHardpoint(selectedMount, hardpoint);
+          closePopup();
+        }
+      }
+    });
+  })();
+}
+
+function applyMountToHardpoint(mount: Mount, hardpoint: WeaponHardpoint) {
+  selectedMounts.set(hardpoint.port_name, { mount, hardpoint });
+  
+  if (currentAttackerShip && currentAttackerShip.weapon_hardpoints) {
+    weaponSlotManager.updateSlotsFromHardpoints(currentAttackerShip.weapon_hardpoints);
+  }
+  
+  calculateTTK();
+  saveSettings();
+}
+
 
 init();
