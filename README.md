@@ -56,12 +56,10 @@ Think of it as a variant of [Erkul](https://www.erkul.games/) but as a lightweig
 
 # Changes in v0.1.19:
 
-  - 307 ships regenerated from P4K source
-  - New missiles, mounts and shields added to internal files (46 missiles)
-  - Mount selection system for swappable hardpoints
-  - Ship-exclusive Vanduul weapons
-  - RSI ship loadout fixes (Polaris, Perseus, Scorpius, Zeus)
-  - Windows bug fix - ships should now load correctly for selection
+  - Fixed TTK calculation to use sustained DPS (not per-shot damage)
+  - Added 3 missing capital ship weapons
+  - Fixed 39 ships with missing default_weapon data
+  - Fixed aegs_emp_sentinel_s4 weapon entry
 
 ---
 
