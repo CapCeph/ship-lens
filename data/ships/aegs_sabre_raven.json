@@ -3,9 +3,9 @@
   "display_name": "Aegis Sabre Raven",
   "hull_hp": 3500,
   "armor": {
-    "hp": 0,
-    "resist_physical": 1.0,
-    "resist_energy": 1.0,
+    "hp": 1500,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
     "resist_distortion": 1.0,
     "damage_mult_physical": 1.0,
     "damage_mult_energy": 1.0,
@@ -62,7 +62,10 @@
       "category": "emp",
       "mount_name": "mxox_emp_device_s2",
       "sub_ports": [
-        { "size": 2, "default_weapon": "mxox_emp_device_s2" }
+        {
+          "size": 2,
+          "default_weapon": "mxox_emp_device_s2"
+        }
       ]
     },
     {
@@ -72,7 +75,10 @@
       "category": "emp",
       "mount_name": "mxox_emp_device_s2",
       "sub_ports": [
-        { "size": 2, "default_weapon": "mxox_emp_device_s2" }
+        {
+          "size": 2,
+          "default_weapon": "mxox_emp_device_s2"
+        }
       ]
     }
   ]

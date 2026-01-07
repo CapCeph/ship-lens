@@ -37,7 +37,8 @@
       "mount_name": "anvl_valkyrie_nose_turret_s3",
       "sub_ports": [
         {
-          "size": 3
+          "size": 3,
+          "default_weapon": "empty"
         }
       ]
     },

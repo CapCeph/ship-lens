@@ -3,9 +3,9 @@
   "display_name": "Origin 125a",
   "hull_hp": 1650,
   "armor": {
-    "hp": 0,
-    "resist_physical": 1.0,
-    "resist_energy": 1.0,
+    "hp": 1020,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
     "resist_distortion": 1.0,
     "damage_mult_physical": 1.0,
     "damage_mult_energy": 1.0,

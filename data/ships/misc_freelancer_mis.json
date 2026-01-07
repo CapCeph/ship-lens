@@ -3,9 +3,9 @@
   "display_name": "MISC Freelancer MIS",
   "hull_hp": 9500,
   "armor": {
-    "hp": 0,
-    "resist_physical": 1.0,
-    "resist_energy": 1.0,
+    "hp": 3900,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
     "resist_distortion": 1.0,
     "damage_mult_physical": 1.0,
     "damage_mult_energy": 1.0,
@@ -36,8 +36,14 @@
       "category": "pilot",
       "mount_name": "behr_pc2_dual_s3",
       "sub_ports": [
-        { "size": 3, "default_weapon": "behr_lasercannon_s3" },
-        { "size": 3, "default_weapon": "behr_lasercannon_s3" }
+        {
+          "size": 3,
+          "default_weapon": "behr_lasercannon_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "behr_lasercannon_s3"
+        }
       ]
     },
     {
@@ -47,8 +53,14 @@
       "category": "pilot",
       "mount_name": "behr_pc2_dual_s3",
       "sub_ports": [
-        { "size": 3, "default_weapon": "behr_lasercannon_s3" },
-        { "size": 3, "default_weapon": "behr_lasercannon_s3" }
+        {
+          "size": 3,
+          "default_weapon": "behr_lasercannon_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "behr_lasercannon_s3"
+        }
       ]
     },
     {
@@ -58,8 +70,14 @@
       "category": "manned_turret",
       "mount_name": "misc_freelancer_base_scitem_turret",
       "sub_ports": [
-        { "size": 3, "default_weapon": "klwe_laserrepeater_s3" },
-        { "size": 3, "default_weapon": "klwe_laserrepeater_s3" }
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
       ]
     },
     {
@@ -69,8 +87,14 @@
       "category": "missile",
       "mount_name": "mrck_s04_behr_dual_s03",
       "sub_ports": [
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" }
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     },
     {
@@ -80,8 +104,14 @@
       "category": "missile",
       "mount_name": "mrck_s04_behr_dual_s03",
       "sub_ports": [
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" }
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     },
     {
@@ -91,8 +121,14 @@
       "category": "missile",
       "mount_name": "mrck_s04_behr_dual_s03",
       "sub_ports": [
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" }
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     },
     {
@@ -102,8 +138,14 @@
       "category": "missile",
       "mount_name": "mrck_s04_behr_dual_s03",
       "sub_ports": [
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" }
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     },
     {
@@ -113,16 +155,46 @@
       "category": "missile",
       "mount_name": "mrck_s05_misc_freelancer_mis_right",
       "sub_ports": [
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" }
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        }
       ]
     },
     {
@@ -132,16 +204,46 @@
       "category": "missile",
       "mount_name": "mrck_s05_misc_freelancer_mis_left",
       "sub_ports": [
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" }
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        }
       ]
     }
   ]

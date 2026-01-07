@@ -37,7 +37,8 @@
       "mount_name": "entityclassdefinition.anvl_hornet_f7a_nose_turret",
       "sub_ports": [
         {
-          "size": 3
+          "size": 3,
+          "default_weapon": "empty"
         }
       ]
     },
@@ -49,7 +50,8 @@
       "mount_name": "mxox_neutronrepeater_s3",
       "sub_ports": [
         {
-          "size": 3
+          "size": 3,
+          "default_weapon": "mxox_neutronrepeater_s3"
         }
       ]
     },
@@ -61,7 +63,8 @@
       "mount_name": "mxox_neutronrepeater_s3",
       "sub_ports": [
         {
-          "size": 3
+          "size": 3,
+          "default_weapon": "mxox_neutronrepeater_s3"
         }
       ]
     },
@@ -99,7 +102,8 @@
       "mount_name": "entityclassdefinition.anvl_hornet_f7a_ball_turret",
       "sub_ports": [
         {
-          "size": 5
+          "size": 5,
+          "default_weapon": "empty"
         }
       ]
     },
@@ -111,7 +115,8 @@
       "mount_name": "mxox_neutronrepeater_s3",
       "sub_ports": [
         {
-          "size": 3
+          "size": 3,
+          "default_weapon": "mxox_neutronrepeater_s3"
         }
       ]
     },
@@ -123,7 +128,8 @@
       "mount_name": "mxox_neutronrepeater_s3",
       "sub_ports": [
         {
-          "size": 3
+          "size": 3,
+          "default_weapon": "mxox_neutronrepeater_s3"
         }
       ]
     },

@@ -37,7 +37,8 @@
       "mount_name": "entityclassdefinition.cnou_mustang_nose_turret_s3",
       "sub_ports": [
         {
-          "size": 3
+          "size": 3,
+          "default_weapon": "empty"
         }
       ]
     },
@@ -49,7 +50,8 @@
       "mount_name": "klwe_laserrepeater_s2",
       "sub_ports": [
         {
-          "size": 2
+          "size": 2,
+          "default_weapon": "klwe_laserrepeater_s2"
         }
       ]
     },
@@ -61,7 +63,8 @@
       "mount_name": "klwe_laserrepeater_s2",
       "sub_ports": [
         {
-          "size": 2
+          "size": 2,
+          "default_weapon": "klwe_laserrepeater_s2"
         }
       ]
     }

@@ -3,9 +3,9 @@
   "display_name": "RSI Scorpius Wikelo Sneak Special",
   "hull_hp": 10000,
   "armor": {
-    "hp": 0,
-    "resist_physical": 1.0,
-    "resist_energy": 1.0,
+    "hp": 3900,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
     "resist_distortion": 1.0,
     "damage_mult_physical": 1.0,
     "damage_mult_energy": 1.0,
@@ -36,10 +36,22 @@
       "category": "missile",
       "mount_name": "mrck_s04_rsi_scorpius_top_left",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        }
       ]
     },
     {
@@ -49,10 +61,22 @@
       "category": "missile",
       "mount_name": "mrck_s04_rsi_scorpius_top_right",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        }
       ]
     },
     {
@@ -139,10 +163,22 @@
       "category": "missile",
       "mount_name": "mrck_s04_rsi_scorpius_bottom_left",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        }
       ]
     },
     {
@@ -152,10 +188,22 @@
       "category": "missile",
       "mount_name": "mrck_s04_rsi_scorpius_bottom_right",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        }
       ]
     }
   ]

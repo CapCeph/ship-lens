@@ -80,7 +80,8 @@
       "mount_name": "mrck_s02_rsi_apollo_medivac",
       "sub_ports": [
         {
-          "size": 2
+          "size": 2,
+          "default_weapon": "empty"
         }
       ]
     },
@@ -92,7 +93,8 @@
       "mount_name": "mrck_s02_rsi_apollo_medivac",
       "sub_ports": [
         {
-          "size": 2
+          "size": 2,
+          "default_weapon": "empty"
         }
       ]
     }

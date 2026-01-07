@@ -3,9 +3,9 @@
   "display_name": "Aegis Javelin",
   "hull_hp": 5000000,
   "armor": {
-    "hp": 0,
-    "resist_physical": 1.0,
-    "resist_energy": 1.0,
+    "hp": 3600000,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
     "resist_distortion": 1.0,
     "damage_mult_physical": 1.0,
     "damage_mult_energy": 1.0,
@@ -37,7 +37,8 @@
       "mount_name": "behr_javelinballisticcannon_s7",
       "sub_ports": [
         {
-          "size": 7
+          "size": 7,
+          "default_weapon": "behr_javelinballisticcannon_s7"
         }
       ]
     },
@@ -49,7 +50,8 @@
       "mount_name": "behr_javelinballisticcannon_s7",
       "sub_ports": [
         {
-          "size": 7
+          "size": 7,
+          "default_weapon": "behr_javelinballisticcannon_s7"
         }
       ]
     },
@@ -61,7 +63,8 @@
       "mount_name": "apar_ballisticgatling_s4_capitalship",
       "sub_ports": [
         {
-          "size": 4
+          "size": 4,
+          "default_weapon": "apar_ballisticgatling_s4_capitalship"
         }
       ]
     },
@@ -73,7 +76,8 @@
       "mount_name": "apar_ballisticgatling_s4_capitalship",
       "sub_ports": [
         {
-          "size": 4
+          "size": 4,
+          "default_weapon": "apar_ballisticgatling_s4_capitalship"
         }
       ]
     },
@@ -110,9 +114,18 @@
       "category": "missile",
       "mount_name": "mrck_s04_aegs_javelin_tri",
       "sub_ports": [
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" }
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        }
       ]
     },
     {
@@ -122,9 +135,18 @@
       "category": "missile",
       "mount_name": "mrck_s04_aegs_javelin_tri",
       "sub_ports": [
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" }
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        }
       ]
     },
     {
@@ -134,9 +156,18 @@
       "category": "missile",
       "mount_name": "mrck_s04_aegs_javelin_tri",
       "sub_ports": [
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" }
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        }
       ]
     },
     {
@@ -146,9 +177,18 @@
       "category": "missile",
       "mount_name": "mrck_s04_aegs_javelin_tri",
       "sub_ports": [
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" }
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        }
       ]
     },
     {
@@ -158,9 +198,18 @@
       "category": "missile",
       "mount_name": "mrck_s04_aegs_javelin_tri",
       "sub_ports": [
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" }
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        }
       ]
     },
     {
@@ -170,9 +219,18 @@
       "category": "missile",
       "mount_name": "mrck_s04_aegs_javelin_tri",
       "sub_ports": [
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" },
-        { "size": 4, "default_weapon": "misl_s04_em_taln_raptor" }
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        },
+        {
+          "size": 4,
+          "default_weapon": "misl_s04_em_taln_raptor"
+        }
       ]
     }
   ]

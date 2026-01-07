@@ -115,7 +115,8 @@
       "mount_name": "anvl_hawk_emp_device_s2",
       "sub_ports": [
         {
-          "size": 2
+          "size": 2,
+          "default_weapon": "anvl_hawk_emp_device_s2"
         }
       ]
     }

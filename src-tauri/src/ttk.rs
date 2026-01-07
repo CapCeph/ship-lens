@@ -127,9 +127,23 @@ fn sum_weapon_damage(weapons: &[EquippedWeapon], scenario: &CombatScenario) -> D
 
     for equipped in weapons {
         let count = equipped.count as f64;
-        damage.physical += equipped.weapon.damage_physical * count * accuracy;
-        damage.energy += equipped.weapon.damage_energy * count * accuracy;
-        damage.distortion += equipped.weapon.damage_distortion * count * accuracy;
+        let weapon = &equipped.weapon;
+
+        // Calculate DPS per damage type based on per-shot damage ratios
+        // The weapon has sustained_dps (total DPS) and damage_physical/energy/distortion (per-shot)
+        let total_per_shot = weapon.damage_physical + weapon.damage_energy + weapon.damage_distortion;
+
+        if total_per_shot > 0.0 {
+            // Calculate what portion of DPS is each damage type
+            let phys_ratio = weapon.damage_physical / total_per_shot;
+            let energy_ratio = weapon.damage_energy / total_per_shot;
+            let dist_ratio = weapon.damage_distortion / total_per_shot;
+
+            // Apply ratio to sustained_dps to get DPS per damage type
+            damage.physical += weapon.sustained_dps * phys_ratio * count * accuracy;
+            damage.energy += weapon.sustained_dps * energy_ratio * count * accuracy;
+            damage.distortion += weapon.sustained_dps * dist_ratio * count * accuracy;
+        }
     }
 
     damage

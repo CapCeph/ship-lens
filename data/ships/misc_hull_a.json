@@ -3,9 +3,9 @@
   "display_name": "MISC Hull A",
   "hull_hp": 20000,
   "armor": {
-    "hp": 0,
-    "resist_physical": 1.0,
-    "resist_energy": 1.0,
+    "hp": 12000,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
     "resist_distortion": 1.0,
     "damage_mult_physical": 1.0,
     "damage_mult_energy": 1.0,
@@ -36,8 +36,14 @@
       "category": "remote_turret",
       "mount_name": "misc_hull_a_nose_turret_s5",
       "sub_ports": [
-        { "size": 1, "default_weapon": "klwe_laserrepeater_s1" },
-        { "size": 1, "default_weapon": "klwe_laserrepeater_s1" }
+        {
+          "size": 1,
+          "default_weapon": "klwe_laserrepeater_s1"
+        },
+        {
+          "size": 1,
+          "default_weapon": "klwe_laserrepeater_s1"
+        }
       ]
     }
   ]

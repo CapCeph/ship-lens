@@ -3,9 +3,9 @@
   "display_name": "Aegis Sabre Firebird",
   "hull_hp": 2500,
   "armor": {
-    "hp": 0,
-    "resist_physical": 1.0,
-    "resist_energy": 1.0,
+    "hp": 1500,
+    "resist_physical": 0.85,
+    "resist_energy": 1.3,
     "resist_distortion": 1.0,
     "damage_mult_physical": 1.0,
     "damage_mult_energy": 1.0,
@@ -36,30 +36,102 @@
       "category": "missile",
       "mount_name": "mrck_s06_aegs_sabre_firebird",
       "sub_ports": [
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" },
-        { "size": 3, "default_weapon": "misl_s03_em_fski_thunderbolt" }
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_em_fski_thunderbolt"
+        }
       ]
     },
     {

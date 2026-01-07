@@ -54,7 +54,8 @@
       "mount_name": "",
       "sub_ports": [
         {
-          "size": 10
+          "size": 10,
+          "default_weapon": "empty"
         }
       ]
     },
@@ -253,7 +254,8 @@
       "mount_name": "aegs_idris_remote_camera_turret_upper",
       "sub_ports": [
         {
-          "size": 4
+          "size": 4,
+          "default_weapon": "empty"
         }
       ]
     },
@@ -265,7 +267,8 @@
       "mount_name": "aegs_idris_remote_camera_turret_lower",
       "sub_ports": [
         {
-          "size": 4
+          "size": 4,
+          "default_weapon": "empty"
         }
       ]
     },

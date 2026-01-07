@@ -250,7 +250,8 @@
       "mount_name": "mrck_s08_aegs_idris",
       "sub_ports": [
         {
-          "size": 8
+          "size": 8,
+          "default_weapon": "empty"
         }
       ]
     },
@@ -262,7 +263,8 @@
       "mount_name": "klwe_massdriver_s10",
       "sub_ports": [
         {
-          "size": 10
+          "size": 10,
+          "default_weapon": "klwe_massdriver_s10"
         }
       ]
     },
