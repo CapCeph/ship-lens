@@ -35,9 +35,15 @@ __pycache__/
 venv/
 .venv/
 
-# Project context (contains sensitive info)
-CLAUDE.md
-
 # Internal development
 .claude/
 grsch/
+scripts/
+
+# Internal documentation (AI context, implementation notes, validation reports)
+CLAUDE.md
+PENDING_CHANGES.md
+*_IMPLEMENTATION.md
+data/VALIDATION_*.md
+data/VALIDATION_*.txt
+data/DATA_UPDATE_*.md
