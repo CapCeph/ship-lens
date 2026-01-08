@@ -20,13 +20,16 @@
   },
   "components": {
     "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
+    "powerplant_total_hp": 1500,
+    "cooler_total_hp": 130,
+    "shield_gen_total_hp": 150,
     "qd_total_hp": 0
   },
   "shield_count": 1,
   "max_shield_size": 1,
-  "default_shield_ref": "",
-  "weapon_hardpoints": []
+  "default_shield_ref": "shld_seco_s01_web_scitem",
+  "weapon_hardpoints": [],
+  "powerplant_total_hp": 1500,
+  "cooler_total_hp": 130,
+  "shield_gen_total_hp": 150
 }

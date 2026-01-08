@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 273000
   },
   "components": {
     "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "powerplant_total_hp": 340,
+    "cooler_total_hp": 110,
+    "shield_gen_total_hp": 260,
+    "qd_total_hp": 130,
+    "thruster_total_hp": 273000
   },
   "shield_count": 2,
   "max_shield_size": 1,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_seco_s01_ink_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_weapon_left",
@@ -36,7 +37,10 @@
       "category": "pilot",
       "mount_name": "mount_gimbal_s3",
       "sub_ports": [
-        {"size": 3, "default_weapon": "gats_ballisticgatling_s3"}
+        {
+          "size": 3,
+          "default_weapon": "gats_ballisticgatling_s3"
+        }
       ]
     },
     {
@@ -46,7 +50,10 @@
       "category": "pilot",
       "mount_name": "mount_gimbal_s3",
       "sub_ports": [
-        {"size": 3, "default_weapon": "gats_ballisticgatling_s3"}
+        {
+          "size": 3,
+          "default_weapon": "gats_ballisticgatling_s3"
+        }
       ]
     },
     {
@@ -56,7 +63,10 @@
       "category": "pilot",
       "mount_name": "mount_gimbal_s3",
       "sub_ports": [
-        {"size": 3, "default_weapon": "amrs_lasercannon_s3"}
+        {
+          "size": 3,
+          "default_weapon": "amrs_lasercannon_s3"
+        }
       ]
     },
     {
@@ -66,7 +76,10 @@
       "category": "pilot",
       "mount_name": "mount_gimbal_s3",
       "sub_ports": [
-        {"size": 3, "default_weapon": "amrs_lasercannon_s3"}
+        {
+          "size": 3,
+          "default_weapon": "amrs_lasercannon_s3"
+        }
       ]
     },
     {
@@ -76,7 +89,10 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_single_s03",
       "sub_ports": [
-        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"}
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     },
     {
@@ -86,8 +102,14 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_dual_s02",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
-        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_ir_fski_ignite"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_ir_fski_ignite"
+        }
       ]
     },
     {
@@ -97,10 +119,22 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_quad_s01",
       "sub_ports": [
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"}
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        }
       ]
     },
     {
@@ -110,7 +144,10 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_single_s03",
       "sub_ports": [
-        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"}
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     },
     {
@@ -120,7 +157,10 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_single_s03",
       "sub_ports": [
-        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"}
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     },
     {
@@ -130,8 +170,14 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_dual_s02",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
-        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_ir_fski_ignite"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_ir_fski_ignite"
+        }
       ]
     },
     {
@@ -141,10 +187,22 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_quad_s01",
       "sub_ports": [
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"}
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        }
       ]
     },
     {
@@ -154,10 +212,22 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_quad_s01",
       "sub_ports": [
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"}
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        }
       ]
     }
   ]

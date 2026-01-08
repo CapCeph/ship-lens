@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 333000
   },
   "components": {
-    "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "turret_total_hp": 16000,
+    "powerplant_total_hp": 1280,
+    "cooler_total_hp": 840,
+    "shield_gen_total_hp": 1400,
+    "qd_total_hp": 500,
+    "thruster_total_hp": 333000
   },
   "shield_count": 1,
   "max_shield_size": 3,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_basl_s03_stronghold_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_front_turret",
@@ -87,8 +88,14 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_dual_s02",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        }
       ]
     },
     {
@@ -98,7 +105,10 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_single_s03",
       "sub_ports": [
-        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"}
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     },
     {
@@ -108,8 +118,14 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_dual_s02",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        }
       ]
     },
     {
@@ -119,7 +135,10 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_single_s03",
       "sub_ports": [
-        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"}
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     }
   ]

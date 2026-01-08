@@ -516,7 +516,8 @@ impl GameData {
         let shields_json: HashMap<String, serde_json::Value> = serde_json::from_str(&json_content)?;
 
         for (internal_name, shield_data) in shields_json {
-            if internal_name.contains("Template") {
+            // Case-insensitive template check
+            if internal_name.to_lowercase().contains("template") {
                 continue;
             }
 
@@ -556,7 +557,7 @@ impl GameData {
                     .unwrap_or(1.0),
             };
 
-            self.shields.insert(shield.display_name.clone(), shield);
+            self.shields.insert(shield.internal_name.clone(), shield);
         }
 
         Ok(())

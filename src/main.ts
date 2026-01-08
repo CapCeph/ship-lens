@@ -391,13 +391,27 @@ class SearchableDropdown {
     }
     // Position dropdown using fixed positioning relative to input
     const rect = this.searchInput.getBoundingClientRect();
-    this.dropdown.style.top = `${rect.bottom + 4}px`;
+    const dropdownHeight = 200; // max-height from CSS
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+
     this.dropdown.style.left = `${rect.left}px`;
     this.dropdown.style.width = `${rect.width}px`;
-    this.dropdown.classList.add("open");
+
+    // Open upward if not enough space below, but enough above
+    if (spaceBelow < dropdownHeight + 8 && spaceAbove > spaceBelow) {
+      this.dropdown.style.top = 'auto';
+      this.dropdown.style.bottom = `${window.innerHeight - rect.top + 4}px`;
+      this.dropdown.classList.add("open", "open-up");
+    } else {
+      this.dropdown.style.bottom = 'auto';
+      this.dropdown.style.top = `${rect.bottom + 4}px`;
+      this.dropdown.classList.remove("open-up");
+      this.dropdown.classList.add("open");
+    }
   }
   private hideDropdown() {
-    this.dropdown.classList.remove("open");
+    this.dropdown.classList.remove("open", "open-up");
     // Move dropdown back to container
     if (this.dropdown.parentElement === document.body) {
       this.container.appendChild(this.dropdown);
@@ -1224,6 +1238,7 @@ const accuracyPctEl = document.getElementById("accuracy-pct") as HTMLElement;
 const damageTypesEl = document.getElementById("damage-types") as HTMLElement;
 const powerDrawEl = document.getElementById("power-draw") as HTMLElement;
 const shieldHpEl = document.getElementById("shield-hp") as HTMLElement;
+const shieldDetailEl = document.getElementById("shield-detail") as HTMLElement;
 const hullHpEl = document.getElementById("hull-hp") as HTMLElement;
 const armorHpEl = document.getElementById("armor-hp") as HTMLElement;
 const thrusterHpEl = document.getElementById("thruster-hp") as HTMLElement;
@@ -1231,6 +1246,7 @@ const powerplantHpEl = document.getElementById("powerplant-hp") as HTMLElement;
 const coolerHpEl = document.getElementById("cooler-hp") as HTMLElement;
 const shieldGenHpEl = document.getElementById("shield-gen-hp") as HTMLElement;
 const qdHpEl = document.getElementById("qd-hp") as HTMLElement;
+const componentsSectionEl = document.getElementById("components-section") as HTMLElement;
 const timelineShieldEl = document.getElementById("timeline-shield") as HTMLElement;
 const timelineArmorEl = document.getElementById("timeline-armor") as HTMLElement;
 const timelineHullEl = document.getElementById("timeline-hull") as HTMLElement;
@@ -1259,8 +1275,23 @@ function formatNumber(num: number): string { return num.toLocaleString(); }
 function formatTime(seconds: number): string {
   if (!isFinite(seconds) || seconds < 0) return "--";
   if (seconds < 0.1) return "<0.1";
-  if (seconds >= 1000) return ">1000";
-  return seconds.toFixed(1);
+
+  // Under 60 seconds: show decimal seconds
+  if (seconds < 60) {
+    return seconds.toFixed(1);
+  }
+
+  // Under 1 hour: show minutes and seconds
+  if (seconds < 3600) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.round(seconds % 60);
+    return `${mins}m ${secs}s`;
+  }
+
+  // 1 hour or more: show hours and minutes
+  const hours = Math.floor(seconds / 3600);
+  const mins = Math.round((seconds % 3600) / 60);
+  return `${hours}h ${mins}m`;
 }
 
 // Animated value update with pulse effect
@@ -1360,7 +1391,8 @@ function updateBars() {
   if (!currentTargetShip) return;
   const selectedShield = allShields.find(s => s.display_name === shieldDropdown.getValue());
   const shieldCount = currentTargetShip.shield_count || 1;
-  const totalShieldHp = (selectedShield?.max_hp || 0) * shieldCount;
+  const activeShields = Math.min(shieldCount, 2);  // Rule of Two
+  const totalShieldHp = (selectedShield?.max_hp || 0) * activeShields;
   shieldBarEl.style.width = `${Math.min(100, (totalShieldHp / maxValues.shield) * 100)}%`;
   hullBarEl.style.width = `${Math.min(100, (currentTargetShip.hull_hp / maxValues.hull) * 100)}%`;
   armorBarEl.style.width = `${Math.min(100, (currentTargetShip.armor_hp / maxValues.armor) * 100)}%`;
@@ -1472,6 +1504,15 @@ async function updateTargetShip(name: string) {
       coolerHpEl.textContent = formatNumber(currentTargetShip.cooler_total_hp);
       shieldGenHpEl.textContent = formatNumber(currentTargetShip.shield_gen_total_hp);
       qdHpEl.textContent = formatNumber(currentTargetShip.qd_total_hp);
+
+      // Hide components section if no component data is available
+      const hasComponentData = currentTargetShip.thruster_total_hp > 0
+        || currentTargetShip.powerplant_total_hp > 0
+        || currentTargetShip.cooler_total_hp > 0
+        || currentTargetShip.shield_gen_total_hp > 0
+        || currentTargetShip.qd_total_hp > 0;
+      componentsSectionEl.style.display = hasComponentData ? '' : 'none';
+
       updateShieldOptions();
 
       // Auto-select default shield if ship has one
@@ -1535,9 +1576,10 @@ async function calculateTTK() {
     return;
   }
 
-  // Get shield
-  const selectedShieldName = shieldDropdown.getValue();
-  const shieldData = allShields.find(s => s.display_name === selectedShieldName);
+  // Get shield - dropdown value is display_name, but backend needs internal_name
+  const selectedShieldDisplayName = shieldDropdown.getValue();
+  const shieldData = allShields.find(s => s.display_name === selectedShieldDisplayName);
+  const selectedShieldName = shieldData?.internal_name || null;
 
   // Get scenario modifiers
   const mountAccuracy = getMountAccuracy();
@@ -1566,8 +1608,17 @@ async function calculateTTK() {
 
     // Update shield HP display (uses Rule of Two now)
     const shieldCount = currentTargetShip.shield_count || 1;
-    const totalShieldHp = shieldData ? shieldData.max_hp * Math.min(shieldCount, 2) : 0;
+    const activeShields = Math.min(shieldCount, 2);
+    const totalShieldHp = shieldData ? shieldData.max_hp * activeShields : 0;
     shieldHpEl.textContent = shieldData ? formatNumber(Math.round(totalShieldHp)) : "0";
+
+    // Update shield detail (inline display)
+    if (shieldData) {
+      const regenRate = shieldData.regen || 0;
+      shieldDetailEl.textContent = `${activeShields}/${shieldCount} Shields • ${formatNumber(Math.round(regenRate))} HP/s`;
+    } else {
+      shieldDetailEl.textContent = "";
+    }
     updateBars();
 
     // Animated TTK update
@@ -1575,9 +1626,6 @@ async function calculateTTK() {
     // Animated DPS counter
     animateValue(effectiveDpsEl, Math.round(result.effective_dps), (n) => formatNumber(Math.round(n)));
     updateTimeline(result.shield_time, result.armor_time, result.hull_time);
-
-    // Update damage breakdown display if it exists
-    updateDamageBreakdown(result);
 
   } catch (e) {
     console.error("TTK calculation failed:", e);
@@ -1605,46 +1653,6 @@ function getScenarioModifiers(): { accuracy: number; tot: number } {
   return SCENARIO_MODIFIERS[scenario] || SCENARIO_MODIFIERS["dogfight"];
 }
 
-// Update damage breakdown UI
-function updateDamageBreakdown(result: TTKResult) {
-  const breakdownEl = document.getElementById('damage-breakdown');
-  if (!breakdownEl) return;
-
-  const { damage_breakdown, passthrough_dps } = result;
-  const total = damage_breakdown.physical + damage_breakdown.energy + damage_breakdown.distortion;
-
-  if (total <= 0) {
-    breakdownEl.innerHTML = '';
-    return;
-  }
-
-  const physPct = ((damage_breakdown.physical / total) * 100).toFixed(0);
-  const energyPct = ((damage_breakdown.energy / total) * 100).toFixed(0);
-  const distPct = ((damage_breakdown.distortion / total) * 100).toFixed(0);
-  const passthroughPct = total > 0 ? ((passthrough_dps / total) * 100).toFixed(0) : "0";
-
-  breakdownEl.innerHTML = `
-    <div class="breakdown-row" title="Physical damage (ballistics) - ${passthroughPct}% bypasses shields">
-      <span class="breakdown-label">Physical:</span>
-      <span class="breakdown-value">${formatNumber(Math.round(damage_breakdown.physical))} DPS (${physPct}%)</span>
-    </div>
-    <div class="breakdown-row" title="Energy damage - fully absorbed by shields, bonus damage after">
-      <span class="breakdown-label">Energy:</span>
-      <span class="breakdown-value">${formatNumber(Math.round(damage_breakdown.energy))} DPS (${energyPct}%)</span>
-    </div>
-    ${damage_breakdown.distortion > 0 ? `
-    <div class="breakdown-row" title="Distortion damage - shields only">
-      <span class="breakdown-label">Distortion:</span>
-      <span class="breakdown-value">${formatNumber(Math.round(damage_breakdown.distortion))} DPS (${distPct}%)</span>
-    </div>` : ''}
-    ${passthrough_dps > 0 ? `
-    <div class="breakdown-row passthrough" title="Shield bypass - damage that hits armor while shields are up">
-      <span class="breakdown-label">Shield Bypass:</span>
-      <span class="breakdown-value">${formatNumber(Math.round(passthrough_dps))} DPS (${passthroughPct}%)</span>
-    </div>` : ''}
-  `;
-}
-
 // Legacy local calculation as fallback
 function calculateTTKLegacy() {
   if (!currentAttackerShip || !currentTargetShip) return;
@@ -1658,15 +1666,23 @@ function calculateTTKLegacy() {
 
   const effectiveDps = totalRawDps * hitRate * fireModeMod * timeOnTarget * powerMult;
 
-  const selectedShieldName = shieldDropdown.getValue();
-  const shieldData = allShields.find(s => s.display_name === selectedShieldName);
+  const selectedShieldDisplayName = shieldDropdown.getValue();
+  const shieldData = allShields.find(s => s.display_name === selectedShieldDisplayName);
   const shieldCount = currentTargetShip.shield_count || 1;
+  const activeShields = Math.min(shieldCount, 2);  // Rule of Two
   const singleShieldHp = shieldData?.max_hp || 0;
   const singleShieldRegen = shieldData?.regen || 0;
-  const totalShieldHp = singleShieldHp * shieldCount;
-  const totalShieldRegen = singleShieldRegen * shieldCount;
+  const totalShieldHp = singleShieldHp * activeShields;
+  const totalShieldRegen = singleShieldRegen * activeShields;
 
   shieldHpEl.textContent = shieldData ? formatNumber(Math.round(totalShieldHp)) : "0";
+
+  // Update shield detail (inline display)
+  if (shieldData) {
+    shieldDetailEl.textContent = `${activeShields}/${shieldCount} Shields • ${formatNumber(Math.round(singleShieldRegen))} HP/s`;
+  } else {
+    shieldDetailEl.textContent = "";
+  }
   updateBars();
 
   const netShieldDps = Math.max(0, effectiveDps - totalShieldRegen);

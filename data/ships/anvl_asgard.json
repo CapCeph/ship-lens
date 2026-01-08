@@ -16,14 +16,15 @@
     "retro_hp": 1200,
     "mav_hp": 1800,
     "vtol_hp": 1000,
-    "total_hp": 6500
+    "total_hp": 334200
   },
   "components": {
-    "turret_total_hp": 4000,
-    "powerplant_total_hp": 3000,
-    "cooler_total_hp": 2000,
-    "shield_gen_total_hp": 3500,
-    "qd_total_hp": 2000
+    "turret_total_hp": 8200,
+    "powerplant_total_hp": 1500,
+    "cooler_total_hp": 1470,
+    "shield_gen_total_hp": 2320,
+    "qd_total_hp": 410,
+    "thruster_total_hp": 334200
   },
   "shield_count": 2,
   "max_shield_size": 2,
@@ -53,22 +54,70 @@
       "category": "missile",
       "mount_name": "mrck_s07_anvl_asgard_16_s03",
       "sub_ports": [
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" },
-        { "size": 3, "default_weapon": "misl_s03_cs_fski_arrester" }
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     },
     {
@@ -140,5 +189,8 @@
         }
       ]
     }
-  ]
+  ],
+  "powerplant_total_hp": 1500,
+  "shield_gen_total_hp": 2320,
+  "qd_total_hp": 410
 }

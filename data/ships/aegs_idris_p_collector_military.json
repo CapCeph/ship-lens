@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 6660000
   },
   "components": {
-    "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "turret_total_hp": 117000,
+    "powerplant_total_hp": 112000,
+    "cooler_total_hp": 72000,
+    "shield_gen_total_hp": 86000,
+    "qd_total_hp": 48000,
+    "thruster_total_hp": 6660000
   },
   "shield_count": 2,
   "max_shield_size": 4,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_godi_s04_idris_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_front_turret",

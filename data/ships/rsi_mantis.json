@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 80900
   },
   "components": {
     "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "powerplant_total_hp": 270,
+    "cooler_total_hp": 360,
+    "shield_gen_total_hp": 420,
+    "qd_total_hp": 240,
+    "thruster_total_hp": 80900
   },
   "shield_count": 2,
   "max_shield_size": 1,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_godi_s01_allstop_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_weapon_left",
@@ -62,8 +63,14 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_dual_s02",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"},
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        }
       ]
     },
     {
@@ -73,8 +80,14 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_dual_s02",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"},
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        }
       ]
     },
     {
@@ -84,8 +97,14 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_dual_s02",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"},
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        }
       ]
     },
     {
@@ -95,8 +114,14 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_dual_s02",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"},
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        }
       ]
     }
   ]

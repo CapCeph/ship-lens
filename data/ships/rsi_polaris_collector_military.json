@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 280000
   },
   "components": {
-    "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "turret_total_hp": 75000,
+    "powerplant_total_hp": 14000,
+    "cooler_total_hp": 9500,
+    "shield_gen_total_hp": 13000,
+    "qd_total_hp": 1500,
+    "thruster_total_hp": 280000
   },
   "shield_count": 1,
   "max_shield_size": 4,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_rsi_s04_polaris_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_missile_rack_right",
@@ -366,5 +367,10 @@
         }
       ]
     }
-  ]
+  ],
+  "powerplant_total_hp": 14000,
+  "cooler_total_hp": 9500,
+  "shield_gen_total_hp": 13000,
+  "qd_total_hp": 1500,
+  "thruster_total_hp": 280000
 }

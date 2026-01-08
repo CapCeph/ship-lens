@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 54000
   },
   "components": {
     "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "powerplant_total_hp": 700,
+    "cooler_total_hp": 230,
+    "shield_gen_total_hp": 750,
+    "qd_total_hp": 300,
+    "thruster_total_hp": 54000
   },
   "shield_count": 1,
   "max_shield_size": 2,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_godi_s02_fr76_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_gun_left",

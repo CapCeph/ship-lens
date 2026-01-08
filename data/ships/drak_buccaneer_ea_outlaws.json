@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 241100
   },
   "components": {
     "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "powerplant_total_hp": 350,
+    "cooler_total_hp": 420,
+    "shield_gen_total_hp": 150,
+    "qd_total_hp": 150,
+    "thruster_total_hp": 241100
   },
   "shield_count": 1,
   "max_shield_size": 1,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_seco_s01_web_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_Spinal_S4",
@@ -101,8 +102,14 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_dual_s02",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"},
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_ir_fski_ignite"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        }
       ]
     },
     {
@@ -112,9 +119,19 @@
       "category": "missile",
       "mount_name": "mrck_s03_behr_dual_s02",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_cs_fski_tempest"},
-        {"size": 2, "default_weapon": "misl_s02_ir_fski_ignite"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_cs_fski_tempest"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_ir_fski_ignite"
+        }
       ]
     }
-  ]
+  ],
+  "cooler_total_hp": 420,
+  "shield_gen_total_hp": 150,
+  "qd_total_hp": 150,
+  "thruster_total_hp": 241100
 }

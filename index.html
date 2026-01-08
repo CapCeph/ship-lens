@@ -281,14 +281,6 @@
             </div>
           </div>
 
-          <!-- Damage Breakdown (4.5 model) -->
-          <div class="panel-section damage-breakdown-section">
-            <h3 class="section-title">DAMAGE BREAKDOWN</h3>
-            <div id="damage-breakdown" class="damage-breakdown">
-              <!-- Populated by JS with Physical/Energy/Distortion/Passthrough -->
-            </div>
-          </div>
-
           <!-- Damage Timeline -->
           <div class="panel-section">
             <h3 class="section-title">DAMAGE TIMELINE</h3>
@@ -381,13 +373,8 @@
               <div class="stat-card shield-card">
                 <div class="stat-icon">◈</div>
                 <div class="stat-info">
-                  <span class="stat-label">
-                    Shield HP
-                    <span class="info-icon" id="shield-info-icon">
-                      <span class="info-icon-symbol">ⓘ</span>
-                      <span class="info-tooltip" id="shield-info-tooltip">Loading...</span>
-                    </span>
-                  </span>
+                  <span class="stat-label">Shield HP</span>
+                  <span class="shield-detail" id="shield-detail"></span>
                   <span class="stat-value" id="shield-hp">0</span>
                 </div>
                 <div class="stat-bar">
@@ -418,7 +405,7 @@
           </div>
 
           <!-- Components -->
-          <div class="panel-section">
+          <div class="panel-section" id="components-section">
             <h3 class="section-title">COMPONENTS</h3>
             <div class="components-grid">
               <div class="component-item">

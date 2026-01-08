@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 37600
   },
   "components": {
     "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "powerplant_total_hp": 220,
+    "cooler_total_hp": 220,
+    "shield_gen_total_hp": 260,
+    "qd_total_hp": 150,
+    "thruster_total_hp": 37600
   },
   "shield_count": 2,
   "max_shield_size": 1,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_asas_s01_shimmer_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_class_4_center",
@@ -119,5 +120,9 @@
         }
       ]
     }
-  ]
+  ],
+  "cooler_total_hp": 220,
+  "shield_gen_total_hp": 260,
+  "qd_total_hp": 150,
+  "thruster_total_hp": 37600
 }

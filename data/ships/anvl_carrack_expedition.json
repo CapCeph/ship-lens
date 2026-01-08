@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 594700
   },
   "components": {
-    "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "turret_total_hp": 50000,
+    "powerplant_total_hp": 4000,
+    "cooler_total_hp": 2600,
+    "shield_gen_total_hp": 3200,
+    "qd_total_hp": 1400,
+    "thruster_total_hp": 594700
   },
   "shield_count": 2,
   "max_shield_size": 3,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_basl_s03_barbican_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_turret_left",
