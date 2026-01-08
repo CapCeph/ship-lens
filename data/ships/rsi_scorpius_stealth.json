@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 90000
   },
   "components": {
-    "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "turret_total_hp": 5000,
+    "powerplant_total_hp": 440,
+    "cooler_total_hp": 280,
+    "shield_gen_total_hp": 460,
+    "qd_total_hp": 170,
+    "thruster_total_hp": 90000
   },
   "shield_count": 1,
   "max_shield_size": 2,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_asas_s02_umbra_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_missilelauncher_left_top",
@@ -206,5 +207,6 @@
         }
       ]
     }
-  ]
+  ],
+  "thruster_total_hp": 90000
 }

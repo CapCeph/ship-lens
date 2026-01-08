@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 457700
   },
   "components": {
-    "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "turret_total_hp": 6000,
+    "powerplant_total_hp": 860,
+    "cooler_total_hp": 430,
+    "shield_gen_total_hp": 580,
+    "qd_total_hp": 750,
+    "thruster_total_hp": 457700
   },
   "shield_count": 1,
   "max_shield_size": 2,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_godi_s02_fullstop_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_turret_rear",
@@ -96,8 +97,14 @@
       "category": "missile",
       "mount_name": "mrck_s04_behr_dual_s03",
       "sub_ports": [
-        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"},
-        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"}
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     },
     {
@@ -107,8 +114,14 @@
       "category": "missile",
       "mount_name": "mrck_s04_behr_dual_s03",
       "sub_ports": [
-        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"},
-        {"size": 3, "default_weapon": "misl_s03_cs_fski_arrester"}
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        },
+        {
+          "size": 3,
+          "default_weapon": "misl_s03_cs_fski_arrester"
+        }
       ]
     },
     {
@@ -118,16 +131,46 @@
       "category": "bomb",
       "mount_name": "bmbrck_crus_spirit_a1",
       "sub_ports": [
-        {"size": 5, "default_weapon": "bomb_s05_fski"},
-        {"size": 5, "default_weapon": "bomb_s05_fski"},
-        {"size": 5, "default_weapon": "bomb_s05_fski"},
-        {"size": 5, "default_weapon": "bomb_s05_fski"},
-        {"size": 5, "default_weapon": "bomb_s05_fski"},
-        {"size": 5, "default_weapon": "bomb_s05_fski"},
-        {"size": 5, "default_weapon": "bomb_s05_fski"},
-        {"size": 5, "default_weapon": "bomb_s05_fski"},
-        {"size": 5, "default_weapon": "bomb_s05_fski"},
-        {"size": 5, "default_weapon": "bomb_s05_fski"}
+        {
+          "size": 5,
+          "default_weapon": "bomb_s05_fski"
+        },
+        {
+          "size": 5,
+          "default_weapon": "bomb_s05_fski"
+        },
+        {
+          "size": 5,
+          "default_weapon": "bomb_s05_fski"
+        },
+        {
+          "size": 5,
+          "default_weapon": "bomb_s05_fski"
+        },
+        {
+          "size": 5,
+          "default_weapon": "bomb_s05_fski"
+        },
+        {
+          "size": 5,
+          "default_weapon": "bomb_s05_fski"
+        },
+        {
+          "size": 5,
+          "default_weapon": "bomb_s05_fski"
+        },
+        {
+          "size": 5,
+          "default_weapon": "bomb_s05_fski"
+        },
+        {
+          "size": 5,
+          "default_weapon": "bomb_s05_fski"
+        },
+        {
+          "size": 5,
+          "default_weapon": "bomb_s05_fski"
+        }
       ]
     }
   ]

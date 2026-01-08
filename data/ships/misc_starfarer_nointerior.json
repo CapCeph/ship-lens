@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 378356
   },
   "components": {
-    "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "turret_total_hp": 16500,
+    "powerplant_total_hp": 3900,
+    "cooler_total_hp": 2400,
+    "shield_gen_total_hp": 4200,
+    "qd_total_hp": 1400,
+    "thruster_total_hp": 378356
   },
   "shield_count": 3,
   "max_shield_size": 3,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_basl_s03_stronghold_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_front_turret",
@@ -80,5 +81,10 @@
         }
       ]
     }
-  ]
+  ],
+  "powerplant_total_hp": 1800,
+  "cooler_total_hp": 2400,
+  "shield_gen_total_hp": 4200,
+  "qd_total_hp": 1400,
+  "thruster_total_hp": 378356
 }

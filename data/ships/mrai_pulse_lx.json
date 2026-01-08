@@ -16,17 +16,21 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 36300
   },
   "components": {
     "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
+    "powerplant_total_hp": 71,
+    "cooler_total_hp": 46,
     "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "qd_total_hp": 0,
+    "thruster_total_hp": 36300
   },
   "shield_count": 0,
   "max_shield_size": 0,
   "default_shield_ref": "",
-  "weapon_hardpoints": []
+  "weapon_hardpoints": [],
+  "powerplant_total_hp": 71,
+  "cooler_total_hp": 46,
+  "thruster_total_hp": 36300
 }

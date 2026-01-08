@@ -1,6 +1,6 @@
 {
   "filename": "xnaa_santokyai",
-  "display_name": "Aopoa San'tok.yāi",
+  "display_name": "Aopoa San'tok.y\u0101i",
   "hull_hp": 3675.88,
   "armor": {
     "hp": 2205,
@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 260000
   },
   "components": {
     "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "powerplant_total_hp": 620,
+    "cooler_total_hp": 420,
+    "shield_gen_total_hp": 580,
+    "qd_total_hp": 240,
+    "thruster_total_hp": 260000
   },
   "shield_count": 1,
   "max_shield_size": 2,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_godi_s02_fullstop_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_weapon_top_left",

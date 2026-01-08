@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 309600
   },
   "components": {
-    "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "turret_total_hp": 500,
+    "powerplant_total_hp": 1680,
+    "cooler_total_hp": 1100,
+    "shield_gen_total_hp": 1920,
+    "qd_total_hp": 540,
+    "thruster_total_hp": 309600
   },
   "shield_count": 3,
   "max_shield_size": 2,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_basl_s02_rampart_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_gun_left",
@@ -79,10 +80,22 @@
       "category": "missile",
       "mount_name": "mrck_s04_rsi_zeus_left",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"},
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"},
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"},
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        }
       ]
     },
     {
@@ -92,10 +105,22 @@
       "category": "missile",
       "mount_name": "mrck_s04_rsi_zeus_right",
       "sub_ports": [
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"},
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"},
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"},
-        {"size": 2, "default_weapon": "misl_s02_em_taln_dominator"}
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        },
+        {
+          "size": 2,
+          "default_weapon": "misl_s02_em_taln_dominator"
+        }
       ]
     },
     {

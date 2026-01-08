@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 510000
   },
   "components": {
-    "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "turret_total_hp": 51000,
+    "powerplant_total_hp": 4200,
+    "cooler_total_hp": 3600,
+    "shield_gen_total_hp": 5600,
+    "qd_total_hp": 1400,
+    "thruster_total_hp": 510000
   },
   "shield_count": 4,
   "max_shield_size": 3,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_basl_s03_stronghold_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_turret_nose",
@@ -36,8 +37,14 @@
       "category": "remote_turret",
       "mount_name": "misc_hull_c_nose_turret_s5",
       "sub_ports": [
-        { "size": 3, "default_weapon": "klwe_laserrepeater_s3" },
-        { "size": 3, "default_weapon": "klwe_laserrepeater_s3" }
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
       ]
     },
     {
@@ -47,8 +54,14 @@
       "category": "remote_turret",
       "mount_name": "misc_hull_c_scitem_remote_turret",
       "sub_ports": [
-        { "size": 3, "default_weapon": "klwe_laserrepeater_s3" },
-        { "size": 3, "default_weapon": "klwe_laserrepeater_s3" }
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
       ]
     },
     {
@@ -58,9 +71,19 @@
       "category": "remote_turret",
       "mount_name": "misc_hull_c_scitem_remote_turret_rear",
       "sub_ports": [
-        { "size": 3, "default_weapon": "klwe_laserrepeater_s3" },
-        { "size": 3, "default_weapon": "klwe_laserrepeater_s3" }
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        },
+        {
+          "size": 3,
+          "default_weapon": "klwe_laserrepeater_s3"
+        }
       ]
     }
-  ]
+  ],
+  "cooler_total_hp": 3600,
+  "shield_gen_total_hp": 5600,
+  "qd_total_hp": 1400,
+  "thruster_total_hp": 510000
 }

@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 1000000
   },
   "components": {
-    "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "turret_total_hp": 16000,
+    "powerplant_total_hp": 940,
+    "cooler_total_hp": 700,
+    "shield_gen_total_hp": 1100,
+    "qd_total_hp": 500,
+    "thruster_total_hp": 1000000
   },
   "shield_count": 1,
   "max_shield_size": 3,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_behr_s03_5ca_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_gun_laser_top_left",
@@ -122,13 +123,34 @@
       "category": "missile",
       "mount_name": "mrck_s04_rsi_constellation",
       "sub_ports": [
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"}
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        }
       ]
     },
     {
@@ -138,13 +160,34 @@
       "category": "missile",
       "mount_name": "mrck_s04_rsi_constellation",
       "sub_ports": [
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"}
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        }
       ]
     },
     {
@@ -154,13 +197,34 @@
       "category": "missile",
       "mount_name": "mrck_s04_rsi_constellation",
       "sub_ports": [
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"}
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        }
       ]
     },
     {
@@ -170,13 +234,34 @@
       "category": "missile",
       "mount_name": "mrck_s04_rsi_constellation",
       "sub_ports": [
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"},
-        {"size": 1, "default_weapon": "misl_s01_ir_behr_marksman"}
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        },
+        {
+          "size": 1,
+          "default_weapon": "misl_s01_ir_behr_marksman"
+        }
       ]
     },
     {
@@ -192,5 +277,10 @@
         }
       ]
     }
-  ]
+  ],
+  "powerplant_total_hp": 940,
+  "cooler_total_hp": 700,
+  "shield_gen_total_hp": 1100,
+  "qd_total_hp": 500,
+  "thruster_total_hp": 1000000
 }

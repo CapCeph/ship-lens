@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 161400
   },
   "components": {
-    "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "turret_total_hp": 6500,
+    "powerplant_total_hp": 940,
+    "cooler_total_hp": 700,
+    "shield_gen_total_hp": 1230,
+    "qd_total_hp": 410,
+    "thruster_total_hp": 161400
   },
   "shield_count": 3,
   "max_shield_size": 2,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_behr_s02_5ma_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_sidecannon_left",
@@ -148,5 +149,10 @@
         }
       ]
     }
-  ]
+  ],
+  "powerplant_total_hp": 940,
+  "cooler_total_hp": 700,
+  "shield_gen_total_hp": 1230,
+  "qd_total_hp": 410,
+  "thruster_total_hp": 161400
 }

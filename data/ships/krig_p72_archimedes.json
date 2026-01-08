@@ -16,18 +16,19 @@
     "retro_hp": 0,
     "mav_hp": 0,
     "vtol_hp": 0,
-    "total_hp": 0
+    "total_hp": 54000
   },
   "components": {
     "turret_total_hp": 0,
-    "powerplant_total_hp": 0,
-    "cooler_total_hp": 0,
-    "shield_gen_total_hp": 0,
-    "qd_total_hp": 0
+    "powerplant_total_hp": 240,
+    "cooler_total_hp": 360,
+    "shield_gen_total_hp": 81,
+    "qd_total_hp": 0,
+    "thruster_total_hp": 54000
   },
   "shield_count": 1,
   "max_shield_size": 1,
-  "default_shield_ref": "",
+  "default_shield_ref": "shld_yorm_s01_targa_scitem",
   "weapon_hardpoints": [
     {
       "port_name": "hardpoint_weapon_gun_left_wing",
@@ -81,5 +82,8 @@
         }
       ]
     }
-  ]
+  ],
+  "cooler_total_hp": 360,
+  "shield_gen_total_hp": 81,
+  "thruster_total_hp": 54000
 }

@@ -288,7 +288,7 @@ fn calculate_ttk(
 /// - weapon_names: List of weapon display names to use
 /// - weapon_counts: Corresponding count for each weapon (parallel array)
 /// - target_ship: Display name of target ship
-/// - shield_name: Display name of shield to use (or null for target's default)
+/// - shield_name: Internal name of shield to use (or null for target's default)
 /// - scenario: Combat scenario configuration
 /// - zone: Target zone modifiers (hull, armor, thruster, component percentages)
 #[tauri::command]

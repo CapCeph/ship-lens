@@ -521,6 +521,20 @@ body {
     inset 0 1px 0 rgba(74, 158, 255, 0.15);
 }
 
+/* Dropdown opens upward when near bottom of viewport */
+.select-dropdown.open-up {
+  transform-origin: bottom center;
+  box-shadow:
+    0 -8px 24px rgba(0, 0, 0, 0.5),
+    0 0 12px var(--border-glow),
+    inset 0 -1px 0 rgba(74, 158, 255, 0.15);
+}
+
+.select-dropdown.open-up::before {
+  top: auto;
+  bottom: 0;
+}
+
 /* Subtle top edge glow line */
 .select-dropdown.open::before {
   content: '';
@@ -1125,57 +1139,6 @@ body {
   color: var(--hull-amber);
 }
 
-/* Damage Breakdown (4.5 model) */
-.damage-breakdown-section {
-  margin-top: var(--spacing-sm);
-}
-
-.damage-breakdown {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  font-size: var(--font-size-sm);
-}
-
-.breakdown-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--bg-dark);
-  border-radius: var(--radius-xs);
-  border-left: 3px solid var(--primary);
-}
-
-.breakdown-row:nth-child(1) {
-  border-left-color: var(--stat-armor); /* Physical - orange */
-}
-
-.breakdown-row:nth-child(2) {
-  border-left-color: var(--primary); /* Energy - blue/cyan */
-}
-
-.breakdown-row:nth-child(3) {
-  border-left-color: #9b59b6; /* Distortion - purple */
-}
-
-.breakdown-row.passthrough {
-  border-left-color: #e74c3c; /* Passthrough - red warning */
-  background: rgba(231, 76, 60, 0.1);
-}
-
-.breakdown-label {
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-secondary);
-}
-
-.breakdown-value {
-  font-family: var(--font-mono);
-  color: var(--text-primary);
-}
-
 /* Damage Timeline */
 .timeline {
   display: flex;
@@ -1301,11 +1264,12 @@ body {
   font-size: var(--font-size-sm);
   font-family: var(--font-body);
   white-space: nowrap;
+  text-align: left;
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition-smooth), visibility var(--transition-smooth), transform var(--transition-smooth);
-  z-index: 1000;
+  z-index: 10000;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 8px var(--border-glow);
 }
 
@@ -1333,6 +1297,39 @@ body {
 
 .info-tooltip.warning::after {
   border-top-color: var(--hull-amber);
+}
+
+/* Shield tooltip - FULLY JavaScript controlled (escapes overflow clipping) */
+#shield-info-icon .info-tooltip {
+  position: fixed;
+  white-space: normal;
+  text-align: center;
+  max-width: 280px;
+  line-height: 1.4;
+  /* Reset positioning - JavaScript sets left/top */
+  bottom: auto;
+  left: auto;
+  right: auto;
+  top: 0;
+  /* Force hidden state - JavaScript controls visibility via inline styles */
+  opacity: 0 !important;
+  visibility: hidden !important;
+  /* Override base transform - JS handles positioning */
+  transform: none !important;
+  /* Disable transitions - JS controls visibility instantly */
+  transition: none !important;
+}
+
+/* Override the !important when JavaScript sets inline styles */
+#shield-info-icon .info-tooltip[style*="opacity: 1"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Arrow for shield tooltip - center it */
+#shield-info-icon .info-tooltip::after {
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* Stat Cards */
@@ -1390,6 +1387,19 @@ body {
   font-family: var(--font-mono);
   font-size: var(--font-size-base);
   color: var(--text-primary);
+}
+
+/* Shield detail - inline info between label and value */
+.shield-detail {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  text-align: center;
+  padding: 0 var(--space-sm);
 }
 
 /* Stat Bars */
