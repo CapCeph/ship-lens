@@ -54,13 +54,16 @@ Think of it as a variant of [Erkul](https://www.erkul.games/) but as a lightweig
 
 ---
 
-# Changes in v0.1.19:
+# Changes in v0.1.20:
 
   - Fixed TTK calculation to use sustained DPS (not per-shot damage)
   - Added 3 missing capital ship weapons
   - Fixed 39 ships with missing default_weapon data
   - Fixed aegs_emp_sentinel_s4 weapon entry
-
+  - Updated default shield references for all ships (from P4K data)
+  - Removed DAMAGE BREAKDOWN section from UI
+  - Fixed dropdown positioning - opens upward when near bottom of viewport
+    
 ---
 
 ## Installation
