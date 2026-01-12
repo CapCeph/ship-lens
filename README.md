@@ -44,13 +44,18 @@ Think of it as a variant of [Erkul](https://www.erkul.games/) but as a lightweig
 ### Features
 
 - **Answer "Can I Kill That?"** - See exactly how long any fight takes before you engage
-- **Every Flyable Ship** - 279+ ships with accurate hull, armor, and shield stats
-- **All Player Weapons** - 114+ guns you can actually equip (no NPC/template junk)
+- **Every Flyable Ship** - 307+ ships with accurate hull, armor, and shield stats
+- **All Player Weapons** - 145+ guns you can actually equip (no NPC/template junk)
 - **Test Before You Die** - Dogfight vs Jousting scenarios to plan your approach
 - **See What Hurts** - Breakdown of physical, energy, and distortion damage
 - **Instant Results** - Tweak loadouts and see TTK update live
 - **Save Your Builds** - Fleet presets for your favorite configurations
 - **Rep Your Manufacturer** - Crusader, Drake, MISC, Origin, and Aegis themes
+- **Know Your Weapons** - See exactly how each gun contributes: shield DPS, armor DPS, and solo TTK
+- **Missile Math** - Know how much time your torpedoes save before you waste them on the wrong target
+- **Visual Damage Phases** - Mini-timelines show each weapon's shield/armor/hull breakdown at a glance
+- **Effectiveness Check** - Instantly see which weapons can break shields vs which are just tickling
+- **Torpedo Time Savings** - See exactly how many seconds each missile salvo shaves off
 
 ---
 
