@@ -108,6 +108,9 @@ interface Shield {
   absorb_physical: number;
   absorb_energy: number;
   absorb_distortion: number;
+  // Regen delay mechanics
+  damaged_regen_delay: number;  // Seconds after damage before regen starts
+  downed_regen_delay: number;   // Seconds after depletion before regen starts
 }
 
 // 4.5 TTK calculation result from backend
@@ -115,6 +118,40 @@ interface DamageBreakdown {
   physical: number;
   energy: number;
   distortion: number;
+}
+
+interface WeaponEffectiveness {
+  weapon_name: string;
+  hardpoint_label: string | null;
+  damage_type: string;
+  count: number;
+  raw_dps: number;
+  effective_dps: number;
+  shield_dps: number;
+  passthrough_dps: number;
+  armor_dps: number;
+  hull_dps: number;
+  solo_ttk: number;
+  is_effective: boolean;
+  ineffective_reason: string | null;
+  shield_time: number;
+  armor_time: number;
+  hull_time: number;
+}
+
+interface MissileEffectiveness {
+  missile_name: string;
+  hardpoint_label: string | null;
+  damage_type: string;
+  count: number;
+  total_damage: number;
+  shield_damage: number;
+  passthrough_damage: number;
+  armor_damage: number;
+  hull_damage: number;
+  is_effective: boolean;
+  ineffective_reason: string | null;
+  time_saved: number;
 }
 
 interface TTKResult {
@@ -128,6 +165,9 @@ interface TTKResult {
   passthrough_dps: number;
   armor_damage_during_shields: number;
   shield_failover_phases: number;
+  shields_breakable: boolean;
+  weapon_breakdown: WeaponEffectiveness[];
+  missile_breakdown: MissileEffectiveness[];
 }
 
 interface Stats {
@@ -206,10 +246,10 @@ async function loadSavedSettings(): Promise<SavedSettings | null> {
 
 // Combat modifiers from Excel _Modifiers sheet
 const MOUNT_TYPE_ACCURACY: Record<string, number> = {
-  "Fixed": 0.7,
-  "Gimballed": 0.85,
-  "Turret": 0.9,
-  "Auto-Gimbal": 0.95,
+  "Fixed": 0.60,
+  "Gimballed": 0.75,
+  "Auto-Gimbal": 0.80,
+  "Turret": 0.70,
 };
 
 const FIRE_MODE_DPS_MOD: Record<string, number> = {
@@ -283,17 +323,48 @@ class SearchableDropdown {
       if (e.key === "Escape") {
         this.hideDropdown();
         this.searchInput.blur();
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        this.cycleSelection(1);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        this.cycleSelection(-1);
       } else if (e.key === "Enter") {
-        const firstVisible = this.dropdown.querySelector(".select-option:not(.no-results):not(.group-header)") as HTMLElement;
-        if (firstVisible) {
-          if (firstVisible.dataset.presetId) {
-            this.selectPreset(firstVisible.dataset.presetId);
-          } else {
-            this.selectOption(firstVisible.dataset.value || "");
-          }
+        e.preventDefault();
+        // Close dropdown on Enter if open
+        if (this.dropdown.classList.contains("open")) {
+          this.hideDropdown();
         }
       }
     });
+  }
+
+  private cycleSelection(direction: number) {
+    // Use filtered options if dropdown is open with a search, otherwise use all options
+    const optionsList = this.filteredOptions.length > 0 ? this.filteredOptions : this.options;
+    if (optionsList.length === 0) return;
+
+    // Find current selection index
+    let currentIndex = optionsList.findIndex(opt => opt.value === this.selectedValue);
+
+    // Calculate new index
+    if (currentIndex === -1) {
+      currentIndex = direction > 0 ? 0 : optionsList.length - 1;
+    } else {
+      currentIndex += direction;
+      if (currentIndex < 0) currentIndex = optionsList.length - 1;
+      if (currentIndex >= optionsList.length) currentIndex = 0;
+    }
+
+    // Select the new option immediately (triggers onChange for live updates)
+    const newOption = optionsList[currentIndex];
+    this.selectOption(newOption.value);
+
+    // If dropdown is open, scroll the selected item into view
+    if (this.dropdown.classList.contains("open")) {
+      const selectedEl = this.dropdown.querySelector(`.select-option[data-value="${newOption.value}"]`);
+      selectedEl?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
   }
 
   enableFleetPresets() {
@@ -461,6 +532,7 @@ interface CategorySlot {
   hardpoint: WeaponHardpoint;
   dropdown: SearchableDropdown | null;
   slotIndex: number;
+  isEnabled: boolean;
 }
 
 // Weapon slot manager with category support
@@ -624,7 +696,10 @@ class WeaponSlotManager {
 
           // Check if user has selected a different mount for this hardpoint
           const selectedMountData = selectedMounts.get(hp.port_name);
-          const effectiveMountName = selectedMountData ? selectedMountData.mount.display_name : (hp.mount_name || hp.port_name);
+          // Use display_name for selected mounts (already formatted), format raw names otherwise
+          const effectiveMountName = selectedMountData
+            ? selectedMountData.mount.display_name
+            : formatHardpointLabel(hp.mount_name || hp.port_name);
 
           // If mount was selected, update sub_ports to match the selected mount's configuration
           let effectiveSubPorts = subPorts;
@@ -682,7 +757,7 @@ class WeaponSlotManager {
                   const subPortLabel = subPortCount === 2 ? (subIdx === 0 ? 'Left' : 'Right') : `#${subIdx + 1}`;
                   groupSlotsContainer.insertAdjacentHTML("beforeend", `
                     <div class="weapon-slot sub-port">
-                      <span class="weapon-slot-size">${subPortLabel}</span>
+                      <span class="weapon-slot-size" data-slot-index="${globalSlotIndex}" title="Click to toggle">${subPortLabel}</span>
                       <span class="weapon-slot-size-badge">S${subPortSize}</span>
                       <div class="weapon-bespoke">
                         <span class="weapon-bespoke-name">${bespokeWeapon.display_name}</span>
@@ -704,7 +779,7 @@ class WeaponSlotManager {
                     max_size: subPortSize,
                     sub_ports: [subPort],
                   };
-                  categorySlotsList.push({ hardpoint: subPortHardpoint, dropdown: virtualDropdown, slotIndex: globalSlotIndex });
+                  categorySlotsList.push({ hardpoint: subPortHardpoint, dropdown: virtualDropdown, slotIndex: globalSlotIndex, isEnabled: true });
                   globalSlotIndex++;
                 } else {
                   allBespoke = false;
@@ -728,7 +803,7 @@ class WeaponSlotManager {
 
             groupSlotsContainer.insertAdjacentHTML("beforeend", `
               <div class="weapon-slot sub-port">
-                <span class="weapon-slot-size" title="Sub-port ${subIdx + 1}">${subPortLabel}</span>
+                <span class="weapon-slot-size" data-slot-index="${globalSlotIndex}" title="Click to toggle">${subPortLabel}</span>
                 <span class="weapon-slot-size-badge">S${subPortSize}</span>
                 <div class="searchable-select" id="${slotId}-container">
                   <input type="text" class="search-input" id="${slotId}-search" placeholder="Select weapon..." autocomplete="off">
@@ -805,7 +880,7 @@ class WeaponSlotManager {
               max_size: subPortSize,
               sub_ports: [subPort],  // Individual sub-port
             };
-            categorySlotsList.push({ hardpoint: subPortHardpoint, dropdown, slotIndex: globalSlotIndex });
+            categorySlotsList.push({ hardpoint: subPortHardpoint, dropdown, slotIndex: globalSlotIndex, isEnabled: true });
             globalSlotIndex++;
           }
         } else {
@@ -877,7 +952,7 @@ class WeaponSlotManager {
             const slotId = `weapon-slot-${globalSlotIndex}`;
             slotsContainer.insertAdjacentHTML("beforeend", `
               <div class="weapon-slot">
-                <span class="weapon-slot-size" title="${hp.port_name}">S${displaySize}</span>
+                <span class="weapon-slot-size" data-slot-index="${globalSlotIndex}" title="Click to toggle">S${displaySize}</span>
                 <div class="weapon-bespoke" id="${slotId}-bespoke">
                   <span class="weapon-bespoke-name">${bespokeItem.display_name}</span>
                   <span class="weapon-bespoke-badge">BESPOKE</span>
@@ -891,7 +966,7 @@ class WeaponSlotManager {
               onChange: () => {},
             } as any;
 
-            categorySlotsList.push({ hardpoint: hp, dropdown: virtualDropdown, slotIndex: globalSlotIndex });
+            categorySlotsList.push({ hardpoint: hp, dropdown: virtualDropdown, slotIndex: globalSlotIndex, isEnabled: true });
             globalSlotIndex++;
             return;
           }
@@ -899,7 +974,7 @@ class WeaponSlotManager {
           const slotId = `weapon-slot-${globalSlotIndex}`;
           slotsContainer.insertAdjacentHTML("beforeend", `
             <div class="weapon-slot">
-              <span class="weapon-slot-size" title="${hp.port_name}">S${displaySize}</span>
+              <span class="weapon-slot-size" data-slot-index="${globalSlotIndex}" title="Click to toggle">S${displaySize}</span>
               <div class="searchable-select" id="${slotId}-container">
                 <input type="text" class="search-input" id="${slotId}-search" placeholder="Select weapon..." autocomplete="off">
                 <div class="select-dropdown" id="${slotId}-dropdown"></div>
@@ -948,7 +1023,7 @@ class WeaponSlotManager {
 
           dropdown.onChange(() => { if (this.onChangeCallback) this.onChangeCallback(); });
 
-          categorySlotsList.push({ hardpoint: hp, dropdown, slotIndex: globalSlotIndex });
+          categorySlotsList.push({ hardpoint: hp, dropdown, slotIndex: globalSlotIndex, isEnabled: true });
           globalSlotIndex++;
         }
       });
@@ -1068,7 +1143,7 @@ class WeaponSlotManager {
     this.categorySlots.forEach((slots, category) => {
       if (this.enabledCategories.has(category)) {
         slots.forEach(slot => {
-          if (slot.dropdown) {
+          if (slot.isEnabled && slot.dropdown) {
             const value = slot.dropdown.getValue();
             if (value && value !== 'Empty') weapons.push(value);
           }
@@ -1092,6 +1167,96 @@ class WeaponSlotManager {
   }
 
   onChange(callback: () => void) { this.onChangeCallback = callback; }
+
+  // Get enabled weapons grouped by hardpoint for weapon effectiveness display
+  getEnabledWeaponsGroupedByHardpoint(): { hardpointLabel: string; weaponName: string; count: number; category: string }[] {
+    const groups: Map<string, { weaponName: string; count: number; category: string }> = new Map();
+
+    this.categorySlots.forEach((slots, category) => {
+      if (!this.enabledCategories.has(category)) return;
+
+      slots.forEach(slot => {
+        if (!slot.isEnabled || !slot.dropdown) return;
+
+        const weaponName = slot.dropdown.getValue();
+        if (!weaponName || weaponName === 'Empty') return;
+
+        // Use mount_name if available, otherwise port_name
+        const hardpointLabel = slot.hardpoint.mount_name || slot.hardpoint.port_name;
+
+        // Create unique key for (hardpoint, weapon) combo
+        const key = `${hardpointLabel}::${weaponName}`;
+
+        const existing = groups.get(key);
+        if (existing) {
+          existing.count++;
+        } else {
+          groups.set(key, { weaponName, count: 1, category });
+        }
+      });
+    });
+
+    return Array.from(groups.entries()).map(([key, data]) => ({
+      hardpointLabel: key.split('::')[0],
+      weaponName: data.weaponName,
+      count: data.count,
+      category: data.category,
+    }));
+  }
+
+  // Get ALL weapons grouped by hardpoint (including disabled) with enabled state
+  getAllWeaponsGroupedByHardpoint(): { hardpointLabel: string; weaponName: string; count: number; category: string; isEnabled: boolean }[] {
+    const groups: Map<string, { weaponName: string; count: number; category: string; isEnabled: boolean; minSlotIndex: number }> = new Map();
+
+    this.categorySlots.forEach((slots, category) => {
+      const categoryEnabled = this.enabledCategories.has(category);
+
+      slots.forEach(slot => {
+        if (!slot.dropdown) return;
+
+        const weaponName = slot.dropdown.getValue();
+        if (!weaponName || weaponName === 'Empty') return;
+
+        // Use mount_name if available, otherwise port_name
+        const hardpointLabel = slot.hardpoint.mount_name || slot.hardpoint.port_name;
+
+        // Weapon is enabled only if category is enabled AND slot is enabled
+        const isEnabled = categoryEnabled && slot.isEnabled;
+
+        // Create unique key for (hardpoint, weapon, enabled) combo
+        // Separate enabled and disabled so they show separately
+        const key = `${hardpointLabel}::${weaponName}::${isEnabled}`;
+
+        const existing = groups.get(key);
+        if (existing) {
+          existing.count++;
+          // Track minimum slot index to preserve visual order
+          existing.minSlotIndex = Math.min(existing.minSlotIndex, slot.slotIndex);
+        } else {
+          groups.set(key, { weaponName, count: 1, category, isEnabled, minSlotIndex: slot.slotIndex });
+        }
+      });
+    });
+
+    // Sort by slot index to match attacker weapons panel order
+    const result = Array.from(groups.entries()).map(([key, data]) => {
+      const parts = key.split('::');
+      return {
+        hardpointLabel: parts[0],
+        weaponName: data.weaponName,
+        count: data.count,
+        category: data.category,
+        isEnabled: data.isEnabled,
+        minSlotIndex: data.minSlotIndex,
+      };
+    });
+
+    // Sort by slot index (visual order) instead of alphabetically
+    // This ensures Weapon Effectiveness section matches the Attacker Weapons panel order
+    result.sort((a, b) => a.minSlotIndex - b.minSlotIndex);
+
+    return result;
+  }
 
   getTotalDps(weapons: Weapon[]): number {
     let total = 0;
@@ -1149,6 +1314,50 @@ class WeaponSlotManager {
           slot.dropdown.setValue(weaponNames[globalIndex]);
         }
         globalIndex++;
+      });
+    });
+  }
+
+  toggleSlotEnabled(globalSlotIndex: number) {
+    let found = false;
+    this.categorySlots.forEach((slots) => {
+      slots.forEach(slot => {
+        if (slot.slotIndex === globalSlotIndex) {
+          slot.isEnabled = !slot.isEnabled;
+          // Update UI - size label has data-slot-index, parent is weapon-slot
+          const sizeLabel = document.querySelector(`[data-slot-index="${globalSlotIndex}"]`);
+          const slotWrapper = sizeLabel?.closest('.weapon-slot');
+          slotWrapper?.classList.toggle('slot-disabled', !slot.isEnabled);
+          found = true;
+        }
+      });
+    });
+    if (found && this.onChangeCallback) this.onChangeCallback();
+  }
+
+  getEnabledSlots(): boolean[] {
+    const states: boolean[] = [];
+    this.categorySlots.forEach(slots => {
+      slots.forEach(slot => {
+        states.push(slot.isEnabled);
+      });
+    });
+    return states;
+  }
+
+  setEnabledSlots(states: boolean[]) {
+    let index = 0;
+    this.categorySlots.forEach(slots => {
+      slots.forEach(slot => {
+        if (index < states.length) {
+          slot.isEnabled = states[index];
+          const sizeLabel = document.querySelector(`[data-slot-index="${slot.slotIndex}"]`);
+          const slotWrapper = sizeLabel?.closest('.weapon-slot');
+          if (slotWrapper) {
+            slotWrapper.classList.toggle('slot-disabled', !slot.isEnabled);
+          }
+        }
+        index++;
       });
     });
   }
@@ -1265,6 +1474,7 @@ const settingsClose = document.getElementById("settings-close") as HTMLButtonEle
 // Data cache
 let allWeapons: Weapon[] = [];
 let allShields: Shield[] = [];
+let allMissiles: Missile[] = [];
 let currentAttackerShip: Ship | null = null;
 let currentTargetShip: Ship | null = null;
 
@@ -1272,8 +1482,102 @@ const maxValues = { hull: 100000, armor: 50000, shield: 50000 };
 
 function formatNumber(num: number): string { return num.toLocaleString(); }
 
+// Format technical hardpoint names to user-friendly labels
+// e.g., "rsi_polaris_turret_front" → "Front Turret"
+// e.g., "entityclassdefinition.mount_gimbal_s2" → "Gimbal S2"
+function formatHardpointLabel(rawLabel: string): string {
+  if (!rawLabel) return "";
+
+  let label = rawLabel.toLowerCase();
+
+  // Strip common technical prefixes
+  label = label.replace(/^entityclassdefinition\./i, '');
+  label = label.replace(/^mount_/i, '');
+
+  // Common manufacturer/ship prefixes to strip
+  const prefixPatterns = [
+    /^[a-z]{3,4}_[a-z0-9_]+?_(turret|gun|pdc|missile|weapon|hardpoint)/i,
+    /^[a-z]{3,4}_[a-z0-9]+_/i,  // Generic manufacturer_model_ prefix
+  ];
+
+  // Try to strip manufacturer/ship prefix
+  for (const pattern of prefixPatterns) {
+    const match = label.match(pattern);
+    if (match) {
+      // Keep the matched type word if present
+      const typeMatch = match[0].match(/(turret|gun|pdc|missile|weapon|hardpoint)/i);
+      if (typeMatch) {
+        label = label.slice(match.index! + match[0].length - typeMatch[0].length);
+      } else {
+        label = label.slice(match.index! + match[0].length);
+      }
+      break;
+    }
+  }
+
+  // Replace underscores with spaces
+  label = label.replace(/_/g, ' ').trim();
+
+  // Position words to recognize
+  const positions = ['front', 'rear', 'back', 'left', 'right', 'top', 'bottom', 'upper', 'lower',
+                     'center', 'centre', 'side', 'inner', 'outer', 'forward', 'aft', 'port', 'starboard',
+                     'nose', 'tail', 'wing', 'dorsal', 'ventral'];
+
+  // Type words to recognize
+  const types = ['turret', 'gun', 'pdc', 'missile', 'torpedo', 'weapon', 'hardpoint', 'ball', 'chin', 'remote', 'gimbal', 'fixed'];
+
+  // Split into words
+  const words = label.split(/\s+/).filter(w => w.length > 0);
+
+  // Categorize words
+  const positionWords: string[] = [];
+  const typeWords: string[] = [];
+  const otherWords: string[] = [];
+
+  for (const word of words) {
+    if (positions.includes(word)) {
+      positionWords.push(word);
+    } else if (types.includes(word)) {
+      typeWords.push(word);
+    } else if (!/^\d+$/.test(word)) {  // Skip pure numbers
+      otherWords.push(word);
+    }
+  }
+
+  // Build readable label: [Position] [Other] [Type]
+  const parts: string[] = [];
+
+  // Add position words
+  if (positionWords.length > 0) {
+    parts.push(...positionWords);
+  }
+
+  // Add other descriptive words
+  if (otherWords.length > 0) {
+    parts.push(...otherWords);
+  }
+
+  // Add type words (default to "Turret" if no type found)
+  if (typeWords.length > 0) {
+    parts.push(...typeWords);
+  } else if (parts.length > 0) {
+    parts.push('turret');  // Default type
+  }
+
+  // Title case each word
+  const formatted = parts.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
+  // If we couldn't parse anything meaningful, return a cleaned version of the original
+  if (!formatted) {
+    return rawLabel.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  return formatted;
+}
+
 function formatTime(seconds: number): string {
-  if (!isFinite(seconds) || seconds < 0) return "--";
+  // Handle null/undefined (from JSON infinity serialization) and non-finite values
+  if (seconds === null || seconds === undefined || !isFinite(seconds) || seconds < 0) return "∞";
   if (seconds < 0.1) return "<0.1";
 
   // Under 60 seconds: show decimal seconds
@@ -1352,14 +1656,15 @@ function animateTextValue(element: HTMLElement, newText: string) {
   setTimeout(() => element.classList.remove('value-changed'), 400);
 }
 
-// Calculate hit rate based on scenario and mount type
-// Excel formula: Hit Rate = MIN(Pilot Accuracy × Mount Accuracy, 1)
+// Calculate effective accuracy based on scenario, mount type, and time on target
+// This represents the percentage of raw DPS that actually lands on target
 function getHitRate(): number {
   const scenario = scenarioDropdown.getValue() || "dogfight";
   const mountType = mountTypeDropdown.getValue() || "Gimballed";
   const scenarioMod = SCENARIO_MODIFIERS[scenario] || SCENARIO_MODIFIERS["dogfight"];
-  const mountAccuracy = MOUNT_TYPE_ACCURACY[mountType] || 0.85;
-  return Math.min(scenarioMod.accuracy * mountAccuracy, 1);
+  const mountAccuracy = MOUNT_TYPE_ACCURACY[mountType] || 0.75;
+  // Include time on target in the displayed accuracy
+  return Math.min(scenarioMod.accuracy * mountAccuracy * scenarioMod.tot, 1);
 }
 
 // Get time-on-target from scenario (separate from hit rate)
@@ -1398,11 +1703,26 @@ function updateBars() {
   armorBarEl.style.width = `${Math.min(100, (currentTargetShip.armor_hp / maxValues.armor) * 100)}%`;
 }
 
-function updateTimeline(shieldTime: number, armorTime: number, hullTime: number) {
-  const total = shieldTime + armorTime + hullTime || 1;
-  timelineShieldEl.style.flex = String(Math.max(0.1, shieldTime / total));
-  timelineArmorEl.style.flex = String(Math.max(0.1, armorTime / total));
-  timelineHullEl.style.flex = String(Math.max(0.1, hullTime / total));
+function updateTimeline(shieldTime: number, armorTime: number, hullTime: number, shieldsBreakable?: boolean) {
+  // Use shields_breakable flag if available, otherwise fall back to old logic
+  const isInfinite = (shieldsBreakable !== undefined && !shieldsBreakable) || shieldTime === null || !isFinite(shieldTime);
+  const safeShield = isInfinite ? 0 : shieldTime;
+  const safeArmor = armorTime ?? 0;
+  const safeHull = hullTime ?? 0;
+
+  const total = safeShield + safeArmor + safeHull || 1;
+
+  // If shields are infinite, show shield bar as full width
+  if (isInfinite) {
+    timelineShieldEl.style.flex = "1";
+    timelineArmorEl.style.flex = "0.1";
+    timelineHullEl.style.flex = "0.1";
+  } else {
+    timelineShieldEl.style.flex = String(Math.max(0.1, safeShield / total));
+    timelineArmorEl.style.flex = String(Math.max(0.1, safeArmor / total));
+    timelineHullEl.style.flex = String(Math.max(0.1, safeHull / total));
+  }
+
   timelineShieldTimeEl.textContent = `${formatTime(shieldTime)}s`;
   timelineArmorTimeEl.textContent = `${formatTime(armorTime)}s`;
   timelineHullTimeEl.textContent = `${formatTime(hullTime)}s`;
@@ -1438,6 +1758,13 @@ async function loadShields() {
   try {
     allShields = await invoke("get_shields");
   } catch (e) { console.error("Failed to load shields:", e); }
+}
+
+async function loadMissiles() {
+  try {
+    allMissiles = await invoke("get_missiles");
+    console.log("loadMissiles: received", allMissiles.length, "missiles");
+  } catch (e) { console.error("Failed to load missiles:", e); }
 }
 
 function updateShieldOptions() {
@@ -1543,6 +1870,218 @@ function updateLoadoutSummary() {
   animateTextValue(powerDrawEl, powerDraw > 0 ? `${formatNumber(Math.round(powerDraw))} pwr/s` : "--");
 }
 
+function updateWeaponBreakdown(
+  weaponBreakdown: WeaponEffectiveness[],
+  missileBreakdown: MissileEffectiveness[],
+  shieldsBreakable: boolean
+) {
+  const container = document.getElementById('weapon-breakdown');
+  if (!container) return;
+
+  // Get ALL weapons including disabled ones
+  const allWeapons = weaponSlotManager?.getAllWeaponsGroupedByHardpoint() || [];
+
+  // If no weapons at all (even disabled), hide section
+  if (allWeapons.length === 0 && missileBreakdown.length === 0) {
+    container.innerHTML = '';
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'block';
+
+  let html = `<div class="section-title">WEAPON EFFECTIVENESS</div>`;
+
+  // Display all weapons (including disabled ones)
+  // First, create a map of backend effectiveness data keyed by hardpoint::weapon
+  const effectivenessMap = new Map<string, WeaponEffectiveness>();
+  weaponBreakdown.forEach(w => {
+    const key = `${w.hardpoint_label || ''}::${w.weapon_name}`;
+    effectivenessMap.set(key, w);
+  });
+
+  // Now iterate over enabled weapons only
+  allWeapons.forEach(weaponInfo => {
+    // Skip disabled weapons - the count (×3 vs ×4) already reflects what's enabled
+    if (!weaponInfo.isEnabled) return;
+
+    const key = `${weaponInfo.hardpointLabel}::${weaponInfo.weaponName}`;
+    const w = effectivenessMap.get(key);
+
+    const formattedHardpoint = formatHardpointLabel(weaponInfo.hardpointLabel);
+    const displayLabel = formattedHardpoint
+      ? `${formattedHardpoint}: ${weaponInfo.weaponName}`
+      : weaponInfo.weaponName;
+    const countSuffix = weaponInfo.count > 1 ? ` ×${weaponInfo.count}` : '';
+
+    if (w) {
+      // Enabled weapon with effectiveness data from backend
+      const badgeClass = w.is_effective ? 'effective' : 'ineffective';
+      const badgeText = w.is_effective ? 'EFFECTIVE' : 'INEFFECTIVE';
+
+      const isCollapsible = !w.is_effective;
+      const collapsedClass = isCollapsible ? 'collapsed' : '';
+
+      html += `
+        <div class="weapon-breakdown-item ${badgeClass} ${collapsedClass}" ${isCollapsible ? 'data-collapsible="true"' : ''}>
+          <div class="weapon-breakdown-header">
+            ${isCollapsible ? '<span class="expand-indicator"></span>' : ''}
+            <span class="weapon-breakdown-name">${displayLabel}${countSuffix}</span>
+            <span class="weapon-breakdown-type">${w.damage_type}</span>
+            <span class="effectiveness-badge ${badgeClass}">${badgeText}</span>
+          </div>
+          <div class="weapon-breakdown-content">
+            <div class="weapon-breakdown-stats">
+              <div class="breakdown-stat">
+                <span class="breakdown-label">Shield</span>
+                <span class="breakdown-value">${Math.round(w.shield_dps)} DPS absorbed${w.passthrough_dps > 0 ? `, ${Math.round(w.passthrough_dps)} DPS passthrough` : ''}</span>
+              </div>
+              <div class="breakdown-stat">
+                <span class="breakdown-label">Armor</span>
+                <span class="breakdown-value">${Math.round(w.armor_dps)} DPS</span>
+              </div>
+              <div class="breakdown-stat">
+                <span class="breakdown-label">Hull</span>
+                <span class="breakdown-value">${Math.round(w.hull_dps)} DPS</span>
+              </div>
+              <div class="breakdown-stat solo-ttk">
+                <span class="breakdown-label">Solo TTK</span>
+                <span class="breakdown-value">${formatTime(w.solo_ttk)}</span>
+              </div>
+              ${w.ineffective_reason ? `<div class="breakdown-reason">${w.ineffective_reason}</div>` : ''}
+            </div>
+            ${w.shield_time !== undefined ? `
+            <div class="weapon-mini-timeline">
+              <div class="mini-timeline-bar">
+                <div class="mini-segment shield" style="flex: ${!isFinite(w.shield_time) ? 1 : Math.max(0.05, w.shield_time / (w.shield_time + w.armor_time + w.hull_time || 1))}">
+                  <span class="mini-time">${formatTime(w.shield_time)}</span>
+                </div>
+                ${isFinite(w.shield_time) ? `
+                <div class="mini-segment armor" style="flex: ${Math.max(0.05, w.armor_time / (w.shield_time + w.armor_time + w.hull_time || 1))}">
+                  <span class="mini-time">${formatTime(w.armor_time)}</span>
+                </div>
+                <div class="mini-segment hull" style="flex: ${Math.max(0.05, w.hull_time / (w.shield_time + w.armor_time + w.hull_time || 1))}">
+                  <span class="mini-time">${formatTime(w.hull_time)}</span>
+                </div>
+                ` : ''}
+              </div>
+            </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    } else {
+      // Enabled weapon but no effectiveness data from backend (e.g., missiles or backend error)
+      // Show as active with minimal info
+      html += `
+        <div class="weapon-breakdown-item effective collapsed" data-collapsible="true">
+          <div class="weapon-breakdown-header">
+            <span class="expand-indicator"></span>
+            <span class="weapon-breakdown-name">${displayLabel}${countSuffix}</span>
+            <span class="weapon-breakdown-type">--</span>
+            <span class="effectiveness-badge effective">ACTIVE</span>
+          </div>
+          <div class="weapon-breakdown-content">
+            <div class="weapon-breakdown-stats">
+              <div class="breakdown-reason">Contributing to TTK calculation</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  });
+
+  // Display missiles
+  missileBreakdown.forEach(m => {
+    const badgeClass = m.is_effective ? 'effective' : 'ineffective';
+    const badgeText = m.is_effective ? 'EFFECTIVE' : 'INEFFECTIVE';
+    const countSuffix = m.count > 1 ? ` ×${m.count}` : '';
+    const formattedHardpoint = m.hardpoint_label ? formatHardpointLabel(m.hardpoint_label) : null;
+    const displayLabel = formattedHardpoint
+      ? `${formattedHardpoint}: ${m.missile_name}`
+      : m.missile_name;
+
+    const isCollapsible = !m.is_effective;
+    const collapsedClass = isCollapsible ? 'collapsed' : '';
+
+    html += `
+      <div class="weapon-breakdown-item ${badgeClass} ${collapsedClass}" ${isCollapsible ? 'data-collapsible="true"' : ''}>
+        <div class="weapon-breakdown-header">
+          ${isCollapsible ? '<span class="expand-indicator"></span>' : ''}
+          <span class="weapon-breakdown-name">${displayLabel}${countSuffix}</span>
+          <span class="weapon-breakdown-type">${m.damage_type} • BURST</span>
+          <span class="effectiveness-badge ${badgeClass}">${badgeText}</span>
+        </div>
+        <div class="weapon-breakdown-content">
+          <div class="weapon-breakdown-stats">
+            <div class="breakdown-stat">
+              <span class="breakdown-label">Total Damage</span>
+              <span class="breakdown-value">${formatNumber(Math.round(m.total_damage))}</span>
+            </div>
+            <div class="breakdown-stat">
+              <span class="breakdown-label">Shield</span>
+              <span class="breakdown-value">${formatNumber(Math.round(m.shield_damage))} absorbed${m.passthrough_damage > 0 ? `, ${formatNumber(Math.round(m.passthrough_damage))} passthrough` : ''}</span>
+            </div>
+            <div class="breakdown-stat">
+              <span class="breakdown-label">Armor</span>
+              <span class="breakdown-value">${formatNumber(Math.round(m.armor_damage))}</span>
+            </div>
+            <div class="breakdown-stat">
+              <span class="breakdown-label">Hull</span>
+              <span class="breakdown-value">${formatNumber(Math.round(m.hull_damage))}</span>
+            </div>
+            ${m.ineffective_reason ? `<div class="breakdown-reason">${m.ineffective_reason}</div>` : ''}
+          </div>
+          <div class="missile-damage-timeline">
+            <div class="damage-bar">
+              <div class="damage-segment shield" style="flex: ${Math.max(0.05, m.shield_damage / (m.shield_damage + m.armor_damage + m.hull_damage || 1))}">
+                <span class="damage-label">${formatNumber(Math.round(m.shield_damage))}</span>
+              </div>
+              <div class="damage-segment armor" style="flex: ${Math.max(0.05, m.armor_damage / (m.shield_damage + m.armor_damage + m.hull_damage || 1))}">
+                <span class="damage-label">${formatNumber(Math.round(m.armor_damage))}</span>
+              </div>
+              <div class="damage-segment hull" style="flex: ${Math.max(0.05, m.hull_damage / (m.shield_damage + m.armor_damage + m.hull_damage || 1))}">
+                <span class="damage-label">${formatNumber(Math.round(m.hull_damage))}</span>
+              </div>
+            </div>
+            <div class="time-saved">
+              Saves <span class="time-saved-value">${formatTime(m.time_saved)}</span> off TTK
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  // Add insight based on effectiveness
+  const ineffectiveCount = weaponBreakdown.filter(w => !w.is_effective).length;
+  const effectiveCount = weaponBreakdown.filter(w => w.is_effective).length;
+  const hasBallisticEffective = weaponBreakdown.some(w => w.is_effective && w.damage_type === 'Ballistic');
+  const hasEnergyEffective = weaponBreakdown.some(w => w.is_effective && w.damage_type === 'Energy');
+
+  if (!shieldsBreakable && hasBallisticEffective && !hasEnergyEffective) {
+    html += `<div class="weapon-insight">Shields cannot be depleted. Only ballistic passthrough contributes damage.</div>`;
+  } else if (ineffectiveCount > 0 && effectiveCount > 0) {
+    if (hasBallisticEffective && !hasEnergyEffective) {
+      html += `<div class="weapon-insight">Only ballistic weapons contribute damage. Consider all-ballistic loadout for capital ships.</div>`;
+    }
+  } else if (ineffectiveCount === weaponBreakdown.length && weaponBreakdown.length > 0) {
+    html += `<div class="weapon-insight warning">No weapons can overcome shield regeneration. Target is effectively invulnerable to this loadout.</div>`;
+  }
+
+  container.innerHTML = html;
+
+  // Add click handlers for collapsible items
+  container.querySelectorAll('[data-collapsible="true"]').forEach(item => {
+    const header = item.querySelector('.weapon-breakdown-header');
+    if (header) {
+      header.addEventListener('click', () => {
+        item.classList.toggle('collapsed');
+      });
+    }
+  });
+}
+
 async function calculateTTK() {
   updateLoadoutSummary();
 
@@ -1555,24 +2094,46 @@ async function calculateTTK() {
     animateTextValue(ttkValueEl, "∞");
     animateValue(effectiveDpsEl, 0, (n) => formatNumber(Math.round(n)));
     updateTimeline(0, 0, 0);
+    updateWeaponBreakdown([], [], true);  // Update breakdown to show all weapons as disabled
     return;
   }
 
-  // Build weapon names and counts (filter out "Empty" selections)
-  const weaponMap = new Map<string, number>();
-  for (const weaponName of equippedWeapons) {
-    if (weaponName && weaponName !== 'Empty') {
-      weaponMap.set(weaponName, (weaponMap.get(weaponName) || 0) + 1);
+  // Build weapon names and counts grouped by hardpoint
+  const hardpointGroups = weaponSlotManager?.getEnabledWeaponsGroupedByHardpoint() || [];
+  const weaponEntries: { hardpointLabel: string; weaponName: string; count: number }[] = [];
+  const missileEntries: { hardpointLabel: string; missileName: string; count: number }[] = [];
+
+  for (const group of hardpointGroups) {
+    const isWeapon = allWeapons.some(w => w.display_name === group.weaponName);
+    const isMissile = allMissiles.some(m => m.display_name === group.weaponName);
+
+    if (isWeapon) {
+      weaponEntries.push({
+        hardpointLabel: group.hardpointLabel,
+        weaponName: group.weaponName,
+        count: group.count,
+      });
+    } else if (isMissile) {
+      missileEntries.push({
+        hardpointLabel: group.hardpointLabel,
+        missileName: group.weaponName,
+        count: group.count,
+      });
     }
   }
-  const weaponNames = Array.from(weaponMap.keys());
-  const weaponCounts = Array.from(weaponMap.values());
 
-  // If all weapons are empty, show infinity TTK
-  if (weaponNames.length === 0) {
+  // Prepare arrays for backend call - include hardpoint label in weapon name
+  const weaponNames = weaponEntries.map(e => `${e.hardpointLabel}::${e.weaponName}`);
+  const weaponCounts = weaponEntries.map(e => e.count);
+  const missileNames = missileEntries.map(e => `${e.hardpointLabel}::${e.missileName}`);
+  const missileCounts = missileEntries.map(e => e.count);
+
+  // If all enabled weapons are empty, show infinity TTK
+  if (weaponNames.length === 0 && missileNames.length === 0) {
     animateTextValue(ttkValueEl, "∞");
     animateValue(effectiveDpsEl, 0, (n) => formatNumber(Math.round(n)));
     updateTimeline(0, 0, 0);
+    updateWeaponBreakdown([], [], true);  // Update breakdown to show all weapons as disabled
     return;
   }
 
@@ -1593,6 +2154,8 @@ async function calculateTTK() {
     const result = await invoke<TTKResult>("calculate_ttk_v2", {
       weaponNames,
       weaponCounts,
+      missileNames,
+      missileCounts,
       targetShip: currentTargetShip.display_name,
       shieldName: selectedShieldName || null,
       mountAccuracy,
@@ -1615,7 +2178,11 @@ async function calculateTTK() {
     // Update shield detail (inline display)
     if (shieldData) {
       const regenRate = shieldData.regen || 0;
-      shieldDetailEl.textContent = `${activeShields}/${shieldCount} Shields • ${formatNumber(Math.round(regenRate))} HP/s`;
+      const regenDelay = shieldData.damaged_regen_delay || 0;
+      const fireMode = fireModeDropdown?.getValue() || "sustained";
+      const regenSuppressed = fireMode === "sustained" && regenDelay > 0;
+      const regenStatus = regenSuppressed ? "(suppressed)" : "";
+      shieldDetailEl.textContent = `${activeShields}/${shieldCount} Shields • ${formatNumber(Math.round(regenRate))} HP/s ${regenStatus}`;
     } else {
       shieldDetailEl.textContent = "";
     }
@@ -1625,12 +2192,21 @@ async function calculateTTK() {
     animateTextValue(ttkValueEl, formatTime(result.total_ttk));
     // Animated DPS counter
     animateValue(effectiveDpsEl, Math.round(result.effective_dps), (n) => formatNumber(Math.round(n)));
-    updateTimeline(result.shield_time, result.armor_time, result.hull_time);
+    updateTimeline(result.shield_time, result.armor_time, result.hull_time, result.shields_breakable);
+
+    // Always update weapon breakdown - it will show disabled weapons even if backend returns empty
+    updateWeaponBreakdown(
+      result.weapon_breakdown || [],
+      result.missile_breakdown || [],
+      result.shields_breakable
+    );
 
   } catch (e) {
     console.error("TTK calculation failed:", e);
     // Fallback to legacy local calculation
     calculateTTKLegacy();
+    // Still update weapon breakdown to show disabled state correctly
+    updateWeaponBreakdown([], [], true);
   }
 }
 
@@ -2436,9 +3012,22 @@ async function init() {
   weaponPowerDropdown.onChange(() => { calculateTTK(); saveSettings(); });
   weaponSlotManager.onChange(() => { calculateTTK(); saveSettings(); });
 
+  // Click handler for weapon slot size labels to toggle slots
+  document.getElementById('weapon-slots-container')?.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const sizeLabel = target.closest('[data-slot-index]') as HTMLElement;
+    if (sizeLabel) {
+      const slotIndex = parseInt(sizeLabel.dataset.slotIndex || '', 10);
+      if (!isNaN(slotIndex)) {
+        weaponSlotManager.toggleSlotEnabled(slotIndex);
+      }
+    }
+  });
+
   // Load data
   await loadWeapons();
   await loadShields();
+  await loadMissiles();
   await Promise.all([loadShips(), loadStats()]);
 
   // Load fleet presets
@@ -2447,6 +3036,16 @@ async function init() {
 
   // Restore saved settings
   await restoreSavedSettings();
+
+  // Silent refresh after all data is loaded to ensure proper processing
+  // This fixes an issue where the initial ship selection doesn't fully process
+  setTimeout(async () => {
+    const attackerShip = attackerShipDropdown.getValue();
+    const targetShip = targetShipDropdown.getValue();
+    if (attackerShip) await updateAttackerShip(attackerShip);
+    if (targetShip) await updateTargetShip(targetShip);
+    calculateTTK();
+  }, 200);
 
   // Check for updates (non-blocking)
   checkForUpdates();

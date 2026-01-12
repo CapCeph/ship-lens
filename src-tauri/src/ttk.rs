@@ -83,6 +83,44 @@ struct EffectiveShield {
     failover_phases: i32,
 }
 
+/// Per-weapon effectiveness analysis
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WeaponEffectiveness {
+    pub weapon_name: String,
+    pub hardpoint_label: Option<String>,  // Parent hardpoint/turret name
+    pub damage_type: String,  // "Ballistic", "Energy", "Distortion", "Mixed"
+    pub count: i32,
+    pub raw_dps: f64,
+    pub effective_dps: f64,
+    pub shield_dps: f64,      // DPS absorbed by shields
+    pub passthrough_dps: f64, // DPS bypassing shields
+    pub armor_dps: f64,       // DPS after armor resistance
+    pub hull_dps: f64,
+    pub solo_ttk: f64,        // TTK if only this weapon was equipped
+    pub shield_time: f64,     // Time this weapon takes on shields (solo)
+    pub armor_time: f64,      // Time on armor
+    pub hull_time: f64,       // Time on hull
+    pub is_effective: bool,   // false if DPS < shield regen
+    pub ineffective_reason: Option<String>,  // "Shield regen exceeds damage"
+}
+
+/// Per-missile effectiveness analysis
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MissileEffectiveness {
+    pub missile_name: String,
+    pub hardpoint_label: Option<String>,  // Parent hardpoint/turret name
+    pub damage_type: String,  // Based on dominant damage type
+    pub count: i32,
+    pub total_damage: f64,    // Burst damage (not DPS)
+    pub shield_damage: f64,   // Damage to shields
+    pub passthrough_damage: f64, // Damage bypassing shields (physical)
+    pub armor_damage: f64,    // Damage after armor resistance
+    pub hull_damage: f64,
+    pub time_saved: f64,      // TTK reduction from this missile burst
+    pub is_effective: bool,
+    pub ineffective_reason: Option<String>,
+}
+
 /// Complete TTK calculation result
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TTKResult {
@@ -106,6 +144,12 @@ pub struct TTKResult {
     pub armor_damage_during_shields: f64,
     /// Number of shield failover phases (Rule of Two)
     pub shield_failover_phases: i32,
+    /// Can shields be depleted by energy weapons? (false = only passthrough path works)
+    pub shields_breakable: bool,
+    /// Per-weapon effectiveness breakdown
+    pub weapon_breakdown: Vec<WeaponEffectiveness>,
+    /// Per-missile effectiveness breakdown
+    pub missile_breakdown: Vec<MissileEffectiveness>,
 }
 
 /// Equipped weapon with quantity
@@ -113,6 +157,7 @@ pub struct TTKResult {
 pub struct EquippedWeapon {
     pub weapon: Weapon,
     pub count: i32,
+    pub name_with_label: String,  // Original name from frontend (may include "HARDPOINT::weapon_name")
 }
 
 /// Calculate total damage output from weapons with scenario modifiers
@@ -251,6 +296,262 @@ fn calculate_armor_damage(damage: &DamageBreakdown, target: &Ship) -> f64 {
     phys_dmg + energy_dmg + dist_dmg
 }
 
+/// Calculate per-weapon effectiveness analysis
+///
+/// Analyzes a single weapon type's effectiveness against a target, including:
+/// - Shield absorption and passthrough
+/// - Armor resistance
+/// - Solo TTK (if only this weapon was equipped)
+/// - Whether the weapon can overcome shield regeneration
+pub fn calculate_weapon_effectiveness(
+    weapon: &Weapon,
+    weapon_name_with_label: &str,  // May contain "HARDPOINT::weapon_name"
+    count: i32,
+    target: &Ship,
+    shield: &Shield,
+    scenario: &CombatScenario,
+    zone: &ZoneModifiers,
+) -> WeaponEffectiveness {
+    // Parse hardpoint label if present
+    let (hardpoint_label, actual_weapon_name) = if weapon_name_with_label.contains("::") {
+        let parts: Vec<&str> = weapon_name_with_label.splitn(2, "::").collect();
+        (Some(parts[0].to_string()), parts[1].to_string())
+    } else {
+        (None, weapon_name_with_label.to_string())
+    };
+
+    // 1. Calculate raw DPS (before accuracy)
+    let raw_dps = weapon.sustained_dps * count as f64;
+
+    // 2. Apply scenario modifiers (accuracy)
+    let accuracy = scenario.mount_accuracy
+        * scenario.scenario_accuracy
+        * scenario.time_on_target
+        * scenario.fire_mode
+        * scenario.power_multiplier;
+
+    let effective_dps = raw_dps * accuracy;
+
+    // 3. Calculate damage breakdown by type
+    let total_per_shot = weapon.damage_physical + weapon.damage_energy + weapon.damage_distortion;
+    let damage = if total_per_shot > 0.0 {
+        DamageBreakdown {
+            physical: effective_dps * (weapon.damage_physical / total_per_shot),
+            energy: effective_dps * (weapon.damage_energy / total_per_shot),
+            distortion: effective_dps * (weapon.damage_distortion / total_per_shot),
+        }
+    } else {
+        DamageBreakdown::default()
+    };
+
+    // 4. Shield phase calculation
+    let (shield_dps, passthrough_dps) = calculate_shield_damage(&damage, shield);
+
+    // 5. Apply Rule of Two for shield calculation
+    let effective_shield = apply_rule_of_two(shield, target.shield_count);
+
+    // 6. Determine if weapon can break shields
+    // Regen suppression: sustained fire prevents regen from starting
+    let regen_suppressed = scenario.fire_mode >= 1.0 && shield.damaged_regen_delay > 0.0;
+    let effective_regen = if regen_suppressed { 0.0 } else { effective_shield.regen };
+    let net_shield_dps = (shield_dps - effective_regen).max(0.0);
+    let shields_breakable = net_shield_dps > 0.0 && effective_shield.total_hp > 0.0;
+
+    // 7. Armor phase calculation
+    let armor_dps = calculate_armor_damage(&damage, target);
+
+    // 8. Hull DPS (no resistance on hull typically)
+    let hull_dps = damage.total();
+
+    // 9. Calculate solo TTK and phase timelines
+    let zone_armor_hp = target.armor_hp * zone.armor;
+    let zone_hull_hp = target.hull_hp * zone.hull;
+    let zone_thruster_hp = target.thruster_total_hp as f64 * zone.thruster;
+    let zone_component_hp = (target.powerplant_total_hp + target.cooler_total_hp + target.shield_gen_total_hp) as f64 * zone.component;
+    let total_hull_hp = zone_hull_hp + zone_thruster_hp + zone_component_hp;
+
+    let (solo_ttk, weapon_shield_time, weapon_armor_time, weapon_hull_time) = if shields_breakable {
+        // Normal path: break shields, then armor, then hull
+        let shield_time = if net_shield_dps > 0.0 {
+            effective_shield.total_hp / net_shield_dps
+        } else {
+            f64::INFINITY
+        };
+
+        let armor_time = if zone_armor_hp > 0.0 && armor_dps > 0.0 {
+            zone_armor_hp / armor_dps
+        } else {
+            0.0
+        };
+
+        let hull_time = if total_hull_hp > 0.0 && hull_dps > 0.0 {
+            total_hull_hp / hull_dps
+        } else {
+            0.0
+        };
+
+        (shield_time + armor_time + hull_time, shield_time, armor_time, hull_time)
+    } else if passthrough_dps > 0.0 {
+        // Passthrough path: can't break shields, but can kill via passthrough
+        let armor_passthrough_dps = calculate_armor_damage(&DamageBreakdown {
+            physical: passthrough_dps,
+            energy: 0.0,
+            distortion: 0.0,
+        }, target);
+
+        let armor_time = if zone_armor_hp > 0.0 && armor_passthrough_dps > 0.0 {
+            zone_armor_hp / armor_passthrough_dps
+        } else {
+            0.0
+        };
+
+        let hull_time = if total_hull_hp > 0.0 && passthrough_dps > 0.0 {
+            total_hull_hp / passthrough_dps
+        } else {
+            0.0
+        };
+
+        // Shields never break, but weapon can kill via passthrough
+        (armor_time + hull_time, f64::INFINITY, armor_time, hull_time)
+    } else {
+        // Can't break shields and no passthrough - infinite TTK
+        (f64::INFINITY, f64::INFINITY, 0.0, 0.0)
+    };
+
+    // 10. Determine effectiveness and reason
+    let (is_effective, ineffective_reason) = if solo_ttk.is_infinite() {
+        (false, Some("Shield regen exceeds damage".to_string()))
+    } else if passthrough_dps > 0.0 && !shields_breakable {
+        // Effective via passthrough, but can't break shields
+        (true, Some("Damage via passthrough only".to_string()))
+    } else {
+        (true, None)
+    };
+
+    // 11. Determine primary damage type
+    let damage_type = if weapon.damage_physical > weapon.damage_energy && weapon.damage_physical > weapon.damage_distortion {
+        "Ballistic".to_string()
+    } else if weapon.damage_energy > weapon.damage_physical && weapon.damage_energy > weapon.damage_distortion {
+        "Energy".to_string()
+    } else if weapon.damage_distortion > weapon.damage_physical && weapon.damage_distortion > weapon.damage_energy {
+        "Distortion".to_string()
+    } else {
+        "Mixed".to_string()
+    };
+
+    WeaponEffectiveness {
+        weapon_name: actual_weapon_name,  // Use parsed name without label
+        hardpoint_label,
+        damage_type,
+        count,
+        raw_dps,
+        effective_dps,
+        shield_dps,
+        passthrough_dps,
+        armor_dps,
+        hull_dps,
+        solo_ttk,
+        shield_time: weapon_shield_time,
+        armor_time: weapon_armor_time,
+        hull_time: weapon_hull_time,
+        is_effective,
+        ineffective_reason,
+    }
+}
+
+/// Calculate per-missile effectiveness analysis
+///
+/// Analyzes missile burst damage effectiveness against a target, including:
+/// - Shield absorption and passthrough
+/// - Armor resistance
+/// - Whether missiles can contribute meaningful damage
+pub fn calculate_missile_effectiveness(
+    missile: &crate::data::Missile,
+    missile_name_with_label: &str,  // May contain "HARDPOINT::missile_name"
+    count: i32,
+    target: &crate::data::Ship,
+    shield: &crate::data::Shield,
+) -> MissileEffectiveness {
+    // Parse hardpoint label if present
+    let (hardpoint_label, actual_missile_name) = if missile_name_with_label.contains("::") {
+        let parts: Vec<&str> = missile_name_with_label.splitn(2, "::").collect();
+        (Some(parts[0].to_string()), parts[1].to_string())
+    } else {
+        (None, missile_name_with_label.to_string())
+    };
+
+    // 1. Calculate total burst damage (all missiles together)
+    let total_per_missile = missile.damage_physical + missile.damage_energy + missile.damage_distortion;
+    let total_damage = total_per_missile * count as f64;
+
+    // 2. Build damage breakdown
+    let damage = DamageBreakdown {
+        physical: missile.damage_physical * count as f64,
+        energy: missile.damage_energy * count as f64,
+        distortion: missile.damage_distortion * count as f64,
+    };
+
+    // 3. Shield phase calculation
+    let (shield_damage, passthrough_damage) = calculate_shield_damage(&damage, shield);
+
+    // 4. Armor phase calculation (passthrough + post-shield damage)
+    let armor_damage = calculate_armor_damage(&damage, target);
+
+    // 5. Hull damage (no resistance)
+    let hull_damage = damage.total();
+
+    // 6. Determine effectiveness
+    // Missiles are always somewhat effective if they have physical damage (passthrough)
+    // Or if they have enough energy damage to meaningfully impact shields
+    let is_effective = total_damage > 0.0;
+    let ineffective_reason = if total_damage == 0.0 {
+        Some("No damage".to_string())
+    } else {
+        None
+    };
+
+    // 7. Determine primary damage type
+    let damage_type = if missile.damage_physical > missile.damage_energy && missile.damage_physical > missile.damage_distortion {
+        "Ballistic".to_string()
+    } else if missile.damage_energy > missile.damage_physical && missile.damage_energy > missile.damage_distortion {
+        "Energy".to_string()
+    } else if missile.damage_distortion > missile.damage_physical && missile.damage_distortion > missile.damage_energy {
+        "Distortion".to_string()
+    } else {
+        "Mixed".to_string()
+    };
+
+    // 8. Calculate time_saved
+    // Simple approach: estimate how much HP the missile removes and convert to time based on a reference DPS
+    // This is a placeholder - a more sophisticated calculation would require weapon loadout context
+    // For now, assume an average effective DPS of 1000 for estimation purposes
+    let reference_dps = 1000.0;
+    let time_saved = if passthrough_damage > 0.0 {
+        // Passthrough damage directly reduces armor/hull - estimate time saved
+        let armor_time_saved = armor_damage / reference_dps;
+        let hull_time_saved = (passthrough_damage - armor_damage).max(0.0) / reference_dps;
+        armor_time_saved + hull_time_saved
+    } else {
+        // Only shield damage - estimate time saved
+        shield_damage / reference_dps
+    };
+
+    MissileEffectiveness {
+        missile_name: actual_missile_name,  // Use parsed name without label
+        hardpoint_label,
+        damage_type,
+        count,
+        total_damage,
+        shield_damage,
+        passthrough_damage,
+        armor_damage,
+        hull_damage,
+        time_saved,
+        is_effective,
+        ineffective_reason,
+    }
+}
+
 /// Main TTK calculation function
 ///
 /// Calculates time to kill based on:
@@ -282,6 +583,9 @@ pub fn calculate_ttk(
             passthrough_dps: 0.0,
             armor_damage_during_shields: 0.0,
             shield_failover_phases: 0,
+            shields_breakable: false,
+            weapon_breakdown: vec![],
+            missile_breakdown: vec![],
         };
     }
 
@@ -292,8 +596,14 @@ pub fn calculate_ttk(
     let effective_shield = apply_rule_of_two(shield, target.shield_count);
 
     // 4. Shield time calculation (time to fully deplete shields)
+    // Regen suppression: If firing continuously (sustained fire mode), constant hits
+    // prevent shield regen from ever starting (each hit resets the damaged_regen_delay timer).
+    // For sustained fire with multiple weapons, regen is effectively 0.
+    let regen_suppressed = scenario.fire_mode >= 1.0 && shield.damaged_regen_delay > 0.0 && weapons.len() > 0;
+    let effective_regen = if regen_suppressed { 0.0 } else { effective_shield.regen };
+
     let theoretical_shield_time = if effective_shield.total_hp > 0.0 {
-        let net_shield_dps = (shield_dps - effective_shield.regen).max(0.0);
+        let net_shield_dps = (shield_dps - effective_regen).max(0.0);
         if net_shield_dps > 0.0 {
             effective_shield.total_hp / net_shield_dps
         } else {
@@ -429,6 +739,43 @@ pub fn calculate_ttk(
         (f64::INFINITY, 0.0, 0.0)
     };
 
+    // 9. Calculate per-weapon effectiveness breakdown
+    // Group weapons by name_with_label (preserves hardpoint grouping from frontend)
+    use std::collections::HashMap;
+    let mut weapon_groups: HashMap<String, (Weapon, i32)> = HashMap::new();
+
+    for equipped in weapons {
+        weapon_groups.entry(equipped.name_with_label.clone())
+            .and_modify(|(_, count)| *count += equipped.count)
+            .or_insert((equipped.weapon.clone(), equipped.count));
+    }
+
+    let mut weapon_breakdown: Vec<WeaponEffectiveness> = weapon_groups
+        .iter()
+        .map(|(name_with_label, (weapon, count))| {
+            calculate_weapon_effectiveness(weapon, name_with_label, *count, target, shield, scenario, zone)
+        })
+        .collect();
+
+    // Sort by hardpoint label for stable ordering (don't re-sort by effectiveness)
+    // This prevents the list from jumping around when weapons are toggled
+    weapon_breakdown.sort_by(|a, b| {
+        let label_a = a.hardpoint_label.as_deref().unwrap_or("");
+        let label_b = b.hardpoint_label.as_deref().unwrap_or("");
+        match label_a.cmp(label_b) {
+            std::cmp::Ordering::Equal => a.weapon_name.cmp(&b.weapon_name),
+            other => other,
+        }
+    });
+
+    // 10. Determine if shields are breakable (can energy weapons deplete shields?)
+    // Shields are breakable if the total shield DPS (minus regen) is positive
+    let shields_breakable = if effective_shield.total_hp > 0.0 {
+        (shield_dps - effective_shield.regen) > 0.0
+    } else {
+        true // No shields = always "breakable"
+    };
+
     TTKResult {
         shield_time: display_shield_time,
         armor_time: display_armor_time,
@@ -440,6 +787,9 @@ pub fn calculate_ttk(
         passthrough_dps,
         armor_damage_during_shields,
         shield_failover_phases: effective_shield.failover_phases,
+        shields_breakable,
+        weapon_breakdown,
+        missile_breakdown: vec![],  // No missiles passed to this function yet
     }
 }
 
@@ -463,6 +813,9 @@ pub fn calculate_ttk_no_shields(
             passthrough_dps: 0.0,
             armor_damage_during_shields: 0.0,
             shield_failover_phases: 0,
+            shields_breakable: true,
+            weapon_breakdown: vec![],
+            missile_breakdown: vec![],
         };
     }
 
@@ -491,6 +844,9 @@ pub fn calculate_ttk_no_shields(
         passthrough_dps: hull_dps, // All damage goes to armor/hull (same as effective_dps)
         armor_damage_during_shields: 0.0,
         shield_failover_phases: 0,
+        shields_breakable: true,
+        weapon_breakdown: vec![],
+        missile_breakdown: vec![],
     }
 }
 

@@ -612,7 +612,7 @@
   "banu_energyrepeater_s2": {
     "id": "dfe5aeb2-3b56-422b-ba88-f165e827facd",
     "name": "banu_energyrepeater_s2",
-    "display_name": "CF-227 Badger Repeater",
+    "display_name": "CF-227 Badger (Broken)",
     "manufacturer": "Banu",
     "size": 2,
     "weapon_type": "gun",
@@ -990,7 +990,7 @@
   "klwe_laserrepeater_pdc_s2": {
     "id": "0e3f4b37-8085-4641-a360-40e4e372cd15",
     "name": "klwe_laserrepeater_pdc_s2",
-    "display_name": "CF-227 Badger Repeater",
+    "display_name": "CF-227 Badger PDC",
     "manufacturer": "Klaus & Werner",
     "size": 2,
     "weapon_type": "pdc",
@@ -2113,7 +2113,7 @@
   "hrst_laserrepeater_s4_turret": {
     "id": "7bd374e9-9d2f-4659-94cf-840e79d23b34",
     "name": "hrst_laserrepeater_s4_turret",
-    "display_name": "Attrition-4 Repeater",
+    "display_name": "Attrition-4 Repeater (Turret)",
     "manufacturer": "Hurston",
     "size": 4,
     "weapon_type": "gun",
@@ -2892,7 +2892,7 @@
   "behr_lasercannon_s7_idris_m": {
     "id": "aa0f8505-7284-46ee-af10-12356f3e7576",
     "name": "behr_lasercannon_s7_idris_m",
-    "display_name": "M9A Cannon",
+    "display_name": "M9A Laser Cannon (Idris-M)",
     "manufacturer": "Behring",
     "size": 7,
     "weapon_type": "gun",
@@ -2913,7 +2913,7 @@
   "behr_lasercannon_s7_turret": {
     "id": "c2a8fdaa-a195-4f1d-a223-70eef526e09d",
     "name": "behr_lasercannon_s7_turret",
-    "display_name": "M9A Cannon",
+    "display_name": "M9A Laser Cannon (Turret)",
     "manufacturer": "Behring",
     "size": 7,
     "weapon_type": "gun",
@@ -2976,7 +2976,7 @@
   "behr_lasercannon_s8": {
     "id": "6bf837a5-2763-4cd3-aa9c-869b0e798cb3",
     "name": "behr_lasercannon_s8",
-    "display_name": "M9A Cannon",
+    "display_name": "M9A Laser Cannon S8",
     "manufacturer": "Behring",
     "size": 8,
     "weapon_type": "gun",
@@ -3018,7 +3018,7 @@
   "behr_lasercannon_s9": {
     "id": "bf958f42-4f50-46ce-af92-64b08e7f7c19",
     "name": "behr_lasercannon_s9",
-    "display_name": "M9A Cannon",
+    "display_name": "M9A Laser Cannon S9",
     "manufacturer": "Behring",
     "size": 9,
     "weapon_type": "gun",
@@ -3102,7 +3102,7 @@
   "behr_massdriver_s12": {
     "id": "a1ea51dd-1665-41cf-923a-d6a42a7130ce",
     "name": "behr_massdriver_s12",
-    "display_name": "M9A Cannon",
+    "display_name": "M12A Mass Driver",
     "manufacturer": "Behring",
     "size": 12,
     "weapon_type": "gun",

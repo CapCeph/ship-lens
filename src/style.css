@@ -692,6 +692,24 @@ body {
   border-radius: var(--radius-sm);
   min-width: clamp(24px, 3vmin, 36px);
   text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.weapon-slot-size:hover {
+  background: rgba(74, 158, 255, 0.25);
+  box-shadow: var(--glow-primary);
+}
+
+/* Disabled slot styling */
+.weapon-slot.slot-disabled {
+  opacity: 0.4;
+}
+
+.weapon-slot.slot-disabled .search-input,
+.weapon-slot.slot-disabled .weapon-bespoke-name {
+  text-decoration: line-through;
+  color: var(--text-muted);
 }
 
 /* Dual mount group container */
@@ -733,6 +751,11 @@ body {
   color: var(--accent-secondary);
   background: rgba(255, 170, 0, 0.15);
   min-width: clamp(36px, 4vmin, 48px);
+}
+
+.weapon-slot.sub-port .weapon-slot-size:hover {
+  background: rgba(255, 170, 0, 0.3);
+  box-shadow: var(--glow-secondary);
 }
 
 .weapon-slot-size-badge {
@@ -2702,6 +2725,355 @@ body {
 
 :root[data-theme="misc"] ::-webkit-scrollbar-thumb {
   background: #5a6370;
+}
+
+/* ===========================================
+   WEAPON BREAKDOWN
+   =========================================== */
+
+/* Weapon breakdown container */
+#weapon-breakdown {
+  margin-top: var(--space-lg);
+}
+
+/* Individual weapon item */
+.weapon-breakdown-item {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-sm);
+  transition: all var(--transition-fast);
+}
+
+
+.weapon-breakdown-item.effective {
+  border-left: 4px solid var(--success-green);
+}
+
+.weapon-breakdown-item.ineffective {
+  border-left: 4px solid var(--damage-red);
+  opacity: 0.8;
+}
+
+.weapon-breakdown-item.disabled {
+  border-left: 4px solid var(--text-tertiary);
+  opacity: 0.5;
+}
+
+.weapon-breakdown-item.disabled .weapon-breakdown-name {
+  color: var(--text-tertiary);
+}
+
+.weapon-breakdown-item.disabled .weapon-breakdown-type {
+  color: var(--text-tertiary);
+}
+
+.effectiveness-badge.disabled {
+  background: var(--bg-secondary);
+  color: var(--text-tertiary);
+  border: 1px solid var(--border);
+}
+
+/* Collapsible ineffective weapons */
+.weapon-breakdown-item[data-collapsible="true"] .weapon-breakdown-header {
+  cursor: pointer;
+  user-select: none;
+  padding: var(--space-sm) var(--space-md);
+  margin: calc(-1 * var(--space-sm)) calc(-1 * var(--space-md));
+  margin-bottom: var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.weapon-breakdown-item[data-collapsible="true"] .weapon-breakdown-header:hover {
+  background: var(--bg-card-hover);
+}
+
+.weapon-breakdown-item[data-collapsible="true"] .weapon-breakdown-header:hover .expand-indicator {
+  color: var(--accent-primary);
+}
+
+/* When collapsed, remove bottom margin and border */
+.weapon-breakdown-item.collapsed .weapon-breakdown-header {
+  margin-bottom: 0;
+  padding-bottom: var(--space-sm);
+  border-bottom: none;
+}
+
+/* Expand/collapse indicator */
+.expand-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+  transition: color var(--transition-fast), transform var(--transition-bounce);
+  flex-shrink: 0;
+}
+
+.expand-indicator::before {
+  content: '';
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  transition: transform var(--transition-bounce);
+}
+
+.weapon-breakdown-item.collapsed .expand-indicator::before {
+  transform: rotate(-45deg);
+}
+
+/* Content collapse animation */
+.weapon-breakdown-content {
+  overflow: hidden;
+  max-height: 1000px;
+  opacity: 1;
+  transition: max-height var(--transition-smooth), opacity var(--transition-fast), padding var(--transition-smooth);
+}
+
+.weapon-breakdown-item.collapsed .weapon-breakdown-content {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Weapon header */
+.weapon-breakdown-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--border);
+}
+
+.weapon-breakdown-name {
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--text-bright);
+  flex: 1;
+  min-width: 120px;
+  line-height: 1.3;
+}
+
+.weapon-breakdown-type {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  background: var(--bg-dark);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.effectiveness-badge {
+  font-family: var(--font-display);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.effectiveness-badge.effective {
+  color: var(--success-green);
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.effectiveness-badge.ineffective {
+  color: var(--damage-red);
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* Weapon stats grid */
+.weapon-breakdown-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.breakdown-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-xs) 0;
+  line-height: 1.3;
+}
+
+.breakdown-stat:not(:last-child):not(:has(+ .solo-ttk)) {
+  border-bottom: 1px solid var(--border);
+}
+
+.breakdown-stat.solo-ttk {
+  border-top: 2px dashed var(--border-light);
+  padding-top: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.breakdown-stat.solo-ttk .breakdown-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.breakdown-stat.solo-ttk .breakdown-value {
+  font-size: var(--font-size-md);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.breakdown-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.breakdown-value {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-base);
+  color: var(--text-bright);
+  text-align: right;
+  font-weight: 500;
+}
+
+.breakdown-reason {
+  font-size: var(--font-size-sm);
+  color: var(--damage-red);
+  font-style: italic;
+  margin-top: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 2px solid var(--damage-red);
+  border-radius: var(--radius-sm);
+  line-height: 1.4;
+}
+
+/* Weapon insights */
+.weapon-insight {
+  font-size: var(--font-size-sm);
+  color: var(--accent-primary);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(74, 158, 255, 0.1);
+  border-left: 2px solid var(--accent-primary);
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-md);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.weapon-insight.warning {
+  color: var(--hull-amber);
+  background: rgba(245, 158, 11, 0.1);
+  border-left-color: var(--hull-amber);
+}
+
+/* Weapon Mini-Timeline (time-based) */
+.weapon-mini-timeline {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px dashed var(--border);
+}
+
+.mini-timeline-bar {
+  display: flex;
+  height: 24px;
+  gap: 1px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-dark);
+}
+
+.mini-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  transition: flex var(--transition-smooth);
+}
+
+.mini-segment.shield { background: var(--stat-shield); }
+.mini-segment.armor { background: var(--stat-armor); }
+.mini-segment.hull { background: var(--stat-hull); }
+
+.mini-time {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--bg-dark);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Missile Damage Timeline (damage-based) */
+.missile-damage-timeline {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px dashed var(--border);
+}
+
+.damage-bar {
+  display: flex;
+  height: 24px;
+  gap: 1px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-dark);
+  margin-bottom: var(--space-sm);
+}
+
+.damage-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  transition: flex var(--transition-smooth);
+}
+
+.damage-segment.shield { background: var(--stat-shield); }
+.damage-segment.armor { background: var(--stat-armor); }
+.damage-segment.hull { background: var(--stat-hull); }
+
+.damage-label {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--bg-dark);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Time Saved Indicator */
+.time-saved {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.time-saved-value {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--success-green);
+}
+
+/* Ineffective weapons get muted timeline */
+.weapon-breakdown-item.ineffective .mini-timeline-bar,
+.weapon-breakdown-item.ineffective .damage-bar {
+  opacity: 0.5;
 }
 
 /* ===========================================

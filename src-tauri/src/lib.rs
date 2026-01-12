@@ -287,6 +287,8 @@ fn calculate_ttk(
 /// Parameters:
 /// - weapon_names: List of weapon display names to use
 /// - weapon_counts: Corresponding count for each weapon (parallel array)
+/// - missile_names: List of missile display names to use
+/// - missile_counts: Corresponding count for each missile (parallel array)
 /// - target_ship: Display name of target ship
 /// - shield_name: Internal name of shield to use (or null for target's default)
 /// - scenario: Combat scenario configuration
@@ -296,6 +298,8 @@ fn calculate_ttk_v2(
     state: State<AppState>,
     weapon_names: Vec<String>,
     weapon_counts: Vec<i32>,
+    missile_names: Vec<String>,
+    missile_counts: Vec<i32>,
     target_ship: String,
     shield_name: Option<String>,
     mount_accuracy: f64,
@@ -322,14 +326,22 @@ fn calculate_ttk_v2(
             continue;
         }
 
+        // Parse the actual weapon name (may contain hardpoint label like "HARDPOINT::weapon_name")
+        let actual_name = if name.contains("::") {
+            name.splitn(2, "::").nth(1).unwrap_or(name)
+        } else {
+            name
+        };
+
         // Try lookup by display_name (frontend passes display names)
-        if let Some(weapon) = data.get_weapon_by_display_name(name) {
+        if let Some(weapon) = data.get_weapon_by_display_name(actual_name) {
             equipped_weapons.push(EquippedWeapon {
                 weapon: weapon.clone(),
                 count,
+                name_with_label: name.clone(),  // Preserve original name with hardpoint label
             });
         } else {
-            return Err(format!("Weapon '{}' not found", name));
+            return Err(format!("Weapon '{}' not found", actual_name));
         }
     }
 
@@ -374,7 +386,50 @@ fn calculate_ttk_v2(
     };
 
     // Calculate TTK using new model
-    let result = ttk::calculate_ttk(&equipped_weapons, target, shield, &scenario, &zone);
+    let mut result = ttk::calculate_ttk(&equipped_weapons, target, shield, &scenario, &zone);
+
+    // Calculate missile effectiveness if missiles are equipped
+    if !missile_names.is_empty() {
+        use std::collections::HashMap;
+        let mut missile_groups: HashMap<String, i32> = HashMap::new();
+
+        for (i, name) in missile_names.iter().enumerate() {
+            let count = missile_counts.get(i).copied().unwrap_or(1);
+            if count <= 0 {
+                continue;
+            }
+
+            *missile_groups.entry(name.clone()).or_insert(0) += count;
+        }
+
+        let mut missile_breakdown = Vec::new();
+        for (name, count) in missile_groups {
+            // Parse the actual missile name (may contain hardpoint label)
+            let actual_name = if name.contains("::") {
+                name.splitn(2, "::").nth(1).unwrap_or(&name)
+            } else {
+                &name
+            };
+
+            if let Some(missile) = data.get_missile_by_display_name(actual_name) {
+                let effectiveness = ttk::calculate_missile_effectiveness(
+                    missile,
+                    &name,  // Pass full name with label
+                    count,
+                    target,
+                    shield,
+                );
+                missile_breakdown.push(effectiveness);
+            }
+        }
+
+        // Sort missiles by total damage (highest first)
+        missile_breakdown.sort_by(|a, b| {
+            b.total_damage.partial_cmp(&a.total_damage).unwrap_or(std::cmp::Ordering::Equal)
+        });
+
+        result.missile_breakdown = missile_breakdown;
+    }
 
     Ok(result)
 }

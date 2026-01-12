@@ -27,7 +27,7 @@
     "max_lifetime": 165.0,
     "arm_time": 5.0,
     "lock_time": 10.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s04_em_taln_raptor": {
     "name": "misl_s04_em_taln_raptor",
@@ -57,7 +57,7 @@
     "max_lifetime": 135.0,
     "arm_time": 1.0,
     "lock_time": 7.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s01_ir_vncl_arrow": {
     "name": "misl_s01_ir_vncl_arrow",
@@ -132,7 +132,7 @@
     "max_lifetime": 90.0,
     "arm_time": 1.0,
     "lock_time": 5.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s05_ir_taln_valkyrie": {
     "name": "misl_s05_ir_taln_valkyrie",
@@ -162,7 +162,7 @@
     "max_lifetime": 165.0,
     "arm_time": 5.0,
     "lock_time": 10.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s01_cs_fski_spark": {
     "name": "misl_s01_cs_fski_spark",
@@ -222,7 +222,7 @@
     "max_lifetime": 135.0,
     "arm_time": 5.0,
     "lock_time": 10.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s02_cs_thcn_strikeforce": {
     "name": "misl_s02_cs_thcn_strikeforce",
@@ -297,7 +297,7 @@
     "max_lifetime": 90.0,
     "arm_time": 4.0,
     "lock_time": 5.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s04_ir_behr_pathfinder": {
     "name": "misl_s04_ir_behr_pathfinder",
@@ -327,7 +327,7 @@
     "max_lifetime": 135.0,
     "arm_time": 5.0,
     "lock_time": 10.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "bomb_s03_fski_thunderball": {
     "name": "bomb_s03_fski_thunderball",
@@ -387,7 +387,7 @@
     "max_lifetime": 165.0,
     "arm_time": 1.0,
     "lock_time": 7.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s03_em_fski_thunderbolt": {
     "name": "misl_s03_em_fski_thunderbolt",
@@ -462,7 +462,7 @@
     "max_lifetime": 135.0,
     "arm_time": 1.0,
     "lock_time": 7.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s09_cs_taln_argos_2": {
     "name": "misl_s09_cs_taln_argos_2",
@@ -492,7 +492,7 @@
     "max_lifetime": 165.0,
     "arm_time": 1.0,
     "lock_time": 7.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s12_ir_behr_executor": {
     "name": "misl_s12_ir_behr_executor",
@@ -507,7 +507,7 @@
     "max_lifetime": 135.0,
     "arm_time": 5.0,
     "lock_time": 10.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s12_em_taln_calamity": {
     "name": "misl_s12_em_taln_calamity",
@@ -522,7 +522,7 @@
     "max_lifetime": 165.0,
     "arm_time": 5.0,
     "lock_time": 10.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s02_em_taln_dominator": {
     "name": "misl_s02_em_taln_dominator",
@@ -612,7 +612,7 @@
     "max_lifetime": 165.0,
     "arm_time": 1.0,
     "lock_time": 7.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s01_em_behr_pioneer": {
     "name": "misl_s01_em_behr_pioneer",
@@ -672,7 +672,7 @@
     "max_lifetime": 90.0,
     "arm_time": 4.0,
     "lock_time": 5.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   },
   "misl_s10_em_behr_executor": {
     "name": "misl_s10_em_behr_executor",
@@ -687,6 +687,6 @@
     "max_lifetime": 135.0,
     "arm_time": 1.0,
     "lock_time": 7.0,
-    "missile_type": "missile"
+    "missile_type": "torpedo"
   }
 }

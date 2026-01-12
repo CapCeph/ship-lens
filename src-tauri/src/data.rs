@@ -126,6 +126,13 @@ pub struct Shield {
     pub absorb_physical: f64,
     pub absorb_energy: f64,
     pub absorb_distortion: f64,
+    // Regen delay mechanics (4.5)
+    // DamagedRegenDelay: seconds after taking damage before regen starts
+    // DownedRegenDelay: seconds after shields fully depleted before regen starts
+    #[serde(default, alias = "regen_delay")]
+    pub damaged_regen_delay: f64,
+    #[serde(default, alias = "down_delay")]
+    pub downed_regen_delay: f64,
 }
 
 /// Weapon mount data (gimbals, fixed mounts, turrets)
@@ -555,6 +562,13 @@ impl GameData {
                 absorb_distortion: shield_data["absorption_distortion"].as_f64()
                     .or_else(|| shield_data["absorb_distortion"].as_f64())
                     .unwrap_or(1.0),
+                // Regen delay mechanics
+                damaged_regen_delay: shield_data["regen_delay"].as_f64()
+                    .or_else(|| shield_data["damaged_regen_delay"].as_f64())
+                    .unwrap_or(5.0), // Default ~5s
+                downed_regen_delay: shield_data["down_delay"].as_f64()
+                    .or_else(|| shield_data["downed_regen_delay"].as_f64())
+                    .unwrap_or(10.0), // Default ~10s
             };
 
             self.shields.insert(shield.internal_name.clone(), shield);
