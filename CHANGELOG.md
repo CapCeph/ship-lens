@@ -4,6 +4,27 @@ All notable changes to Ship Lens will be documented in this file.
 
 ---
 
+## [v0.1.23](https://github.com/CapCeph/ship-lens/releases/tag/v0.1.23) - 2025-01-13
+
+### Bug Fixes
+
+#### Duplicate Missile Display in Weapon Effectiveness
+- Fixed missiles appearing twice in Weapon Effectiveness section:
+  - Once in weapons loop showing "ACTIVE" (missiles treated as regular weapons)
+  - Once in missiles loop showing "EFFECTIVE" (missiles as missiles)
+- Root cause: Missiles counted in both weapon and missile loops in `updateWeaponBreakdown()`
+- Fix: Skip weapons with category "missile", "torpedo", or "bomb" in the weapons loop
+- Affected: 203 ships (66% of database) with missile/torpedo/bomb hardpoints
+- Single code change in `src/main.ts` updateWeaponBreakdown() function
+
+### Files Changed
+
+| File | Changes |
+|------|---------|
+| `src/main.ts` | Fixed duplicate missile display - skip missile categories in weapons loop |
+
+---
+
 ## [v0.1.22](https://github.com/CapCeph/ship-lens/releases/tag/v0.1.22) - 2025-01-13
 
 ### New Features

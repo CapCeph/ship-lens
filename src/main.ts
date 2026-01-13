@@ -1905,6 +1905,11 @@ function updateWeaponBreakdown(
     // Skip disabled weapons - the count (×3 vs ×4) already reflects what's enabled
     if (!weaponInfo.isEnabled) return;
 
+    // Skip missiles/torpedoes/bombs - they're handled separately in missileBreakdown loop
+    if (weaponInfo.category === 'missile' || weaponInfo.category === 'torpedo' || weaponInfo.category === 'bomb') {
+      return;
+    }
+
     const key = `${weaponInfo.hardpointLabel}::${weaponInfo.weaponName}`;
     const w = effectivenessMap.get(key);
 

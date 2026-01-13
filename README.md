@@ -78,12 +78,10 @@ Think of it as a variant of [Erkul](https://www.erkul.games/) but as a lightweig
 
 ## What's New
 
-### v0.1.22 Highlights
+### v0.1.23 Highlights
 
-- **Per-Weapon Effectiveness** - Each weapon now shows its own damage timeline with shield/armor/hull phases
-- **Missile Damage Analysis** - See damage distribution and time savings for each missile salvo
-- **Visual Improvements** - Mini-timeline bars, effectiveness badges, and cleaner UI
-- **Data Fixes** - Fixed Idris-P FW armor value, disambiguated duplicate weapon names
+- **Bug Fix: Duplicate Missile Display** - Fixed missiles showing twice in Weapon Effectiveness section (once as "ACTIVE", once as "EFFECTIVE")
+- **Affects 203 ships** - 66% of ship database with missile/torpedo/bomb hardpoints now display correctly
 
 **[View Full Changelog](CHANGELOG.md)** | **[All Releases](https://github.com/CapCeph/ship-lens/releases)**
 
@@ -95,12 +93,12 @@ Think of it as a variant of [Erkul](https://www.erkul.games/) but as a lightweig
 
 **Fedora / RHEL:**
 ```bash
-curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens-0.1.22-1.x86_64.rpm && sudo dnf install -y ./Ship.Lens-*.rpm
+curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens-0.1.23-1.x86_64.rpm && sudo dnf install -y ./Ship.Lens-*.rpm
 ```
 
 **Ubuntu / Debian / Zorin:**
 ```bash
-curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens_0.1.22_amd64.deb && sudo apt install -y ./Ship.Lens_*.deb
+curl -sLO https://github.com/CapCeph/ship-lens/releases/latest/download/Ship.Lens_0.1.23_amd64.deb && sudo apt install -y ./Ship.Lens_*.deb
 ```
 
 ### Windows
