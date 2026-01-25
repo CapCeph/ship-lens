@@ -5,7 +5,7 @@
 <h1 align="center">Ship Lens</h1>
 
 <p align="center">
-  <strong>A lightweight desktop damage calculator for Star Citizen</strong>
+  <strong>NOTE: This project has been put on hold as a large set of data must be collected for a massive rework</strong>
 </p>
 
 <p align="center">
